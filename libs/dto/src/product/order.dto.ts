@@ -24,5 +24,12 @@ export class OrderDto {
     @ApiProperty({ description: 'Shipping address ID', example: '123' })
      addressID: string;
 
-   
+        @ApiProperty({ description: 'Array of image URLs related to the order', example: ['http://example.com/image1.jpg', 'http://example.com/image2.jpg'] })
+    imageUrls?: string[];
+
+
+    @ApiProperty({ description: 'Additional order details', example: { giftWrap: true, deliveryInstructions: "Leave at front door" }, required: false })
+    orderDetails?: any;
+
+
 }

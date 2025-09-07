@@ -13,6 +13,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { ProductsModule } from './products/products.module';
+import { CartModule } from './cart/cart.module';
 import { GlobalMongooseModule } from 'src/global-mongoose.module';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
@@ -47,9 +48,9 @@ import { OrdersModule } from './orders/orders.module';
           ttl: 60000,
           limit: 10,
         }]),
-    AuthModule,
-    UploadsModule,
-    UsersModule, ProductsModule, OrdersModule, CategoriesModule, ],
+  AuthModule,
+  UploadsModule,
+  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

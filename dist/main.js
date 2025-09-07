@@ -74,6 +74,7 @@ __exportStar(__webpack_require__(/*! ./reference/otp.dto */ "./libs/dto/src/refe
 __exportStar(__webpack_require__(/*! ./reference/address.dto */ "./libs/dto/src/reference/address.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/authenticator.dto */ "./libs/dto/src/reference/authenticator.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/cart.dto */ "./libs/dto/src/product/cart.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/categories.dto */ "./libs/dto/src/product/categories.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/details.dto */ "./libs/dto/src/product/details.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/reviews.dto */ "./libs/dto/src/product/reviews.dto.ts"), exports);
@@ -81,6 +82,87 @@ __exportStar(__webpack_require__(/*! ./product/notifications.dto */ "./libs/dto/
 __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/select.dto */ "./libs/dto/src/reference/select.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/order.dto */ "./libs/dto/src/product/order.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/cart.dto.ts":
+/*!******************************************!*\
+  !*** ./libs/dto/src/product/cart.dto.ts ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartDto = exports.CartItemDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class CartItemDto {
+}
+exports.CartItemDto = CartItemDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod_123' }),
+    __metadata("design:type", String)
+], CartItemDto.prototype, "productID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Selected color (optional)', required: false }),
+    __metadata("design:type", String)
+], CartItemDto.prototype, "color", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Selected size (optional)', required: false }),
+    __metadata("design:type", String)
+], CartItemDto.prototype, "size", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Quantity', example: 1 }),
+    __metadata("design:type", Number)
+], CartItemDto.prototype, "quantity", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Unit price', example: 25.0 }),
+    __metadata("design:type", Number)
+], CartItemDto.prototype, "unitPrice", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Line total', example: 25.0 }),
+    __metadata("design:type", Number)
+], CartItemDto.prototype, "lineTotal", void 0);
+class CartDto {
+}
+exports.CartDto = CartDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Cart ID', required: false }),
+    __metadata("design:type", String)
+], CartDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user_123' }),
+    __metadata("design:type", String)
+], CartDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Array of cart items', type: [CartItemDto] }),
+    __metadata("design:type", Array)
+], CartDto.prototype, "items", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Cart subtotal', example: 100.0 }),
+    __metadata("design:type", Number)
+], CartDto.prototype, "subtotal", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Tax (optional)', required: false, example: 0.0 }),
+    __metadata("design:type", Number)
+], CartDto.prototype, "tax", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Shipping (optional)', required: false, example: 0.0 }),
+    __metadata("design:type", Number)
+], CartDto.prototype, "shipping", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Total amount', example: 100.0 }),
+    __metadata("design:type", Number)
+], CartDto.prototype, "total", void 0);
 
 
 /***/ }),
@@ -296,6 +378,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Shipping address ID', example: '123' }),
     __metadata("design:type", String)
 ], OrderDto.prototype, "addressID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Array of image URLs related to the order', example: ['http://example.com/image1.jpg', 'http://example.com/image2.jpg'] }),
+    __metadata("design:type", Array)
+], OrderDto.prototype, "imageUrls", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Additional order details', example: { giftWrap: true, deliveryInstructions: "Leave at front door" }, required: false }),
+    __metadata("design:type", Object)
+], OrderDto.prototype, "orderDetails", void 0);
 
 
 /***/ }),
@@ -1795,6 +1885,7 @@ __exportStar(__webpack_require__(/*! ./otp.schema */ "./libs/schema/src/otp.sche
 __exportStar(__webpack_require__(/*! ./products/product.schema */ "./libs/schema/src/products/product.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./products/farm.schema */ "./libs/schema/src/products/farm.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./products/order.schema */ "./libs/schema/src/products/order.schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./products/cart.schema */ "./libs/schema/src/products/cart.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/categories.schema */ "./libs/schema/src/reference/categories.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/address.schema */ "./libs/schema/src/reference/address.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/product-type.schema */ "./libs/schema/src/reference/product-type.schema.ts"), exports);
@@ -1863,6 +1954,91 @@ exports.OTPSchema.pre('save', async function (next, error) {
     }
     next();
 });
+
+
+/***/ }),
+
+/***/ "./libs/schema/src/products/cart.schema.ts":
+/*!*************************************************!*\
+  !*** ./libs/schema/src/products/cart.schema.ts ***!
+  \*************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartSchema = exports.CartModel = exports.CartItemSchema = exports.CartItem = void 0;
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+let CartItem = class CartItem {
+};
+exports.CartItem = CartItem;
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], CartItem.prototype, "productID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], CartItem.prototype, "color", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], CartItem.prototype, "size", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: 1 }),
+    __metadata("design:type", Number)
+], CartItem.prototype, "quantity", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", Number)
+], CartItem.prototype, "unitPrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", Number)
+], CartItem.prototype, "lineTotal", void 0);
+exports.CartItem = CartItem = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], CartItem);
+exports.CartItemSchema = mongoose_1.SchemaFactory.createForClass(CartItem);
+let CartModel = class CartModel {
+};
+exports.CartModel = CartModel;
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], CartModel.prototype, "userID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [exports.CartItemSchema], default: [] }),
+    __metadata("design:type", Array)
+], CartModel.prototype, "items", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: 0 }),
+    __metadata("design:type", Number)
+], CartModel.prototype, "subtotal", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: 0 }),
+    __metadata("design:type", Number)
+], CartModel.prototype, "tax", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false, default: 0 }),
+    __metadata("design:type", Number)
+], CartModel.prototype, "shipping", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: 0 }),
+    __metadata("design:type", Number)
+], CartModel.prototype, "total", void 0);
+exports.CartModel = CartModel = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], CartModel);
+exports.CartSchema = mongoose_1.SchemaFactory.createForClass(CartModel);
 
 
 /***/ }),
@@ -1995,6 +2171,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSchema = exports.OrderModel = void 0;
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
@@ -2021,6 +2198,14 @@ __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], OrderModel.prototype, "totalPrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String] }),
+    __metadata("design:type", Array)
+], OrderModel.prototype, "imagesUrls", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Object }),
+    __metadata("design:type", typeof (_a = typeof Record !== "undefined" && Record) === "function" ? _a : Object)
+], OrderModel.prototype, "orderDetails", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
@@ -3862,6 +4047,7 @@ const mailer_1 = __webpack_require__(/*! @nestjs-modules/mailer */ "@nestjs-modu
 const schedule_1 = __webpack_require__(/*! @nestjs/schedule */ "@nestjs/schedule");
 const throttler_1 = __webpack_require__(/*! @nestjs/throttler */ "@nestjs/throttler");
 const products_module_1 = __webpack_require__(/*! ./products/products.module */ "./src/products/products.module.ts");
+const cart_module_1 = __webpack_require__(/*! ./cart/cart.module */ "./src/cart/cart.module.ts");
 const global_mongoose_module_1 = __webpack_require__(/*! src/global-mongoose.module */ "./src/global-mongoose.module.ts");
 const categories_module_1 = __webpack_require__(/*! ./categories/categories.module */ "./src/categories/categories.module.ts");
 const orders_module_1 = __webpack_require__(/*! ./orders/orders.module */ "./src/orders/orders.module.ts");
@@ -3897,7 +4083,7 @@ exports.AppModule = AppModule = __decorate([
                 }]),
             auth_module_1.AuthModule,
             uploads_module_1.UploadsModule,
-            users_module_1.UsersModule, products_module_1.ProductsModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule,
+            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -4418,9 +4604,6 @@ let AuthService = class AuthService {
                 if (user.status === "disabled") {
                     throw new common_1.UnauthorizedException("User is disabled");
                 }
-                if (user.emailStatus !== "verified") {
-                    throw new common_1.UnauthorizedException("Email not verified");
-                }
                 return this.getLoginToken(user);
             }
             throw new common_1.UnauthorizedException("Invalid Credentials");
@@ -4453,7 +4636,7 @@ let AuthService = class AuthService {
             email: user.email,
         };
         console.log(payload);
-        const access_token = this.jwtService.sign(payload, { expiresIn: "1d" });
+        const access_token = this.jwtService.sign(payload);
         const refresh_token = this.jwtService.sign(payload, {
             expiresIn: "30d",
             secret: this.config.get("JWT_SECRET2"),
@@ -4811,6 +4994,232 @@ exports.LocalStrategy = LocalStrategy = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
 ], LocalStrategy);
+
+
+/***/ }),
+
+/***/ "./src/cart/cart.controller.ts":
+/*!*************************************!*\
+  !*** ./src/cart/cart.controller.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const cart_service_1 = __webpack_require__(/*! ./cart.service */ "./src/cart/cart.service.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+let CartController = class CartController {
+    constructor(cartService) {
+        this.cartService = cartService;
+    }
+    async create(cart, req) {
+        return this.cartService.upset(cart, req.user);
+    }
+    async findByUser(userID) {
+        return this.cartService.findByUser(userID);
+    }
+    async findAll(query) {
+        return this.cartService.findAll(query);
+    }
+    async update(cartID, cart) {
+        return this.cartService.update(cartID, cart);
+    }
+    async delete(ids) {
+        return this.cartService.delete(ids);
+    }
+};
+exports.CartController = CartController;
+__decorate([
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create or replace user cart' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.CartDto }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.CartDto !== "undefined" && dto_1.CartDto) === "function" ? _b : Object, Object]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('user/:userID'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get cart by user ID' }),
+    (0, swagger_1.ApiParam)({ name: 'userID', required: true, type: String }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('userID')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "findByUser", null);
+__decorate([
+    (0, common_1.Get)(''),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all carts' }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Patch)(':cartID'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update cart by id' }),
+    (0, swagger_1.ApiParam)({ name: 'cartID', required: true, type: String }),
+    (0, swagger_1.ApiBody)({ type: dto_1.CartDto }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('cartID')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, typeof (_c = typeof dto_1.CartDto !== "undefined" && dto_1.CartDto) === "function" ? _c : Object]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(''),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete carts by IDs' }),
+    (0, swagger_1.ApiBody)({ schema: { type: 'array', items: { type: 'string' } } }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "delete", null);
+exports.CartController = CartController = __decorate([
+    (0, swagger_1.ApiTags)('cart'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.Controller)('cart'),
+    __metadata("design:paramtypes", [typeof (_a = typeof cart_service_1.CartService !== "undefined" && cart_service_1.CartService) === "function" ? _a : Object])
+], CartController);
+
+
+/***/ }),
+
+/***/ "./src/cart/cart.module.ts":
+/*!*********************************!*\
+  !*** ./src/cart/cart.module.ts ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const cart_controller_1 = __webpack_require__(/*! ./cart.controller */ "./src/cart/cart.controller.ts");
+const cart_service_1 = __webpack_require__(/*! ./cart.service */ "./src/cart/cart.service.ts");
+let CartModule = class CartModule {
+};
+exports.CartModule = CartModule;
+exports.CartModule = CartModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [cart_controller_1.CartController],
+        providers: [cart_service_1.CartService],
+    })
+], CartModule);
+
+
+/***/ }),
+
+/***/ "./src/cart/cart.service.ts":
+/*!**********************************!*\
+  !*** ./src/cart/cart.service.ts ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let CartService = class CartService {
+    constructor(cartModel) {
+        this.cartModel = cartModel;
+    }
+    async upset(createCartDto, userData) {
+        const existing = await this.cartModel.findOne({ userID: userData._id.toString() });
+        if (existing) {
+            existing.items = createCartDto.items;
+            existing.subtotal = createCartDto.subtotal;
+            existing.tax = createCartDto.tax || 0;
+            existing.shipping = createCartDto.shipping || 0;
+            existing.total = createCartDto.total;
+            const saved = await existing.save();
+            return (0, service_1.serviceResponse)({ data: saved, message: 'Cart updated', status: true });
+        }
+        const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
+        return (0, service_1.serviceResponse)({ data: created, message: 'Cart created', status: true });
+    }
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const carts = await this.cartModel
+            .find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({ data: carts, message: 'Carts retrieved', status: true, metadata: await (0, service_1.getMetadata)({ model: this.cartModel, query, querys: {} }) });
+    }
+    async findByUser(userID) {
+        const cart = await this.cartModel.findOne({ userID }).exec();
+        return (0, service_1.serviceResponse)({ data: cart, message: 'Cart retrieved', status: true });
+    }
+    async update(id, updateCartDto) {
+        const updated = await this.cartModel.findByIdAndUpdate(id, updateCartDto, { new: true }).exec();
+        if (!updated)
+            return (0, service_1.serviceResponse)({ message: 'Cart not found', status: false });
+        return (0, service_1.serviceResponse)({ data: updated, message: 'Cart updated', status: true });
+    }
+    async delete(ids) {
+        const result = await this.cartModel.deleteMany({ _id: { $in: ids } });
+        if (result.deletedCount === 0)
+            return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
+        return (0, service_1.serviceResponse)({ message: `${result.deletedCount} cart(s) deleted`, status: true });
+    }
+};
+exports.CartService = CartService;
+exports.CartService = CartService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.CartModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], CartService);
 
 
 /***/ }),
@@ -5268,6 +5677,7 @@ exports.GlobalMongooseModule = GlobalMongooseModule = __decorate([
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.ActivityLogModel.name, schema: schema_1.ActivityLogSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.AuthenticatorModel.name, schema: schema_1.AuthenticatorSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.OTPModel.name, schema: schema_1.OTPSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.CartModel.name, schema: schema_1.CartSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: schema_3.ProductModel.name, schema: schema_3.ProductSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.OrderModel.name, schema: schema_1.OrderSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: schema_1.CategoriesModel.name, schema: schema_1.CategoriesSchema }]),
@@ -5827,7 +6237,7 @@ let ProductService = class ProductService {
         this.productModel = productModel;
     }
     async upset(createProductDto, userData) {
-        const created = await this.productModel.create({ ...createProductDto, userID: userData._id.toString() });
+        const created = await this.productModel.create(createProductDto);
         return (0, service_1.serviceResponse)({
             data: created,
             message: "Product plan created successfully",

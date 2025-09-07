@@ -21,6 +21,14 @@ export class OrderModel {
   @Prop({  })
   totalPrice: number;
 
+  @Prop({ type: [String] })
+  imagesUrls: string[];
+
+
+
+  @Prop({type: Object })
+  orderDetails: Record<string, any>;
+
   @Prop({  })
   status: string;
 

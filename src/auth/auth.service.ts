@@ -130,9 +130,9 @@ export class AuthService {
           throw new UnauthorizedException("User is disabled");
         }
 
-        if (user.emailStatus !== "verified") {
-          throw new UnauthorizedException("Email not verified");
-        }
+        // if (user.emailStatus !== "verified") {
+        //   throw new UnauthorizedException("Email not verified");
+        // }
         
         return this.getLoginToken(user);
       }
@@ -178,7 +178,9 @@ export class AuthService {
       email: user.email,
     };
     console.log(payload);
-    const access_token = this.jwtService.sign(payload, { expiresIn: "1d" });
+    const access_token = this.jwtService.sign(payload, 
+      // { expiresIn: "1d" }
+    );
     const refresh_token = this.jwtService.sign(payload, {
       expiresIn: "30d",
       secret: this.config.get("JWT_SECRET2"),

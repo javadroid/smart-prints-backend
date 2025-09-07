@@ -9,6 +9,7 @@ export * from './reference/otp.dto';
 export * from './reference/address.dto';
 export * from './reference/authenticator.dto';
 export * from './product/product.dto';
+export * from './product/cart.dto';
 
 export * from './product/categories.dto';
 export * from './product/details.dto';

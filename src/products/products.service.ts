@@ -25,7 +25,7 @@ export class ProductService {
   //   if (!farm) {
   //  throw  new NotFoundException('Farm not found or you do not have permission to add products to this farm');
   //   }
-    const created = await this.productModel.create({ ...createProductDto, userID: userData._id.toString() });
+    const created = await this.productModel.create(createProductDto);
     return serviceResponse({
       data: created,
       message: "Product plan created successfully",
