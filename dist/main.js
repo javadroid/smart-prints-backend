@@ -521,6 +521,10 @@ class ProductDto {
 }
 exports.ProductDto = ProductDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Is the product featured', example: false, required: false }),
+    __metadata("design:type", Boolean)
+], ProductDto.prototype, "isFeatured", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Product ID', }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "id", void 0);
@@ -2351,6 +2355,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], ProductModel.prototype, "id", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: true }),
+    __metadata("design:type", Boolean)
+], ProductModel.prototype, "isFeatured", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
@@ -5103,7 +5111,7 @@ __decorate([
 exports.CartController = CartController = __decorate([
     (0, swagger_1.ApiTags)('cart'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
-    (0, common_1.Controller)('cart'),
+    (0, common_1.Controller)('carts'),
     __metadata("design:paramtypes", [typeof (_a = typeof cart_service_1.CartService !== "undefined" && cart_service_1.CartService) === "function" ? _a : Object])
 ], CartController);
 
@@ -5834,7 +5842,7 @@ __decorate([
 exports.OrderController = OrderController = __decorate([
     (0, swagger_1.ApiTags)("order"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
-    (0, common_1.Controller)('order'),
+    (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [typeof (_a = typeof orders_service_1.OrderService !== "undefined" && orders_service_1.OrderService) === "function" ? _a : Object])
 ], OrderController);
 
@@ -6135,7 +6143,6 @@ __decorate([
 __decorate([
     (0, common_1.Get)(""),
     (0, swagger_1.ApiOperation)({ summary: "Get all products" }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiQuery)({
         name: "page",
         required: false,
@@ -6167,7 +6174,7 @@ __decorate([
 exports.ProductController = ProductController = __decorate([
     (0, swagger_1.ApiTags)("product"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
-    (0, common_1.Controller)('product'),
+    (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [typeof (_a = typeof products_service_1.ProductService !== "undefined" && products_service_1.ProductService) === "function" ? _a : Object])
 ], ProductController);
 

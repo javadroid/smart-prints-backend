@@ -7,7 +7,7 @@ import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } fro
 @ApiTags("order")
 @ApiBearerAuth("access-token")
 
-@Controller('order')
+@Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 

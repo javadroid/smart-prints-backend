@@ -83,6 +83,8 @@ export class DesignAreaDto {
 export class ProductDto {
   _id?: string;
 
+  @ApiProperty({ description: 'Is the product featured', example: false, required: false })
+  isFeatured?: boolean;
   @ApiProperty({ description: 'Product ID',  })
   id: string ;
 

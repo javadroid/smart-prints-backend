@@ -7,7 +7,7 @@ import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } fro
 @ApiTags("product")
 @ApiBearerAuth("access-token")
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -81,7 +81,7 @@ export class ProductController {
   @Get("")
   // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Get all products" })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiQuery({
     name: "page",
     required: false,

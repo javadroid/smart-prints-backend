@@ -6,7 +6,7 @@ import { CartDto } from '@app/dto';
 
 @ApiTags('cart')
 @ApiBearerAuth('access-token')
-@Controller('cart')
+@Controller('carts')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
