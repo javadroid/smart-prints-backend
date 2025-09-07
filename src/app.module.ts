@@ -13,9 +13,10 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { ProductsModule } from './products/products.module';
-import { GlobalMongooseModule } from 'global-mongoose.module';
+import { GlobalMongooseModule } from 'src/global-mongoose.module';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
+
 
 
 @Module({

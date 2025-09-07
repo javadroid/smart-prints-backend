@@ -2,69 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./global-mongoose.module.ts":
-/*!***********************************!*\
-  !*** ./global-mongoose.module.ts ***!
-  \***********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GlobalMongooseModule = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const schema_2 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const schema_3 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const dotenv = __webpack_require__(/*! dotenv */ "dotenv");
-dotenv.config();
-const { MONGODB_URL, environment } = process.env;
-const DBLINK = environment === 'production'
-    ? MONGODB_URL
-    : 'mongodb://localhost:27017/smartprints';
-let GlobalMongooseModule = class GlobalMongooseModule {
-};
-exports.GlobalMongooseModule = GlobalMongooseModule;
-exports.GlobalMongooseModule = GlobalMongooseModule = __decorate([
-    (0, common_1.Global)(),
-    (0, common_1.Module)({
-        imports: [
-            jwt_1.JwtModule.registerAsync({
-                global: true,
-                imports: [config_1.ConfigModule],
-                inject: [config_1.ConfigService],
-                useFactory: async (configService) => ({
-                    secret: configService.get('JWT_SECRET'),
-                    signOptions: {
-                        expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
-                    },
-                }),
-            }),
-            mongoose_1.MongooseModule.forRoot(DBLINK),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.UserModel.name, schema: schema_1.UserSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_2.WalletModel.name, schema: schema_2.WalletSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ActivityLogModel.name, schema: schema_1.ActivityLogSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.AuthenticatorModel.name, schema: schema_1.AuthenticatorSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.OTPModel.name, schema: schema_1.OTPSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_3.ProductModel.name, schema: schema_3.ProductSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.CategoriesModel.name, schema: schema_1.CategoriesSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ProductTypeModel.name, schema: schema_1.ProductTypeSchema }]),
-        ],
-        exports: [mongoose_1.MongooseModule],
-    })
-], GlobalMongooseModule);
-
-
-/***/ }),
-
 /***/ "./libs/decorator/src/index.ts":
 /*!*************************************!*\
   !*** ./libs/decorator/src/index.ts ***!
@@ -142,6 +79,7 @@ __exportStar(__webpack_require__(/*! ./product/reviews.dto */ "./libs/dto/src/pr
 __exportStar(__webpack_require__(/*! ./product/notifications.dto */ "./libs/dto/src/product/notifications.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/select.dto */ "./libs/dto/src/reference/select.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/order.dto */ "./libs/dto/src/product/order.dto.ts"), exports);
 
 
 /***/ }),
@@ -323,6 +261,65 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Product weight', example: `${28.33}Kg`, required: false }),
     __metadata("design:type", Number)
 ], NotificationsDto.prototype, "productWeight", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/order.dto.ts":
+/*!*******************************************!*\
+  !*** ./libs/dto/src/product/order.dto.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OrderDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class OrderDto {
+}
+exports.OrderDto = OrderDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Order ID', example: 'ord123' }),
+    __metadata("design:type", String)
+], OrderDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user456' }),
+    __metadata("design:type", String)
+], OrderDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod789' }),
+    __metadata("design:type", String)
+], OrderDto.prototype, "productID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Quantity of the product', example: 2 }),
+    __metadata("design:type", Number)
+], OrderDto.prototype, "quantity", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Total price of the order', example: 120.50 }),
+    __metadata("design:type", Number)
+], OrderDto.prototype, "totalPrice", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Order status', example: 'pending' }),
+    __metadata("design:type", String)
+], OrderDto.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Shipping address', example: '123 Main St, Anytown, USA' }),
+    __metadata("design:type", String)
+], OrderDto.prototype, "shippingAddress", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Order date', example: '2023-10-26T10:00:00Z' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], OrderDto.prototype, "orderDate", void 0);
 
 
 /***/ }),
@@ -1701,6 +1698,7 @@ __exportStar(__webpack_require__(/*! ./authenticator.schema */ "./libs/schema/sr
 __exportStar(__webpack_require__(/*! ./otp.schema */ "./libs/schema/src/otp.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./products/product.schema */ "./libs/schema/src/products/product.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./products/farm.schema */ "./libs/schema/src/products/farm.schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./products/order.schema */ "./libs/schema/src/products/order.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/categories.schema */ "./libs/schema/src/reference/categories.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/product-type.schema */ "./libs/schema/src/reference/product-type.schema.ts"), exports);
 
@@ -1880,6 +1878,64 @@ exports.FarmSchema.pre('save', async function (next, error) {
     }
     next();
 });
+
+
+/***/ }),
+
+/***/ "./libs/schema/src/products/order.schema.ts":
+/*!**************************************************!*\
+  !*** ./libs/schema/src/products/order.schema.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OrderSchema = exports.OrderModel = void 0;
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+let OrderModel = class OrderModel {
+};
+exports.OrderModel = OrderModel;
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], OrderModel.prototype, "id", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], OrderModel.prototype, "userID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], OrderModel.prototype, "productID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", Number)
+], OrderModel.prototype, "quantity", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", Number)
+], OrderModel.prototype, "totalPrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], OrderModel.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], OrderModel.prototype, "shippingAddress", void 0);
+exports.OrderModel = OrderModel = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], OrderModel);
+exports.OrderSchema = mongoose_1.SchemaFactory.createForClass(OrderModel);
 
 
 /***/ }),
@@ -3533,7 +3589,7 @@ const mailer_1 = __webpack_require__(/*! @nestjs-modules/mailer */ "@nestjs-modu
 const schedule_1 = __webpack_require__(/*! @nestjs/schedule */ "@nestjs/schedule");
 const throttler_1 = __webpack_require__(/*! @nestjs/throttler */ "@nestjs/throttler");
 const products_module_1 = __webpack_require__(/*! ./products/products.module */ "./src/products/products.module.ts");
-const global_mongoose_module_1 = __webpack_require__(/*! global-mongoose.module */ "./global-mongoose.module.ts");
+const global_mongoose_module_1 = __webpack_require__(/*! src/global-mongoose.module */ "./src/global-mongoose.module.ts");
 const categories_module_1 = __webpack_require__(/*! ./categories/categories.module */ "./src/categories/categories.module.ts");
 const orders_module_1 = __webpack_require__(/*! ./orders/orders.module */ "./src/orders/orders.module.ts");
 let AppModule = class AppModule {
@@ -4750,36 +4806,66 @@ exports.UpdateCategoryDto = UpdateCategoryDto;
 
 /***/ }),
 
-/***/ "./src/orders/dto/create-order.dto.ts":
-/*!********************************************!*\
-  !*** ./src/orders/dto/create-order.dto.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "./src/global-mongoose.module.ts":
+/*!***************************************!*\
+  !*** ./src/global-mongoose.module.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateOrderDto = void 0;
-class CreateOrderDto {
-}
-exports.CreateOrderDto = CreateOrderDto;
-
-
-/***/ }),
-
-/***/ "./src/orders/dto/update-order.dto.ts":
-/*!********************************************!*\
-  !*** ./src/orders/dto/update-order.dto.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UpdateOrderDto = void 0;
-const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const create_order_dto_1 = __webpack_require__(/*! ./create-order.dto */ "./src/orders/dto/create-order.dto.ts");
-class UpdateOrderDto extends (0, swagger_1.PartialType)(create_order_dto_1.CreateOrderDto) {
-}
-exports.UpdateOrderDto = UpdateOrderDto;
+exports.GlobalMongooseModule = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const schema_2 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const schema_3 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const dotenv = __webpack_require__(/*! dotenv */ "dotenv");
+dotenv.config();
+const { MONGODB_URL, environment } = process.env;
+const DBLINK = environment === 'production'
+    ? MONGODB_URL
+    : 'mongodb://localhost:27017/smartprints';
+let GlobalMongooseModule = class GlobalMongooseModule {
+};
+exports.GlobalMongooseModule = GlobalMongooseModule;
+exports.GlobalMongooseModule = GlobalMongooseModule = __decorate([
+    (0, common_1.Global)(),
+    (0, common_1.Module)({
+        imports: [
+            jwt_1.JwtModule.registerAsync({
+                global: true,
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    secret: configService.get('JWT_SECRET'),
+                    signOptions: {
+                        expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
+                    },
+                }),
+            }),
+            mongoose_1.MongooseModule.forRoot(DBLINK),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.UserModel.name, schema: schema_1.UserSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_2.WalletModel.name, schema: schema_2.WalletSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ActivityLogModel.name, schema: schema_1.ActivityLogSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.AuthenticatorModel.name, schema: schema_1.AuthenticatorSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.OTPModel.name, schema: schema_1.OTPSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_3.ProductModel.name, schema: schema_3.ProductSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.OrderModel.name, schema: schema_1.OrderSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.CategoriesModel.name, schema: schema_1.CategoriesSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ProductTypeModel.name, schema: schema_1.ProductTypeSchema }]),
+        ],
+        exports: [mongoose_1.MongooseModule],
+    })
+], GlobalMongooseModule);
 
 
 /***/ }),
@@ -4805,71 +4891,132 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OrdersController = void 0;
+exports.OrderController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orders/orders.service.ts");
-const create_order_dto_1 = __webpack_require__(/*! ./dto/create-order.dto */ "./src/orders/dto/create-order.dto.ts");
-const update_order_dto_1 = __webpack_require__(/*! ./dto/update-order.dto */ "./src/orders/dto/update-order.dto.ts");
-let OrdersController = class OrdersController {
-    constructor(ordersService) {
-        this.ordersService = ordersService;
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+let OrderController = class OrderController {
+    constructor(orderService) {
+        this.orderService = orderService;
     }
-    create(createOrderDto) {
-        return this.ordersService.create(createOrderDto);
+    async create(order, req) {
+        return this.orderService.upset(order, req.user);
     }
-    findAll() {
-        return this.ordersService.findAll();
+    async update(order, orderID, req) {
+        return this.orderService.update(orderID, order, req.user);
     }
-    findOne(id) {
-        return this.ordersService.findOne(+id);
+    async findbyId(params, query) {
+        return this.orderService.findByAny(params, query);
     }
-    update(id, updateOrderDto) {
-        return this.ordersService.update(+id, updateOrderDto);
+    async findAll(query) {
+        return this.orderService.findAll(query);
     }
-    remove(id) {
-        return this.ordersService.remove(+id);
+    async delete(ids, req) {
+        return this.orderService.delete(ids, req.user);
     }
 };
-exports.OrdersController = OrdersController;
+exports.OrderController = OrderController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: "Create a new order" }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.OrderDto,
+        description: "Creating a new order Details",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof create_order_dto_1.CreateOrderDto !== "undefined" && create_order_dto_1.CreateOrderDto) === "function" ? _b : Object]),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "create", null);
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.OrderDto !== "undefined" && dto_1.OrderDto) === "function" ? _b : Object, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Patch)(":orderID"),
+    (0, swagger_1.ApiOperation)({ summary: "Update existing orders" }),
+    (0, swagger_1.ApiParam)({
+        name: "orderID",
+        description: "The orderID to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.OrderDto,
+        description: "Updating existing orders",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)("orderID")),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "findAll", null);
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.OrderDto !== "undefined" && dto_1.OrderDto) === "function" ? _c : Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "update", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("by-any/:key/:value"),
+    (0, swagger_1.ApiOperation)({ summary: "Find a order by any key-value pair" }),
+    (0, swagger_1.ApiParam)({ name: "key", description: "The key to search by", type: String }),
+    (0, swagger_1.ApiParam)({
+        name: "value",
+        description: "The value to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of orders per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "findOne", null);
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "findbyId", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    (0, common_1.Get)(""),
+    (0, swagger_1.ApiOperation)({ summary: "Get all orders" }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of orders per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof update_order_dto_1.UpdateOrderDto !== "undefined" && update_order_dto_1.UpdateOrderDto) === "function" ? _c : Object]),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "update", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: "Delete orders by their IDs" }),
+    (0, swagger_1.ApiBody)({ type: [String], description: "Array of order IDs to delete" }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "remove", null);
-exports.OrdersController = OrdersController = __decorate([
-    (0, common_1.Controller)('orders'),
-    __metadata("design:paramtypes", [typeof (_a = typeof orders_service_1.OrdersService !== "undefined" && orders_service_1.OrdersService) === "function" ? _a : Object])
-], OrdersController);
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "delete", null);
+exports.OrderController = OrderController = __decorate([
+    (0, swagger_1.ApiTags)("order"),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, common_1.Controller)('order'),
+    __metadata("design:paramtypes", [typeof (_a = typeof orders_service_1.OrderService !== "undefined" && orders_service_1.OrderService) === "function" ? _a : Object])
+], OrderController);
 
 
 /***/ }),
@@ -4897,8 +5044,8 @@ let OrdersModule = class OrdersModule {
 exports.OrdersModule = OrdersModule;
 exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
-        controllers: [orders_controller_1.OrdersController],
-        providers: [orders_service_1.OrdersService],
+        controllers: [orders_controller_1.OrderController],
+        providers: [orders_service_1.OrderService],
     })
 ], OrdersModule);
 
@@ -4918,30 +5065,140 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OrdersService = void 0;
+exports.OrderService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-let OrdersService = class OrdersService {
-    create(createOrderDto) {
-        return 'This action adds a new order';
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let OrderService = class OrderService {
+    constructor(orderModel) {
+        this.orderModel = orderModel;
     }
-    findAll() {
-        return `This action returns all orders`;
+    async upset(createOrderDto, userData) {
+        const created = await this.orderModel.create({ ...createOrderDto, userID: userData._id.toString() });
+        return (0, service_1.serviceResponse)({
+            data: created,
+            message: "Order plan created successfully",
+            status: true,
+        });
     }
-    findOne(id) {
-        return `This action returns a #${id} order`;
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.orderModel
+            .find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Order plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.orderModel,
+                query,
+                querys: {},
+            }),
+        });
     }
-    update(id, updateOrderDto) {
-        return `This action updates a #${id} order`;
+    async findOne(id) {
+        try {
+            const plan = await this.orderModel.findById(id).exec();
+            return (0, service_1.serviceResponse)({
+                data: plan,
+                message: "Order plan retrieved successfully",
+                status: true,
+            });
+        }
+        catch (error) { }
     }
-    remove(id) {
-        return `This action removes a #${id} order`;
+    async findByAny(params, query) {
+        const { key, value } = params;
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.orderModel
+            .find({ [key]: value })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Order plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.orderModel,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async update(id, updateOrderDto, userData) {
+        try {
+            const updated = await this.orderModel
+                .findByIdAndUpdate(id, updateOrderDto, {
+                new: true,
+            })
+                .exec();
+            if (!updated) {
+                return (0, service_1.serviceResponse)({
+                    message: "Order plan not found",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                data: updated,
+                message: "Order plan updated successfully",
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
+    }
+    async delete(ids, userData) {
+        try {
+            const result = await this.orderModel.deleteMany({
+                _id: { $in: ids },
+            });
+            if (result.deletedCount === 0) {
+                return (0, service_1.serviceResponse)({
+                    message: "No order plans found to delete",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                message: `${result.deletedCount} order plans deleted successfully`,
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
     }
 };
-exports.OrdersService = OrdersService;
-exports.OrdersService = OrdersService = __decorate([
-    (0, common_1.Injectable)()
-], OrdersService);
+exports.OrderService = OrderService;
+exports.OrderService = OrderService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], OrderService);
 
 
 /***/ }),

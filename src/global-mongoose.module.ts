@@ -5,6 +5,8 @@ import {
   AuthenticatorSchema,
   CategoriesModel,
   CategoriesSchema,
+  OrderModel,
+  OrderSchema,
   OTPModel,
   OTPSchema,
   ProductTypeModel,
@@ -53,6 +55,7 @@ const DBLINK =
     MongooseModule.forFeature([{ name: OTPModel.name, schema: OTPSchema }]),
 
     MongooseModule.forFeature([{ name: ProductModel.name, schema: ProductSchema }]),
+      MongooseModule.forFeature([{ name: OrderModel.name, schema: OrderSchema }]),
      MongooseModule.forFeature([{ name: CategoriesModel.name, schema: CategoriesSchema }]),
       MongooseModule.forFeature([{ name: ProductTypeModel.name, schema: ProductTypeSchema }]),
     

@@ -6,6 +6,7 @@ export * from './otp.schema';
 
 export * from './products/product.schema';
 export * from './products/farm.schema';
+export * from './products/order.schema';
 
 
 
