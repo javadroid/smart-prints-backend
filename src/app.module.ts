@@ -46,7 +46,9 @@ import { OrdersModule } from './orders/orders.module';
           ttl: 60000,
           limit: 10,
         }]),
-    UsersModule, ProductsModule, OrdersModule, CategoriesModule, AuthModule],
+    AuthModule,
+    UploadsModule,
+    UsersModule, ProductsModule, OrdersModule, CategoriesModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

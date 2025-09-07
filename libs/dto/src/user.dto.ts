@@ -49,6 +49,15 @@ export class DeleteAccountDTO {
   @ApiProperty({ description: 'new passsword' })
   reason: string;
 }
+export class LoginDTO {
+  // @ApiProperty({ description: 'email || username', example: 'john@example.com' })
+  // email: string
+
+  @ApiProperty({ description: 'Password', example: 'password123' })
+  password: string;
+  @ApiProperty({ description: 'email ', example: 'john@example.com' })
+  email: string;
+}
 
 export class ForgotPasswordDTO {
   @ApiProperty({ description: 'code' })

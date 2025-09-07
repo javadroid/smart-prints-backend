@@ -65,6 +65,1164 @@ exports.GlobalMongooseModule = GlobalMongooseModule = __decorate([
 
 /***/ }),
 
+/***/ "./libs/decorator/src/index.ts":
+/*!*************************************!*\
+  !*** ./libs/decorator/src/index.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./roles.decorator */ "./libs/decorator/src/roles.decorator.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/decorator/src/roles.decorator.ts":
+/*!***********************************************!*\
+  !*** ./libs/decorator/src/roles.decorator.ts ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ROLES_KEY = void 0;
+exports.ROLES_KEY = 'roles';
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/index.ts":
+/*!*******************************!*\
+  !*** ./libs/dto/src/index.ts ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./user.dto */ "./libs/dto/src/user.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./wallet.dto */ "./libs/dto/src/wallet.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./support.dto */ "./libs/dto/src/support.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/country.dto */ "./libs/dto/src/reference/country.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/state.dto */ "./libs/dto/src/reference/state.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/otp.dto */ "./libs/dto/src/reference/otp.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/authenticator.dto */ "./libs/dto/src/reference/authenticator.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/categories.dto */ "./libs/dto/src/product/categories.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/details.dto */ "./libs/dto/src/product/details.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/reviews.dto */ "./libs/dto/src/product/reviews.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/notifications.dto */ "./libs/dto/src/product/notifications.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/select.dto */ "./libs/dto/src/reference/select.dto.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/categories.dto.ts":
+/*!************************************************!*\
+  !*** ./libs/dto/src/product/categories.dto.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CategoryDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class CategoryDto {
+}
+exports.CategoryDto = CategoryDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Category name', example: 'Fruits & veggies', }),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Category description', example: 'Fresh fruits at your disposal' }),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Category image URL', example: 'http://example.com/category.jpg' }),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "imageUrl", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Category ID', example: 'cat123' }),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Category slug', example: 'tubers' }),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "slug", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Indicates if the category can be added to the basket', example: true }),
+    __metadata("design:type", Boolean)
+], CategoryDto.prototype, "addToBasket", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/details.dto.ts":
+/*!*********************************************!*\
+  !*** ./libs/dto/src/product/details.dto.ts ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductDetailsDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const categories_dto_1 = __webpack_require__(/*! ./categories.dto */ "./libs/dto/src/product/categories.dto.ts");
+class ProductDetailsDto {
+}
+exports.ProductDetailsDto = ProductDetailsDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: '12345' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product name', example: 'Sample Product' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product description', example: 'This is a sample product.' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product price', example: `₦${28.33}` }),
+    __metadata("design:type", Number)
+], ProductDetailsDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product category', type: categories_dto_1.CategoryDto }),
+    __metadata("design:type", typeof (_a = typeof categories_dto_1.CategoryDto !== "undefined" && categories_dto_1.CategoryDto) === "function" ? _a : Object)
+], ProductDetailsDto.prototype, "category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product availability', example: 'Out of stock' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "Instock", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product image URL', example: 'http://example.com/image.jpg' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "imageUrl", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Location', example: 'Tudun Wada, Old Karu, Abuja' }),
+    __metadata("design:type", String)
+], ProductDetailsDto.prototype, "location", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'distance', example: `${200}km` }),
+    __metadata("design:type", Number)
+], ProductDetailsDto.prototype, "distance", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product quantity', example: 2 }),
+    __metadata("design:type", Number)
+], ProductDetailsDto.prototype, "quantity", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/notifications.dto.ts":
+/*!***************************************************!*\
+  !*** ./libs/dto/src/product/notifications.dto.ts ***!
+  \***************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NotificationsDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class NotificationsDto {
+}
+exports.NotificationsDto = NotificationsDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Notification ID', example: 'notif123' }),
+    __metadata("design:type", String)
+], NotificationsDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user678' }),
+    __metadata("design:type", String)
+], NotificationsDto.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Notification message', example: 'Your order has been shipped!' }),
+    __metadata("design:type", String)
+], NotificationsDto.prototype, "message", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Date when the notification was created', example: '2023-10-01T12:00:00Z' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], NotificationsDto.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Read status of the notification', example: false }),
+    __metadata("design:type", Boolean)
+], NotificationsDto.prototype, "isRead", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Type of notification', example: 'order' }),
+    __metadata("design:type", String)
+], NotificationsDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Related order ID', example: 'order123', required: false }),
+    __metadata("design:type", String)
+], NotificationsDto.prototype, "orderId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product price', example: `₦${28.33}`, required: false }),
+    __metadata("design:type", Number)
+], NotificationsDto.prototype, "productPrice", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product weight', example: `${28.33}Kg`, required: false }),
+    __metadata("design:type", Number)
+], NotificationsDto.prototype, "productWeight", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/product.dto.ts":
+/*!*********************************************!*\
+  !*** ./libs/dto/src/product/product.dto.ts ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductDto = exports.RatingDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+class RatingDto {
+}
+exports.RatingDto = RatingDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Rating given by the user for the ride', example: '4.5' }),
+    __metadata("design:type", Number)
+], RatingDto.prototype, "rating", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Feedback given by the user for the ride', example: 'Great ride!' }),
+    __metadata("design:type", String)
+], RatingDto.prototype, "feedback", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User _id of the user who gave the rating', example: '1234567890' }),
+    __metadata("design:type", String)
+], RatingDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Date of the rating', example: '2025-03-22T08:30:00Z' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], RatingDto.prototype, "date", void 0);
+class ProductDto {
+}
+exports.ProductDto = ProductDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod123' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product name', example: 'Sample Product' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product description', example: 'This is a sample product.' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product price', example: 28.33 }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product category ID', example: '6568zsdsadD' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "categoryID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'quantity', example: 5 }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "quantity", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product image URL', example: ['http://example.com/image.jpg'] }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "imageUrls", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [RatingDto], description: 'Product rating', }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "rating", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Measurement ooh', example: "'kg','litre','count','pack'" }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "measurement", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'distance', example: 200 }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "distance", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'status', enum: enum_1.ProductStatusEnum, example: enum_1.ProductStatusEnum.PENDING }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Farm ID where the product is sourced', example: 'farm123' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "farmID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product type', example: ['vegetable', 'fruit'] }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "type", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/product/reviews.dto.ts":
+/*!*********************************************!*\
+  !*** ./libs/dto/src/product/reviews.dto.ts ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ReviewsDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class ReviewsDto {
+}
+exports.ReviewsDto = ReviewsDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Review ID', example: 'review123' }),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: '12345' }),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "productId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user678' }),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Review content', example: 'This product is amazing!' }),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "content", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Rating given by the user', example: 5 }),
+    __metadata("design:type", Number)
+], ReviewsDto.prototype, "rating", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Date when the review was created', example: '2023-10-01T12:00:00Z' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], ReviewsDto.prototype, "createdAt", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/authenticator.dto.ts":
+/*!*****************************************************!*\
+  !*** ./libs/dto/src/reference/authenticator.dto.ts ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthenticatorDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class AuthenticatorDTO {
+}
+exports.AuthenticatorDTO = AuthenticatorDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Unique identifier for the user', required: false }),
+    __metadata("design:type", String)
+], AuthenticatorDTO.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User _id of a user', }),
+    __metadata("design:type", String)
+], AuthenticatorDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Authenticator secret', example: 'SJKBSOJPOSBH' }),
+    __metadata("design:type", String)
+], AuthenticatorDTO.prototype, "secret", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'status', example: 'active', default: "active" }),
+    __metadata("design:type", String)
+], AuthenticatorDTO.prototype, "status", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/country.dto.ts":
+/*!***********************************************!*\
+  !*** ./libs/dto/src/reference/country.dto.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CountryDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class CountryDTO {
+}
+exports.CountryDTO = CountryDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country name', example: 'Nigeria' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country code', example: 'NG' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country currency', example: 'NGN' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "currency", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country capital', example: 'Abuja' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "capital", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country flag', example: 'https://flagcdn.com/ng.svg' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "flag", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country dial code', example: '+234' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "dialCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country continent', example: 'Africa' }),
+    __metadata("design:type", String)
+], CountryDTO.prototype, "continent", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country latitude', example: 9.082 }),
+    __metadata("design:type", Number)
+], CountryDTO.prototype, "latitude", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country longitude', example: 8.6753 }),
+    __metadata("design:type", Number)
+], CountryDTO.prototype, "longitude", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/otp.dto.ts":
+/*!*******************************************!*\
+  !*** ./libs/dto/src/reference/otp.dto.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OTPDTO = void 0;
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class OTPDTO {
+}
+exports.OTPDTO = OTPDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Unique identifier for the user', required: false }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User _id of a user', }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'OTP', example: '44035' }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Duration of otp in minutes', example: '30' }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "duration", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'status', example: 'active', default: "active" }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Type of OTP', example: 'EmailVerification', enum: enum_1.OtpType, default: 'EmailVerification' }),
+    __metadata("design:type", String)
+], OTPDTO.prototype, "type", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/select.dto.ts":
+/*!**********************************************!*\
+  !*** ./libs/dto/src/reference/select.dto.ts ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SelectDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class SelectDto {
+}
+exports.SelectDto = SelectDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'OTP', example: '44035' }),
+    __metadata("design:type", String)
+], SelectDto.prototype, "name", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/state.dto.ts":
+/*!*********************************************!*\
+  !*** ./libs/dto/src/reference/state.dto.ts ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.StateDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class StateDTO {
+}
+exports.StateDTO = StateDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State id', example: '1' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State name', example: 'California' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State code', example: 'CA' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State country', example: 'US' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State country', example: 'US' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "countryId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State capital', example: 'Sacramento' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "capital", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State flag', example: 'https://flagcdn.com/us-ca.svg' }),
+    __metadata("design:type", String)
+], StateDTO.prototype, "flag", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'state latitude', example: 9.082 }),
+    __metadata("design:type", Number)
+], StateDTO.prototype, "latitude", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'state longitude', example: 8.6753 }),
+    __metadata("design:type", Number)
+], StateDTO.prototype, "longitude", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/support.dto.ts":
+/*!*************************************!*\
+  !*** ./libs/dto/src/support.dto.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SupportDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class SupportDTO {
+}
+exports.SupportDTO = SupportDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Unique identifier for the support ticket",
+        required: false,
+    }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: "User ID who created the ticket" }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: "admin ID who attend the ticket" }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "adminID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: "Subject of the support ticket" }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "subject", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: "_ID of the support ticket" }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "supportID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: "Description of the issue" }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Status of the ticket",
+        enum: ["open", "closed", "pending"],
+        default: "open",
+    }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Priority of the ticket",
+        enum: ["low", "medium", "high"],
+        default: "low",
+    }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "priority", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Message of the ticket",
+        type: String,
+        example: "hello",
+    }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "message", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Attachment URL for the ticket",
+        required: false,
+    }),
+    __metadata("design:type", String)
+], SupportDTO.prototype, "url", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/user.dto.ts":
+/*!**********************************!*\
+  !*** ./libs/dto/src/user.dto.ts ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d, _e, _f, _g, _h;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserDTO = exports.Refferal = exports.RefreshTokenDTO = exports.VerifyAuthenticationDto = exports.SetAuthenticatorDto = exports.ForgotPasswordDTO = exports.LoginDTO = exports.DeleteAccountDTO = exports.ChangePasswordDTO = exports.BankAccountDTO = exports.UserIDDTO = void 0;
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class UserIDDTO {
+}
+exports.UserIDDTO = UserIDDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'user_id ' }),
+    __metadata("design:type", String)
+], UserIDDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'email ' }),
+    __metadata("design:type", String)
+], UserIDDTO.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: enum_1.OtpType, example: enum_1.OtpType.TWO_FACTOR_AUTHENTICATION, description: 'Type of OTP' }),
+    __metadata("design:type", String)
+], UserIDDTO.prototype, "type", void 0);
+class BankAccountDTO {
+}
+exports.BankAccountDTO = BankAccountDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Bank name' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "bankName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account number' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "accountNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account name' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "accountName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Bank code' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "bankCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account type' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "accountType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'ACH routing number' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "ACHrouting", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Wire routing number' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "wireRouting", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Swift code' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "swiftCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Currency' }),
+    __metadata("design:type", String)
+], BankAccountDTO.prototype, "currency", void 0);
+class ChangePasswordDTO {
+}
+exports.ChangePasswordDTO = ChangePasswordDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'current password' }),
+    __metadata("design:type", String)
+], ChangePasswordDTO.prototype, "currentPassword", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'new passsword' }),
+    __metadata("design:type", String)
+], ChangePasswordDTO.prototype, "newPassword", void 0);
+class DeleteAccountDTO {
+}
+exports.DeleteAccountDTO = DeleteAccountDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'current password' }),
+    __metadata("design:type", String)
+], DeleteAccountDTO.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'new passsword' }),
+    __metadata("design:type", String)
+], DeleteAccountDTO.prototype, "reason", void 0);
+class LoginDTO {
+}
+exports.LoginDTO = LoginDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Password', example: 'password123' }),
+    __metadata("design:type", String)
+], LoginDTO.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'email ', example: 'john@example.com' }),
+    __metadata("design:type", String)
+], LoginDTO.prototype, "email", void 0);
+class ForgotPasswordDTO {
+}
+exports.ForgotPasswordDTO = ForgotPasswordDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'code' }),
+    __metadata("design:type", String)
+], ForgotPasswordDTO.prototype, "code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'new passsword' }),
+    __metadata("design:type", String)
+], ForgotPasswordDTO.prototype, "newPassword", void 0);
+class SetAuthenticatorDto {
+}
+exports.SetAuthenticatorDto = SetAuthenticatorDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'user_id' }),
+    __metadata("design:type", typeof (_a = typeof String !== "undefined" && String) === "function" ? _a : Object)
+], SetAuthenticatorDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'secret' }),
+    __metadata("design:type", typeof (_b = typeof String !== "undefined" && String) === "function" ? _b : Object)
+], SetAuthenticatorDto.prototype, "secret", void 0);
+class VerifyAuthenticationDto {
+}
+exports.VerifyAuthenticationDto = VerifyAuthenticationDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'user_id', example: '12345' }),
+    __metadata("design:type", typeof (_c = typeof String !== "undefined" && String) === "function" ? _c : Object)
+], VerifyAuthenticationDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'code', example: '123456' }),
+    __metadata("design:type", typeof (_d = typeof String !== "undefined" && String) === "function" ? _d : Object)
+], VerifyAuthenticationDto.prototype, "code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: enum_1.OtpType, example: enum_1.OtpType.TWO_FACTOR_AUTHENTICATION, description: 'Type of OTP' }),
+    __metadata("design:type", String)
+], VerifyAuthenticationDto.prototype, "type", void 0);
+class RefreshTokenDTO {
+}
+exports.RefreshTokenDTO = RefreshTokenDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'refresh_token:' }),
+    __metadata("design:type", typeof (_e = typeof String !== "undefined" && String) === "function" ? _e : Object)
+], RefreshTokenDTO.prototype, "refresh_token", void 0);
+class Refferal {
+}
+exports.Refferal = Refferal;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'referral code' }),
+    __metadata("design:type", String)
+], Refferal.prototype, "refCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'status', enum: ['active', 'inactive'] }),
+    __metadata("design:type", String)
+], Refferal.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'max referal' }),
+    __metadata("design:type", Number)
+], Refferal.prototype, "max", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'amount', default: 0 }),
+    __metadata("design:type", Number)
+], Refferal.prototype, "amount", void 0);
+class UserDTO {
+}
+exports.UserDTO = UserDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Unique identifier for the user',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: '12345', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'title', example: 'mr', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "title", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'One signal Player ID', example: 'player123', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "playerId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'User type, e.g. user, driver, admin',
+        enum: enum_1.UserType,
+        default: enum_1.UserType.USER,
+    }),
+    __metadata("design:type", typeof (_f = typeof enum_1.UserType !== "undefined" && enum_1.UserType) === "function" ? _f : Object)
+], UserDTO.prototype, "userType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Username of the user', example: 'john_doe' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "username", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'status', example: enum_1.UserStatus.ACTIVE, enum: enum_1.UserStatus }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'user roles', example: ['investment', "loan"] }),
+    __metadata("design:type", Array)
+], UserDTO.prototype, "roles", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Email address of the user',
+        example: 'john@example.com',
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Full name of the user', example: 'John Doe' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "fullname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'First name of the user', example: 'John ' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "firstname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Last name of the user', example: 'Doe' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "lastname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Gender of the user',
+        enum: enum_1.Gender,
+        example: 'male',
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "gender", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Phone number of the user',
+        example: '+1234567890',
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "phone", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User password', example: 'password123' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'use a user ref code for referral ', example: 'jo9e2' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "useRefCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Profile image URL',
+        example: 'http://example.com/image.jpg',
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "profileImage", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Indicates if the user is an admin',
+        example: false,
+    }),
+    __metadata("design:type", Boolean)
+], UserDTO.prototype, "isAdmin", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Indicates if the user is a super admin',
+        example: false,
+    }),
+    __metadata("design:type", Boolean)
+], UserDTO.prototype, "isSuperAdmin", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Date of birth of the user',
+        example: '1990-01-01T00:00:00.000Z',
+        type: Date,
+    }),
+    __metadata("design:type", typeof (_g = typeof Date !== "undefined" && Date) === "function" ? _g : Object)
+], UserDTO.prototype, "dob", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'California' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "state", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'USA' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Los Angeles County', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "localGovernmentArea", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'single', enum: ['single', 'married'], required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "maritalStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Social media profiles with platforms as keys and handles as values',
+        example: { twitter: 'user_handle', facebook: 'user_handle' },
+        required: false,
+    }),
+    __metadata("design:type", typeof (_h = typeof Record !== "undefined" && Record) === "function" ? _h : Object)
+], UserDTO.prototype, "socialMediaProfile", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Residential address of the user',
+        example: '123 Main St, Springfield, USA',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "residentialAddress", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Bank account information',
+        example: [
+            {
+                bankName: 'Bank of America',
+                accountName: 'John Doe',
+                accountNumber: '987654321',
+            },
+        ],
+    }),
+    __metadata("design:type", Array)
+], UserDTO.prototype, "bankAccount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'referral details' }),
+    __metadata("design:type", Refferal)
+], UserDTO.prototype, "referral", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'referral by' }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "refBy", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/wallet.dto.ts":
+/*!************************************!*\
+  !*** ./libs/dto/src/wallet.dto.ts ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WalletDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class WalletDTO {
+}
+exports.WalletDTO = WalletDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Unique identifier for the wallet', required: false }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID associated with the wallet' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Name of the wallet' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "accountName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account number of the wallet' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "accountNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Current balance of the wallet', example: 1000 }),
+    __metadata("design:type", Number)
+], WalletDTO.prototype, "balance", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Currency of the wallet' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "currency", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Status of the wallet', required: false }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'type of tranfer', enum: ['nuban', 'mobile_money'], default: 'nuban', required: false }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "type", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Bank code of the wallet', default: "058" }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "bank_code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'amount' }),
+    __metadata("design:type", Number)
+], WalletDTO.prototype, "amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'reason' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "reason", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'rideID' }),
+    __metadata("design:type", String)
+], WalletDTO.prototype, "rideID", void 0);
+
+
+/***/ }),
+
 /***/ "./libs/enum/src/action.enum.ts":
 /*!**************************************!*\
   !*** ./libs/enum/src/action.enum.ts ***!
@@ -200,6 +1358,215 @@ var Gender;
     Gender["FEMALE"] = "female";
     Gender["OTHER"] = "other";
 })(Gender || (exports.Gender = Gender = {}));
+
+
+/***/ }),
+
+/***/ "./libs/guard/src/auth.guard.ts":
+/*!**************************************!*\
+  !*** ./libs/guard/src/auth.guard.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthGuard = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+let AuthGuard = class AuthGuard {
+    constructor(userModel, jwtService, configService) {
+        this.userModel = userModel;
+        this.jwtService = jwtService;
+        this.configService = configService;
+    }
+    async canActivate(context) {
+        const request = context.switchToHttp().getRequest();
+        const token = this.extractTokenFromHeader(request);
+        if (!token) {
+            throw new common_1.UnauthorizedException();
+        }
+        try {
+            const payload = await this.jwtService.verifyAsync(token, {
+                secret: this.configService.get("JWT_SECRET")
+            });
+            const user = await this.userModel.findById(payload.sub);
+            request['user'] = user;
+            request['userID'] = user._id;
+        }
+        catch {
+            throw new common_1.UnauthorizedException("auth");
+        }
+        return true;
+    }
+    extractTokenFromHeader(request) {
+        const [type, token] = request.headers.authorization?.split(' ') ?? [];
+        return type === 'Bearer' ? token : undefined;
+    }
+};
+exports.AuthGuard = AuthGuard;
+exports.AuthGuard = AuthGuard = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object, typeof (_c = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _c : Object])
+], AuthGuard);
+
+
+/***/ }),
+
+/***/ "./libs/guard/src/index.ts":
+/*!*********************************!*\
+  !*** ./libs/guard/src/index.ts ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./roles.guard */ "./libs/guard/src/roles.guard.ts"), exports);
+__exportStar(__webpack_require__(/*! ./auth.guard */ "./libs/guard/src/auth.guard.ts"), exports);
+__exportStar(__webpack_require__(/*! ./jwt-auth.guard */ "./libs/guard/src/jwt-auth.guard.ts"), exports);
+__exportStar(__webpack_require__(/*! ./local-auth.guard */ "./libs/guard/src/local-auth.guard.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/guard/src/jwt-auth.guard.ts":
+/*!******************************************!*\
+  !*** ./libs/guard/src/jwt-auth.guard.ts ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.JwtAuthGuard = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
+    canActivate(context) {
+        return super.canActivate(context);
+    }
+    handleRequest(err, user, info) {
+        if (err || !user) {
+            throw err || new common_1.UnauthorizedException("jwt");
+        }
+        return user;
+    }
+};
+exports.JwtAuthGuard = JwtAuthGuard;
+exports.JwtAuthGuard = JwtAuthGuard = __decorate([
+    (0, common_1.Injectable)()
+], JwtAuthGuard);
+
+
+/***/ }),
+
+/***/ "./libs/guard/src/local-auth.guard.ts":
+/*!********************************************!*\
+  !*** ./libs/guard/src/local-auth.guard.ts ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LocalAuthGuard = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+let LocalAuthGuard = class LocalAuthGuard extends (0, passport_1.AuthGuard)('local') {
+};
+exports.LocalAuthGuard = LocalAuthGuard;
+exports.LocalAuthGuard = LocalAuthGuard = __decorate([
+    (0, common_1.Injectable)()
+], LocalAuthGuard);
+
+
+/***/ }),
+
+/***/ "./libs/guard/src/roles.guard.ts":
+/*!***************************************!*\
+  !*** ./libs/guard/src/roles.guard.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RolesGuard = void 0;
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
+let RolesGuard = class RolesGuard {
+    constructor(reflector) {
+        this.reflector = reflector;
+    }
+    canActivate(context) {
+        const requiredRoles = this.reflector.getAllAndOverride(decorator_1.ROLES_KEY, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+        const { user } = context.switchToHttp().getRequest();
+        const hasRole = () => user.roles.some((role) => requiredRoles.includes(role));
+        if (!user || !hasRole()) {
+            throw new common_1.ForbiddenException('You do not have permission to access this resource');
+        }
+        return requiredRoles.some((role) => user.roles?.includes(role));
+    }
+};
+exports.RolesGuard = RolesGuard;
+exports.RolesGuard = RolesGuard = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof core_1.Reflector !== "undefined" && core_1.Reflector) === "function" ? _a : Object])
+], RolesGuard);
 
 
 /***/ }),
@@ -1032,6 +2399,1068 @@ exports.WalletSchema = mongoose_1.SchemaFactory.createForClass(WalletModel);
 
 /***/ }),
 
+/***/ "./libs/service/src/email.service.ts":
+/*!*******************************************!*\
+  !*** ./libs/service/src/email.service.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SendMailService = void 0;
+const mailer_1 = __webpack_require__(/*! @nestjs-modules/mailer */ "@nestjs-modules/mailer");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+let SendMailService = class SendMailService {
+    constructor(mailService) {
+        this.mailService = mailService;
+    }
+    async sendMail({ from, to, subject, html, text }) {
+        const data = {
+            from: from || 'emmanuel@jamfortetech.com',
+            to,
+            subject,
+            text,
+            html,
+        };
+        try {
+            this.mailService.sendMail(data).catch((e) => {
+                console.log('SmS failed');
+            });
+        }
+        catch (error) { }
+    }
+};
+exports.SendMailService = SendMailService;
+exports.SendMailService = SendMailService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _a : Object])
+], SendMailService);
+
+
+/***/ }),
+
+/***/ "./libs/service/src/index.ts":
+/*!***********************************!*\
+  !*** ./libs/service/src/index.ts ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./notification.service */ "./libs/service/src/notification.service.ts"), exports);
+__exportStar(__webpack_require__(/*! ./email.service */ "./libs/service/src/email.service.ts"), exports);
+__exportStar(__webpack_require__(/*! ./notification.service */ "./libs/service/src/notification.service.ts"), exports);
+__exportStar(__webpack_require__(/*! ./notification.gateway */ "./libs/service/src/notification.gateway.ts"), exports);
+__exportStar(__webpack_require__(/*! ./response.service */ "./libs/service/src/response.service.ts"), exports);
+__exportStar(__webpack_require__(/*! ./websocket/web.socket */ "./libs/service/src/websocket/web.socket.ts"), exports);
+__exportStar(__webpack_require__(/*! ./sms.service */ "./libs/service/src/sms.service.ts"), exports);
+__exportStar(__webpack_require__(/*! ./payment/flutterwave */ "./libs/service/src/payment/flutterwave.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/service/src/notification.gateway.ts":
+/*!**************************************************!*\
+  !*** ./libs/service/src/notification.gateway.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NotificationGateway = void 0;
+const websockets_1 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
+const socket_io_1 = __webpack_require__(/*! socket.io */ "socket.io");
+let NotificationGateway = class NotificationGateway {
+    constructor() {
+        this.clients = new Map();
+        this.pendingNotifications = new Map();
+    }
+    handleConnection(client) {
+        const userId = client.handshake.query.userId;
+        console.log('userId', userId);
+        if (userId) {
+            this.clients.set(userId, client.id);
+            if (this.pendingNotifications.has(userId)) {
+                const notifications = this.pendingNotifications.get(userId) || [];
+                notifications.forEach((notification) => {
+                    this.server.to(client.id).emit('notification', notification);
+                });
+                this.pendingNotifications.delete(userId);
+            }
+        }
+    }
+    handleDisconnect(client) {
+        const userId = [...this.clients.entries()].find(([_, id]) => id === client.id)?.[0];
+        if (userId) {
+            this.clients.delete(userId);
+        }
+    }
+    sendNotification(userId, data) {
+        const socketId = this.clients.get(userId);
+        if (socketId) {
+            this.server.to(socketId).emit('notification', data);
+        }
+        else {
+            if (!this.pendingNotifications.has(userId)) {
+                this.pendingNotifications.set(userId, []);
+            }
+            this.pendingNotifications.get(userId)?.push(data);
+        }
+    }
+    handleJoinRoom(client, room) {
+        client.join(room);
+    }
+    handleNewMessage(message) {
+        console.log('message12', message);
+    }
+};
+exports.NotificationGateway = NotificationGateway;
+__decorate([
+    (0, websockets_1.WebSocketServer)(),
+    __metadata("design:type", typeof (_a = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _a : Object)
+], NotificationGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('joinRoom'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], NotificationGateway.prototype, "handleJoinRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('joinRoom'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], NotificationGateway.prototype, "handleNewMessage", null);
+exports.NotificationGateway = NotificationGateway = __decorate([
+    (0, websockets_1.WebSocketGateway)(3002, {})
+], NotificationGateway);
+
+
+/***/ }),
+
+/***/ "./libs/service/src/notification.service.ts":
+/*!**************************************************!*\
+  !*** ./libs/service/src/notification.service.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NotificationService = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! mongoose */ "mongoose");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const mongoose_2 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const axios_1 = __webpack_require__(/*! axios */ "axios");
+const notification_gateway_1 = __webpack_require__(/*! ./notification.gateway */ "./libs/service/src/notification.gateway.ts");
+let NotificationService = class NotificationService {
+    constructor(notificationGateway, activityLogModel) {
+        this.notificationGateway = notificationGateway;
+        this.activityLogModel = activityLogModel;
+        this.oneSignalUrl = "https://onesignal.com/api/v1/notifications";
+        this.appId = process.env.ONESIGNAL_APP_ID;
+        this.apiKey = process.env.ONESIGNAL_API_KEY;
+    }
+    async notificationActivity({ entityType, userID, details, action, entityID, playerIds, }) {
+        await this.activityLogModel.create({
+            entityType,
+            userID,
+            details,
+            action,
+            entityID,
+        });
+        this.notificationGateway.sendNotification(userID.toString(), {
+            action,
+            entityType,
+            entityID,
+            details,
+        });
+        try {
+            const payload = {
+                app_id: this.appId,
+                headings: { en: details },
+                contents: { en: details },
+                include_player_ids: playerIds,
+            };
+            const response = await axios_1.default.post(this.oneSignalUrl, payload, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Basic ${this.apiKey}`,
+                },
+            });
+            console.log(`Notification sent: ${response.status}`);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    optionsBuilder(method, endpoint, data) {
+        return {
+            method,
+            url: `${this.oneSignalUrl}/${endpoint}`,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Basic ${this.apiKey}`,
+            },
+            data: JSON.stringify(data),
+        };
+    }
+    async createNotication(data) {
+        const options = this.optionsBuilder("post", "notifications", data);
+        try {
+            const response = await (0, axios_1.default)(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error(error);
+            return error;
+        }
+    }
+};
+exports.NotificationService = NotificationService;
+exports.NotificationService = NotificationService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(1, (0, mongoose_2.InjectModel)(schema_1.ActivityLogModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof notification_gateway_1.NotificationGateway !== "undefined" && notification_gateway_1.NotificationGateway) === "function" ? _a : Object, typeof (_b = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _b : Object])
+], NotificationService);
+
+
+/***/ }),
+
+/***/ "./libs/service/src/payment/flutterwave.ts":
+/*!*************************************************!*\
+  !*** ./libs/service/src/payment/flutterwave.ts ***!
+  \*************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FlutterwaveService = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const schema_2 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const axios_1 = __webpack_require__(/*! axios */ "axios");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+let FlutterwaveService = class FlutterwaveService {
+    constructor(configService, walletModel, userModel) {
+        this.configService = configService;
+        this.walletModel = walletModel;
+        this.userModel = userModel;
+        this.baseUrl = "";
+        this.secretKey = this.configService.get("FLUTTERWAVE_SECRET_KEY");
+        this.secretHash = this.configService.get("FLUTTERWAVEEncryptionKey");
+        this.headers = {
+            accept: "application/json",
+            Authorization: `Bearer ${this.secretKey}`,
+            "Content-Type": "application/json",
+        };
+    }
+    async handleWebhook(req) {
+        try {
+            const signature = req.headers["verif-hash"];
+            if (!signature || (signature !== this.secretHash)) {
+                throw new Error("Failed to process webhook");
+            }
+            return req.body;
+            return { status: "success", message: "Webhook processed successfully" };
+        }
+        catch (error) {
+            console.error("Error processing webhook:", error);
+            throw new Error("Failed to process webhook");
+        }
+    }
+    async testDeposit(data) {
+        const { account_reference, amount } = data;
+        try {
+            const options = {
+                method: "POST",
+                url: `https://api.flutterwave.com/v3/payout-subaccounts/${account_reference}/fund-account`,
+                headers: this.headers,
+                data: {
+                    amount,
+                    currency: "NGN",
+                },
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error performing wallet to wallet transfer:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async createVirtualAccount(data) {
+        const { account_name, email = "", mobilenumber } = data;
+        console.log(data);
+        try {
+            const options = {
+                method: "POST",
+                url: "https://api.flutterwave.com/v3/payout-subaccounts",
+                headers: this.headers,
+                data: {
+                    account_name,
+                    email,
+                    mobilenumber,
+                    country: "NG",
+                },
+            };
+            const response = await axios_1.default.request(options);
+            const responseType = response.data;
+            const user = await this.userModel.findOne({ email });
+            await this.walletModel.create({
+                accountNumber: responseType.data.nuban,
+                accountName: account_name,
+                userID: user?._id.toString(),
+                barter_id: responseType.data.barter_id,
+                bankCode: responseType.data.bank_code,
+                bankName: responseType.data.bank_name,
+                customerCode: responseType.data.account_reference,
+                currency: "NGN",
+            });
+            return responseType;
+        }
+        catch (error) {
+            console.error("Error creating virtual account:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async walletToWalletTransfer(data) {
+        const { account_bank, account_number, amount, narration, reference, debit_subaccount, } = data;
+        try {
+            const options = {
+                method: "POST",
+                url: "https://api.flutterwave.com/v3/transfers",
+                headers: this.headers,
+                data: {
+                    account_bank,
+                    account_number,
+                    amount,
+                    currency: "NGN",
+                    debit_currency: "NGN",
+                    narration,
+                    reference: reference,
+                    debit_subaccount,
+                },
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error performing wallet to wallet transfer:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async withdrawFunds(data) {
+        const { account_bank, account_number, amount, narration, reference, debit_subaccount, } = data;
+        try {
+            const options = {
+                method: "POST",
+                url: "https://api.flutterwave.com/v3/transfers",
+                headers: this.headers,
+                data: {
+                    account_bank,
+                    account_number,
+                    amount,
+                    currency: "NGN",
+                    narration,
+                    reference: reference,
+                    debit_subaccount,
+                    callback_url: "https://www.flutterwave.com/ng/",
+                    debit_currency: "NGN",
+                },
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error withdrawing funds:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async getAvailableBalance(userID) {
+        const wallet = await this.walletModel.findOne({
+            userID
+        });
+        if (!wallet) {
+            throw new Error("Wallet not found");
+        }
+        const subaccountId = wallet.customerCode;
+        try {
+            const options = {
+                method: "GET",
+                url: `https://api.flutterwave.com/v3/payout-subaccounts/${subaccountId}/balances`,
+                headers: this.headers,
+            };
+            const response = await axios_1.default.request(options);
+            console.log(response.data);
+            return { data: { ...response.data.data, wallet } };
+        }
+        catch (error) {
+            console.error("Error fetching available balance:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async fetchTransactions(data) {
+        const { subaccountId, from, to, fetch_limit = 10, page = 1 } = data;
+        try {
+            const options = {
+                method: "GET",
+                url: `https://api.flutterwave.com/v3/payout-subaccounts/${subaccountId}/transactions?from=${from}&to=${to}&currency=NGN&page=${page}&fetch_limit=${fetch_limit}`,
+                headers: this.headers,
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error fetching transactions:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async getTransferById(transferId) {
+        try {
+            const options = {
+                method: "GET",
+                url: `https://api.flutterwave.com/v3/transfers/${transferId}`,
+                headers: this.headers,
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error fetching transfer by ID:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async verifyAccountNumber(accountNumber, bankCode) {
+        try {
+            const options = {
+                method: "POST",
+                url: "https://api.flutterwave.com/v3/accounts/resolve",
+                headers: this.headers,
+                data: {
+                    account_number: accountNumber,
+                    account_bank: bankCode,
+                },
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error verifying account number:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async getAllBanks() {
+        try {
+            const options = {
+                method: "GET",
+                url: "https://api.flutterwave.com/v3/banks/NG",
+                headers: this.headers,
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error fetching banks:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+};
+exports.FlutterwaveService = FlutterwaveService;
+exports.FlutterwaveService = FlutterwaveService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(1, (0, mongoose_1.InjectModel)(schema_2.WalletModel.name)),
+    __param(2, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _c : Object])
+], FlutterwaveService);
+const CreateSubaccount = {
+    status: "success",
+    message: "Payout subaccount created",
+    data: {
+        id: 1276,
+        account_reference: "PSAC1*****2705732",
+        account_name: "John Doe",
+        barter_id: "234101019871322",
+        email: "johndoe@example.com",
+        mobilenumber: "01010100101",
+        country: "US",
+        nuban: "822*****903",
+        bank_name: "Sterling Bank PLC",
+        bank_code: "232",
+        status: "ACTIVE",
+        created_at: "2021-10-04T18:38:25.000Z",
+    },
+};
+
+
+/***/ }),
+
+/***/ "./libs/service/src/response.service.ts":
+/*!**********************************************!*\
+  !*** ./libs/service/src/response.service.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.serviceResponse = serviceResponse;
+exports.getMetadata = getMetadata;
+function serviceResponse({ message, data, status, metadata }) {
+    return {
+        message,
+        data,
+        status,
+        metadata
+    };
+}
+async function getMetadata({ model, query, querys, }) {
+    const { page = 1, limit = 10 } = query;
+    const total = await model.countDocuments(querys);
+    return {
+        total,
+        totalPage: Math.ceil(total / limit),
+        currentPage: page,
+        limit: limit,
+    };
+}
+
+
+/***/ }),
+
+/***/ "./libs/service/src/sms.service.ts":
+/*!*****************************************!*\
+  !*** ./libs/service/src/sms.service.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SmsService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const axios_1 = __webpack_require__(/*! axios */ "axios");
+let SmsService = class SmsService {
+    constructor() {
+        this.baseUrl = 'https://app.emisri.com';
+        this.username = 'jamforte';
+        this.apiId = 'k6YtmOXf';
+        this.accessToken = '5m]X5k|OLsHrRm_Hk97S7:DCWaUxd1do';
+        this.senderId = 'GoVeloox';
+    }
+    getAuthHeaders() {
+        const token = Buffer.from(`${this.username}:${this.apiId}`).toString('base64');
+        return {
+            Authorization: `Basic ${token}`,
+            'X-Access-Token': "5m]X5k|OLsHrRm_Hk97S7:DCWaUxd1do",
+            'Content-Type': 'application/json',
+        };
+    }
+    async sendSingleSMS(destination, text) {
+        try {
+            const response = await axios_1.default.post('https://app.emisri.com/API/SendBulkSMS', {
+                source: 'GoVeloox',
+                destination: destination,
+                text: text,
+                dataCoding: 0,
+            }, {
+                auth: {
+                    username: this.username,
+                    password: this.apiId
+                },
+                headers: {
+                    'X-Access-Token': this.accessToken,
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log(response.data);
+            return response.data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(error.response?.data || 'Failed to send SMS', error.response?.status || 500);
+        }
+    }
+    async sendBulkSMS(destinations, text) {
+        try {
+            const body = {
+                source: this.senderId,
+                destination: destinations,
+                text,
+                dataCoding: 0,
+            };
+            const response = await axios_1.default.post(`${this.baseUrl}/API/SendBulkSMS`, body, { headers: this.getAuthHeaders() });
+            return response.data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(error.response?.data || 'Failed to send bulk SMS', error.response?.status || 500);
+        }
+    }
+    async generateMessage(data) {
+        const { code, duration, type } = data;
+        switch (type) {
+            case 'EmailVerification':
+                return `Your verification code is ${code}. Use this to verify your email address. This code expires in ${duration} minutes.`;
+            case 'PasswordReset':
+                return `Reset your password using this code: ${code}. Do not share this with anyone. The code is valid for ${duration} minutes.`;
+            case '2FA':
+                return `Your 2FA login code is ${code}. Enter this to complete your secure sign-in. It will expire in ${duration} minutes.`;
+            case 'DeliveryPin':
+                return `Your delivery PIN is ${code}. Share this with the delivery agent to confirm receipt. It will expire in ${duration} minutes.`;
+            default:
+                throw new Error('Invalid message type');
+        }
+    }
+};
+exports.SmsService = SmsService;
+exports.SmsService = SmsService = __decorate([
+    (0, common_1.Injectable)()
+], SmsService);
+
+
+/***/ }),
+
+/***/ "./libs/service/src/websocket/web.socket.ts":
+/*!**************************************************!*\
+  !*** ./libs/service/src/websocket/web.socket.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WebSocketGatewayService = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const websockets_1 = __webpack_require__(/*! @nestjs/websockets */ "@nestjs/websockets");
+const axios_1 = __webpack_require__(/*! axios */ "axios");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const socket_io_1 = __webpack_require__(/*! socket.io */ "socket.io");
+let WebSocketGatewayService = class WebSocketGatewayService {
+    constructor(userModel) {
+        this.userModel = userModel;
+        this.users = new Map();
+        this.usersData = new Map();
+    }
+    async handleConnection(client) {
+        const userId = client.handshake.query.userId;
+        const riderId = client.handshake.query.riderId;
+        const userData = {
+            socketId: client.id,
+            lat: client.handshake.query.lat || 0,
+            long: client.handshake.query.long || 0,
+            address: client.handshake.query.address || '',
+            ip: client.handshake.query.ip,
+        };
+        let ip = client.handshake.headers['x-forwarded-for'] || client.handshake.address;
+        let ip2 = userData.ip ? userData.ip : Array.isArray(ip) ? ip[0] : ip;
+        const location = await this.getLocationFromIP(ip2);
+        if (userId) {
+            this.usersData.set(userId, userData);
+        }
+        this.server.to(client.id).emit('my-data', { userData, location });
+    }
+    handleDisconnect(client) {
+        this.removeClient(client.id, this.users, this.usersData);
+    }
+    removeClient(socketId, userMap, dataMap) {
+        const userId = [...userMap.entries()].find(([_, id]) => id === socketId)?.[0];
+        if (userId) {
+            userMap.delete(userId);
+            dataMap.delete(userId);
+        }
+    }
+    async walletNotification(payload) {
+        const { data, userID } = payload;
+        const userSocketId = this.usersData.get(userID);
+        console.log(userSocketId);
+        if (userSocketId)
+            this.server.to(userSocketId.socketId).emit('flutter-wallet', data);
+    }
+    async getLocationFromIP(ip) {
+        try {
+            const response = await axios_1.default.get(`http://ip-api.com/json/${ip}`);
+            if (response.data.status === 'fail')
+                return null;
+            return {
+                lat: response.data.lat,
+                long: response.data.lon,
+                address: `${response.data.city}, ${response.data.regionName}, ${response.data.country}`,
+            };
+        }
+        catch (error) {
+            console.error('Error fetching location:', error);
+            return null;
+        }
+    }
+    getDistance(lat1 = 0, lon1 = 0, lat2 = 0, lon2 = 0) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * (Math.PI / 180)) *
+                Math.cos(lat2 * (Math.PI / 180)) *
+                Math.sin(dLon / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+};
+exports.WebSocketGatewayService = WebSocketGatewayService;
+__decorate([
+    (0, websockets_1.WebSocketServer)(),
+    __metadata("design:type", typeof (_b = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _b : Object)
+], WebSocketGatewayService.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('notification'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], WebSocketGatewayService.prototype, "walletNotification", null);
+exports.WebSocketGatewayService = WebSocketGatewayService = __decorate([
+    (0, websockets_1.WebSocketGateway)({}),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], WebSocketGatewayService);
+
+
+/***/ }),
+
+/***/ "./libs/strategy/src/facebook.strategy.ts":
+/*!************************************************!*\
+  !*** ./libs/strategy/src/facebook.strategy.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FacebookStrategy = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const passport_facebook_1 = __webpack_require__(/*! passport-facebook */ "passport-facebook");
+let FacebookStrategy = class FacebookStrategy extends (0, passport_1.PassportStrategy)(passport_facebook_1.Strategy, 'facebook') {
+    constructor(config) {
+        super({
+            clientID: '556847563691372',
+            clientSecret: '2113301a89e177bfb21fc9fc2d92ceab',
+            callbackURL: `${config.get('callbackURL')}/v1/auth/facebook/callback`,
+            profileFields: ['id', 'displayName', 'name', 'emails', 'photos'],
+            scope: ['email'],
+        });
+        this.config = config;
+    }
+    async validate(accessToken, refreshToken, profile, done) {
+        const { name, emails, photos } = profile;
+        const user = {
+            email: emails ? emails[0]?.value : "",
+            firstName: name?.givenName,
+            lastName: name?.familyName,
+            picture: photos[0]?.value,
+        };
+        const payload = {
+            user,
+            accessToken,
+        };
+        done(null, user);
+    }
+};
+exports.FacebookStrategy = FacebookStrategy;
+exports.FacebookStrategy = FacebookStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
+], FacebookStrategy);
+
+
+/***/ }),
+
+/***/ "./libs/strategy/src/google.strategy.ts":
+/*!**********************************************!*\
+  !*** ./libs/strategy/src/google.strategy.ts ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GoogleStrategy = void 0;
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const passport_google_oauth20_1 = __webpack_require__(/*! passport-google-oauth20 */ "passport-google-oauth20");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrategy)(passport_google_oauth20_1.Strategy, 'google') {
+    constructor(config) {
+        super({
+            clientID: '664872400063-5g3holsjkgmanem3t6b8dg1uvmp7qogt.apps.googleusercontent.com',
+            clientSecret: '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',
+            callbackURL: `${config.get('callbackURL')}/v1/auth/google/callback`,
+            scope: ['email', 'profile'],
+        });
+        this.config = config;
+    }
+    async validate(accessToken, refreshToken, profile, done) {
+        const { name, emails, photos } = profile;
+        const user = {
+            email: emails[0].value,
+            firstName: name.givenName,
+            lastName: name.familyName,
+            picture: photos[0].value,
+            accessToken
+        };
+        done(null, user);
+    }
+};
+exports.GoogleStrategy = GoogleStrategy;
+exports.GoogleStrategy = GoogleStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
+], GoogleStrategy);
+
+
+/***/ }),
+
+/***/ "./libs/strategy/src/index.ts":
+/*!************************************!*\
+  !*** ./libs/strategy/src/index.ts ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./jwt.strategy */ "./libs/strategy/src/jwt.strategy.ts"), exports);
+__exportStar(__webpack_require__(/*! ./facebook.strategy */ "./libs/strategy/src/facebook.strategy.ts"), exports);
+__exportStar(__webpack_require__(/*! ./google.strategy */ "./libs/strategy/src/google.strategy.ts"), exports);
+__exportStar(__webpack_require__(/*! ./x.strategy */ "./libs/strategy/src/x.strategy.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/strategy/src/jwt.strategy.ts":
+/*!*******************************************!*\
+  !*** ./libs/strategy/src/jwt.strategy.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.JwtStrategy = void 0;
+const passport_jwt_1 = __webpack_require__(/*! passport-jwt */ "passport-jwt");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor(userModel, configService) {
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: configService.get("JWT_SECRET"),
+        });
+        this.userModel = userModel;
+        this.configService = configService;
+    }
+    async validate(payload) {
+        const user = await this.userModel.findById(payload.sub);
+        return user;
+    }
+};
+exports.JwtStrategy = JwtStrategy;
+exports.JwtStrategy = JwtStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _b : Object])
+], JwtStrategy);
+
+
+/***/ }),
+
+/***/ "./libs/strategy/src/x.strategy.ts":
+/*!*****************************************!*\
+  !*** ./libs/strategy/src/x.strategy.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.XStrategy = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const passport_facebook_1 = __webpack_require__(/*! passport-facebook */ "passport-facebook");
+const APIKey = 'bz8IwymAKgYSixRr6wMJwRQby';
+const APIKeySecret = 'v4hUsoxv4JnTLwzMmXAe3u02p141ENsXHvQ3BkFnw9ZK0MuVSs';
+let XStrategy = class XStrategy extends (0, passport_1.PassportStrategy)(passport_facebook_1.Strategy, 'x') {
+    constructor(config) {
+        super({
+            clientID: '556847563691372',
+            clientSecret: '2113301a89e177bfb21fc9fc2d92ceab',
+            callbackURL: 'https://veegil-backend-puir.onrender.com/v1/auth/x/callback',
+            profileFields: ['id', 'displayName', 'name', 'emails', 'photos'],
+        });
+        this.config = config;
+    }
+    async validate(accessToken, refreshToken, profile, done) {
+        const { name, emails, photos } = profile;
+        const user = {
+            email: emails ? emails[0]?.value : "",
+            firstName: name?.givenName,
+            lastName: name?.familyName,
+            picture: photos[0]?.value,
+        };
+        const payload = {
+            user,
+            accessToken,
+        };
+        done(null, user);
+    }
+};
+exports.XStrategy = XStrategy;
+exports.XStrategy = XStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
+], XStrategy);
+
+
+/***/ }),
+
 /***/ "./src/app.controller.ts":
 /*!*******************************!*\
   !*** ./src/app.controller.ts ***!
@@ -1096,6 +3525,7 @@ const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./src/app.
 const app_service_1 = __webpack_require__(/*! ./app.service */ "./src/app.service.ts");
 const auth_module_1 = __webpack_require__(/*! ./auth/auth.module */ "./src/auth/auth.module.ts");
 const users_module_1 = __webpack_require__(/*! ./users/users.module */ "./src/users/users.module.ts");
+const uploads_module_1 = __webpack_require__(/*! ./uploads/uploads.module */ "./src/uploads/uploads.module.ts");
 const platform_express_1 = __webpack_require__(/*! @nestjs/platform-express */ "@nestjs/platform-express");
 const casl_module_1 = __webpack_require__(/*! ./casl/casl.module */ "./src/casl/casl.module.ts");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
@@ -1136,7 +3566,9 @@ exports.AppModule = AppModule = __decorate([
                     ttl: 60000,
                     limit: 10,
                 }]),
-            users_module_1.UsersModule, products_module_1.ProductsModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, auth_module_1.AuthModule
+            auth_module_1.AuthModule,
+            uploads_module_1.UploadsModule,
+            users_module_1.UsersModule, products_module_1.ProductsModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -1194,70 +3626,302 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
-const create_auth_dto_1 = __webpack_require__(/*! ./dto/create-auth.dto */ "./src/auth/dto/create-auth.dto.ts");
-const update_auth_dto_1 = __webpack_require__(/*! ./dto/update-auth.dto */ "./src/auth/dto/update-auth.dto.ts");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const dto_2 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+class RegisterDTO extends (0, swagger_1.PickType)(dto_2.UserDTO, ['title', 'isAdmin', 'isSuperAdmin', 'userType', 'useRefCode', 'firstname', 'fullname', 'lastname', 'email', 'password', 'gender', 'phone', "profileImage", 'residentialAddress']) {
+}
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    create(createAuthDto) {
-        return this.authService.create(createAuthDto);
+    register(data) {
+        return this.authService.register(data);
     }
-    findAll() {
-        return this.authService.findAll();
+    signIn(data) {
+        return this.authService.login(data.email, data.password);
     }
-    findOne(id) {
-        return this.authService.findOne(+id);
+    sendTwoFactorAuthenticationMail(req) {
+        return this.authService.sendTwoFactorAuthenticationMail(req.body);
     }
-    update(id, updateAuthDto) {
-        return this.authService.update(+id, updateAuthDto);
+    sendTwoFactorAuthenticationSms(req) {
+        return this.authService.sendTwoFactorAuthenticationSms(req.body);
     }
-    remove(id) {
-        return this.authService.remove(+id);
+    twoFactorAuthenticationLogin(req) {
+        return this.authService.twoFactorAuthenticationLogin(req.body);
+    }
+    async refresh(refreshToken) {
+        return this.authService.refreshToken(refreshToken);
+    }
+    getProfile(req) {
+        return req.user;
+    }
+    editProfile(req) {
+        return this.authService.editProfile(req.body, req.user._id);
+    }
+    addBankAccount(req) {
+        return this.authService.addBankAccount(req.user._id, req.body);
+    }
+    removeBankAccount(req, accountNumber) {
+        return this.authService.removeBankAccount(req.user._id, accountNumber);
+    }
+    getUserBankAccount(req) {
+        return this.authService.getUserBanks(req.user._id);
+    }
+    editUserBankAccount(req) {
+        return this.authService.editUserBanks(req.user._id, req.body);
+    }
+    async googleAuth(req) { }
+    googleAuthRedirect(req) {
+        return this.authService.ssoGoogle(req);
+    }
+    async facebookLogin() { }
+    async facebookLoginRedirect(req) {
+        return this.authService.ssoFacebook(req);
+    }
+    changePassword(req) {
+        return this.authService.changePassword(req.user._id, req.body.currentPassword, req.body.newPassword);
+    }
+    deleteAccount(req) {
+        return this.authService.deleteAccount(req.user._id.toString(), req.body.email, req.body.reason);
+    }
+    forgotPassword(req) {
+        return this.authService.forgotPassword(req.body.token, req.body.code, req.body.newPassword);
+    }
+    verifyCode(req) {
+        return this.authService.verifyCode(req.body.type, req.body.code);
     }
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.Post)(),
+    (0, common_1.Post)('register'),
+    (0, swagger_1.ApiOperation)({ summary: 'Register a new user' }),
+    (0, swagger_1.ApiBody)({
+        type: RegisterDTO,
+        description: 'User details for creating a new user',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'User registered successfully.' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof create_auth_dto_1.CreateAuthDto !== "undefined" && create_auth_dto_1.CreateAuthDto) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [RegisterDTO]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "create", null);
+], AuthController.prototype, "register", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Post)('login'),
+    (0, swagger_1.ApiOperation)({ summary: 'User login' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.LoginDTO, description: 'User credentials for login' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Login successful.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid credentials.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'User not found.' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.LoginDTO !== "undefined" && dto_1.LoginDTO) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "signIn", null);
+__decorate([
+    (0, common_1.Post)('send-code-to-email'),
+    (0, swagger_1.ApiBody)({ type: dto_2.UserIDDTO, description: 'User ID for sending the code', }),
+    (0, swagger_1.ApiOperation)({ summary: 'Send two-factor authentication code via email' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Code sent successfully.' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof common_1.Request !== "undefined" && common_1.Request) === "function" ? _c : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "sendTwoFactorAuthenticationMail", null);
+__decorate([
+    (0, common_1.Post)('send-code-to-sms'),
+    (0, swagger_1.ApiBody)({ type: dto_2.UserIDDTO, description: 'User ID for sending the code', }),
+    (0, swagger_1.ApiOperation)({ summary: 'Send two-factor authentication code via email' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Code sent successfully.' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof common_1.Request !== "undefined" && common_1.Request) === "function" ? _d : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "sendTwoFactorAuthenticationSms", null);
+__decorate([
+    (0, common_1.Post)('verify-authentication'),
+    (0, swagger_1.ApiBody)({ type: dto_2.VerifyAuthenticationDto, description: 'Data for verification' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Verify two-factor authentication' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Authentication successful.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Code not found or expired.' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_e = typeof common_1.Request !== "undefined" && common_1.Request) === "function" ? _e : Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "twoFactorAuthenticationLogin", null);
+__decorate([
+    (0, common_1.Post)('refresh'),
+    (0, swagger_1.ApiOperation)({ summary: 'Refresh access token' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'New access token generated.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid refresh token.' }),
+    (0, swagger_1.ApiBody)({ type: dto_2.RefreshTokenDTO, description: 'Refresh token for generating a new access token' }),
+    __param(0, (0, common_1.Body)('refresh_token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refresh", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Get)('profile'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get user profile' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User profile retrieved.' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Patch)('profile'),
+    (0, swagger_1.ApiBody)({ type: dto_2.UserDTO, description: 'User details for updating the profile' }),
+    (0, swagger_1.ApiOperation)({ summary: 'edit user profile' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User profile updated.' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "editProfile", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Post)('add-bank-account'),
+    (0, swagger_1.ApiOperation)({ summary: 'Add bank account details' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.BankAccountDTO, description: 'Bank account details' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account added successfully' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "addBankAccount", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Post)('remove-bank-account/:accountNumber'),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove bank account details' }),
+    (0, swagger_1.ApiParam)({ name: 'accountNumber', required: true, type: String, description: 'Account number to remove' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account removed successfully' }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("accountNumber")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "removeBankAccount", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Get)('get-bank-account'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get user bank account details' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account details retrieved successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "getUserBankAccount", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Patch)('edit-bank-account'),
+    (0, swagger_1.ApiOperation)({ summary: 'Edit user bank account details' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.BankAccountDTO, description: 'Bank account details' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account updated successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "editUserBankAccount", null);
+__decorate([
+    (0, common_1.Get)('google'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
+    (0, swagger_1.ApiOperation)({ summary: 'Login with Google' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "googleAuth", null);
+__decorate([
+    (0, common_1.Get)('google/callback'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
+    (0, swagger_1.ApiOperation)({ summary: 'Google authentication callback' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "googleAuthRedirect", null);
+__decorate([
+    (0, common_1.Get)("facebook"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)("facebook")),
+    (0, swagger_1.ApiOperation)({ summary: 'Login with Facebook' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "findAll", null);
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "facebookLogin", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/facebook/callback"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)("facebook")),
+    (0, swagger_1.ApiOperation)({ summary: 'Facebook authentication callback' }),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "findOne", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], AuthController.prototype, "facebookLoginRedirect", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Post)('change-password'),
+    (0, swagger_1.ApiBody)({ type: dto_2.ChangePasswordDTO, }),
+    (0, swagger_1.ApiOperation)({ summary: 'Change Password' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Password successfully updated' }),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof update_auth_dto_1.UpdateAuthDto !== "undefined" && update_auth_dto_1.UpdateAuthDto) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "update", null);
+], AuthController.prototype, "changePassword", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, common_1.Post)('delete-account'),
+    (0, swagger_1.ApiBody)({ type: dto_1.DeleteAccountDTO, }),
+    (0, swagger_1.ApiOperation)({ summary: 'User deletes account' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Account successfully deleted' }),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "remove", null);
+], AuthController.prototype, "deleteAccount", null);
+__decorate([
+    (0, common_1.Post)('forgot-password'),
+    (0, swagger_1.ApiBody)({ type: dto_1.ForgotPasswordDTO, }),
+    (0, swagger_1.ApiOperation)({ summary: 'forgot Password' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Password successfully updated' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)('verify-code'),
+    (0, swagger_1.ApiBody)({ schema: {
+            type: 'object',
+            properties: {
+                type: { type: 'string', example: 'PasswordReset' },
+                code: { type: 'string', example: '123456' },
+            },
+        } }),
+    (0, swagger_1.ApiOperation)({ summary: 'verify code' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'code successfully verified' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "verifyCode", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
 ], AuthController);
@@ -1281,15 +3945,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
 const auth_controller_1 = __webpack_require__(/*! ./auth.controller */ "./src/auth/auth.controller.ts");
+const strategy_1 = __webpack_require__(/*! @app/strategy */ "./libs/strategy/src/index.ts");
+const local_strategy_1 = __webpack_require__(/*! ./local.strategy */ "./src/auth/local.strategy.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const service_2 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const service_3 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const users_module_1 = __webpack_require__(/*! src/users/users.module */ "./src/users/users.module.ts");
+const users_service_1 = __webpack_require__(/*! src/users/users.service */ "./src/users/users.service.ts");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
+        imports: [passport_1.PassportModule, users_module_1.UsersModule],
+        providers: [
+            auth_service_1.AuthService,
+            strategy_1.JwtStrategy,
+            strategy_1.GoogleStrategy,
+            strategy_1.FacebookStrategy,
+            strategy_1.XStrategy,
+            users_service_1.UsersService,
+            service_1.SendMailService,
+            service_2.SmsService,
+            local_strategy_1.LocalStrategy,
+            service_1.NotificationService, service_1.NotificationGateway, service_3.FlutterwaveService
+        ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService],
+        exports: [auth_service_1.AuthService]
     })
 ], AuthModule);
 
@@ -1309,64 +3994,494 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const bcrypt = __webpack_require__(/*! bcrypt */ "bcrypt");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const otplib_1 = __webpack_require__(/*! otplib */ "otplib");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const service_2 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const service_3 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 let AuthService = class AuthService {
-    create(createAuthDto) {
-        return 'This action adds a new auth';
+    constructor(config, userModel, otpModel, authenticatorModel, jwtService, flutterwaveService, smsService, sendMailService) {
+        this.config = config;
+        this.userModel = userModel;
+        this.otpModel = otpModel;
+        this.authenticatorModel = authenticatorModel;
+        this.jwtService = jwtService;
+        this.flutterwaveService = flutterwaveService;
+        this.smsService = smsService;
+        this.sendMailService = sendMailService;
     }
-    findAll() {
-        return `This action returns all auth`;
+    async register(users) {
+        try {
+            let checkUserRefId;
+            if (users.useRefCode) {
+                const user = await this.userModel.findOne({
+                    refCode: users.useRefCode,
+                });
+                if (!user) {
+                    throw new common_1.NotFoundException("Referral code not found");
+                }
+                checkUserRefId = user._id.toString();
+            }
+            const referral = {
+                refBy: checkUserRefId,
+            };
+            const created = await this.userModel.create({
+                ...users,
+                refBy: checkUserRefId,
+                referral,
+            });
+            const data = await this.otpModel.create({
+                userID: created._id,
+                type: "EmailVerification",
+            });
+            const message = await this.smsService.generateMessage(data.toJSON());
+            this.sendMailService.sendMail({
+                to: created.email,
+                subject: "Email Code Verification",
+                text: message,
+            });
+            this.flutterwaveService.createVirtualAccount({
+                account_name: created.fullname,
+                email: created.email,
+                mobilenumber: created.phone,
+            });
+            return {
+                message: "Registration successful, Please Proceed to Email Verification",
+                userID: created._id,
+            };
+        }
+        catch (error) {
+            throw new common_1.NotAcceptableException(error.message);
+        }
     }
-    findOne(id) {
-        return `This action returns a #${id} auth`;
+    async login(email, password) {
+        const user = await this.userModel
+            .findOne({ email })
+            .select([
+            "email",
+            "_id",
+            "username",
+            "id",
+            "password",
+            "userType",
+            "status",
+            "emailStatus",
+        ]);
+        if (user) {
+            const isMatch = await bcrypt.compare(password, user.password);
+            console.log(isMatch, password);
+            if (isMatch) {
+                if (user.status === "disabled") {
+                    throw new common_1.UnauthorizedException("User is disabled");
+                }
+                if (user.emailStatus !== "verified") {
+                    throw new common_1.UnauthorizedException("Email not verified");
+                }
+                return this.getLoginToken(user);
+            }
+            throw new common_1.UnauthorizedException("Invalid Credentials");
+        }
+        throw new common_1.NotFoundException("No User Found");
     }
-    update(id, updateAuthDto) {
-        return `This action updates a #${id} auth`;
+    async verifyEmail(userID, code) {
+        const otp = await this.otpModel.findOne({
+            userID,
+            code,
+            type: "EmailVerification",
+        });
+        if (!otp) {
+            throw new common_1.NotFoundException("Invalid or expired code");
+        }
+        const user = await this.userModel.findByIdAndUpdate(userID, { emailStatus: "verified" }, { new: true });
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        await this.otpModel.findByIdAndDelete(otp._id);
+        return {
+            message: "Email verified successfully",
+            data: user,
+        };
     }
-    remove(id) {
-        return `This action removes a #${id} auth`;
+    getLoginToken(user) {
+        const payload = {
+            sub: user._id,
+            username: user.username,
+            email: user.email,
+        };
+        console.log(payload);
+        const access_token = this.jwtService.sign(payload, { expiresIn: "1d" });
+        const refresh_token = this.jwtService.sign(payload, {
+            expiresIn: "30d",
+            secret: this.config.get("JWT_SECRET2"),
+        });
+        return {
+            message: "Login successful",
+            status: true,
+            data: user,
+            access_token,
+            refresh_token,
+        };
+    }
+    async editProfile(body, userID) {
+        delete body.email;
+        delete body.id;
+        delete body.isAdmin;
+        delete body.isSuperAdmin;
+        delete body.status;
+        delete body.password;
+        const user = await this.userModel.findByIdAndUpdate(userID, body, {
+            new: true,
+        });
+        return {
+            message: "User profile updated",
+            data: user,
+        };
+    }
+    async addBankAccount(userID, bankAccount) {
+        const user = await this.userModel.findById(userID);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        user.bankAccount.push(bankAccount);
+        await user.save();
+        return {
+            message: "Bank account added",
+            data: user.bankAccount,
+        };
+    }
+    async removeBankAccount(userID, accountNumber) {
+        const user = await this.userModel.findById(userID);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        if (!user.bankAccount) {
+            throw new common_1.NotFoundException("No bank account found");
+        }
+        const index = user.bankAccount.findIndex((account) => account.accountNumber === accountNumber);
+        if (index === -1) {
+            throw new common_1.NotFoundException("Bank account not found");
+        }
+        user.bankAccount.splice(index, 1);
+        await user.save();
+        return {
+            message: "Bank account removed",
+            data: user.bankAccount,
+        };
+    }
+    async getUserBanks(userID) {
+        const user = await this.userModel.findById(userID);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        if (!user.bankAccount) {
+            throw new common_1.NotFoundException("No bank account found");
+        }
+        return {
+            message: "Bank account found",
+            data: user.bankAccount,
+        };
+    }
+    async editUserBanks(userID, bankAccount) {
+        const user = await this.userModel.findById(userID);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        if (!user.bankAccount) {
+            throw new common_1.NotFoundException("No bank account found");
+        }
+        const index = user.bankAccount.findIndex((account) => account.accountNumber === bankAccount.accountNumber);
+        if (index === -1) {
+            throw new common_1.NotFoundException("Bank account not found");
+        }
+        user.bankAccount[index] = bankAccount;
+        await user.save();
+        return {
+            message: "Bank account updated",
+            data: user.bankAccount,
+        };
+    }
+    async refreshToken(token) {
+        console.log(token);
+        const payload = this.jwtService.verify(token);
+        if (!payload) {
+            throw new common_1.UnauthorizedException("Invalid refresh token");
+        }
+        const user = await this.userModel.findById(payload.sub);
+        if (!user) {
+            throw new common_1.UnauthorizedException("User not found");
+        }
+        const payload1 = {
+            sub: user._id,
+            username: user.username,
+            email: user.email,
+        };
+        const newAccessToken = this.jwtService.sign(payload1, { expiresIn: "1d" });
+        const refresh_token = this.jwtService.sign(payload1, {
+            expiresIn: "30d",
+        });
+        return {
+            access_token: newAccessToken,
+            refresh_token,
+        };
+    }
+    async ssoGoogle(req) {
+        const user = await this.userModel.findOne({ email: req.user.email });
+        if (user) {
+            return this.getLoginToken(user);
+        }
+        else {
+            const created = await this.userModel.create({
+                ...req.user,
+                username: req.user.email,
+                password: "",
+            });
+            return this.getLoginToken(created);
+        }
+    }
+    async ssoFacebook(req) {
+        const user = await this.userModel.findOne({ email: req.user.email });
+        if (user) {
+            return this.getLoginToken(user);
+        }
+        else {
+            const created = await this.userModel.create({
+                ...req.user,
+                username: req.user.email,
+                password: "",
+            });
+            return this.getLoginToken(created);
+        }
+    }
+    async twoFactorAuthenticationLogin(body) {
+        let isValid = false;
+        if (body.token) {
+            const secret = await this.authenticatorModel.findOne({
+                userID: body.userID,
+            });
+            if (!secret) {
+                throw new common_1.NotFoundException("User has not set authenticator");
+            }
+            isValid = otplib_1.authenticator.check(body.token, secret.secret);
+        }
+        const code = await this.otpModel.findOne({
+            code: body.code,
+            type: body.type,
+            userID: body.userID,
+        });
+        isValid = code ? true : isValid;
+        if (!isValid) {
+            throw new common_1.NotFoundException("Code not found or expired");
+        }
+        const user = await this.userModel.findByIdAndUpdate(body.userID, {
+            emailStatus: "verified",
+        }, { new: true });
+        if (code) {
+            await this.otpModel.findByIdAndDelete(code._id);
+        }
+        return this.getLoginToken(user);
+    }
+    async sendTwoFactorAuthenticationMail(body) {
+        const user = await this.userModel.findOne({
+            $or: [{ _id: body.userID }, { email: body.email || body.userID }],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException("No User Found");
+        }
+        const data = await this.otpModel.create({
+            userID: user._id.toString(),
+            type: body.type,
+        });
+        const message = await this.smsService.generateMessage(data.toJSON());
+        this.sendMailService.sendMail({
+            to: user.email,
+            subject: body.type,
+            text: message,
+        });
+        let d = data.toJSON();
+        delete d.code;
+        return {
+            message: "Code sent",
+            data: d,
+        };
+    }
+    async sendTwoFactorAuthenticationSms(body) {
+        const user = await this.userModel.findOne({
+            $or: [{ _id: body.userID }, { email: body.email || body.userID }],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException("No User Found");
+        }
+        const data = await this.otpModel.create({
+            userID: user._id.toString(),
+            type: body.type,
+        });
+        const message = await this.smsService.generateMessage(data.toJSON());
+        this.smsService.sendSingleSMS(user.phone, message);
+        return {
+            message: "Code sent",
+            data,
+        };
+    }
+    async setTwoFactorAuthenticator(body) {
+        const isValid = otplib_1.authenticator.check(body.code, body.secret);
+        if (!isValid) {
+            throw new common_1.UnauthorizedException("Invalid Token");
+        }
+        const data = await this.authenticatorModel.create({
+            userID: body.userID,
+            secret: body.secret,
+        });
+        const user = await this.userModel.findById(body.userID);
+        this.sendMailService.sendMail({
+            to: user.email,
+            subject: "Two Factor Authenticator",
+            text: `${body.secret}`,
+        });
+        return {
+            message: "authenticator set",
+            data,
+        };
+    }
+    async changePassword(userID, currentPassword, newPassword) {
+        const user = await this.userModel.findById(userID);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            throw new common_1.UnauthorizedException("Current password is incorrect");
+        }
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await this.userModel.findByIdAndUpdate(userID, {
+            password: hashedPassword,
+        });
+        return {
+            message: "Password successfully updated",
+        };
+    }
+    async deleteAccount(userID, email, reason) {
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        if (user._id.toString() !== userID) {
+            throw new common_1.NotAcceptableException("You are not allowed to delete this account");
+        }
+        await this.userModel.findByIdAndDelete(userID);
+        return {
+            message: "Account successfully deleted",
+            status: true,
+        };
+    }
+    async verifyCode(type, code) {
+        let isValid = false;
+        const checkCode = await this.otpModel.findOneAndUpdate({
+            code: code,
+            type,
+        }, { status: "used" });
+        isValid = checkCode ? true : isValid;
+        if (!isValid) {
+            throw new common_1.NotFoundException("Code not found or expired");
+        }
+        return {
+            message: "Code verified successfully",
+        };
+    }
+    async forgotPassword(token, code, newPassword) {
+        const checkCode = await this.otpModel.findOne({
+            code: code,
+            status: "used",
+            type: "PasswordReset",
+        });
+        if (!checkCode) {
+            throw new common_1.NotFoundException("Code not found or expired");
+        }
+        const user = await this.userModel.findById(checkCode.userID);
+        await this.otpModel.findByIdAndDelete(checkCode._id);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await this.userModel.findByIdAndUpdate(checkCode.userID, {
+            password: hashedPassword,
+        });
+        return {
+            message: "Password successfully updated",
+        };
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(1, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __param(2, (0, mongoose_1.InjectModel)(schema_1.OTPModel.name)),
+    __param(3, (0, mongoose_1.InjectModel)(schema_1.AuthenticatorModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _c : Object, typeof (_d = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _d : Object, typeof (_e = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _e : Object, typeof (_f = typeof service_3.FlutterwaveService !== "undefined" && service_3.FlutterwaveService) === "function" ? _f : Object, typeof (_g = typeof service_2.SmsService !== "undefined" && service_2.SmsService) === "function" ? _g : Object, typeof (_h = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _h : Object])
 ], AuthService);
 
 
 /***/ }),
 
-/***/ "./src/auth/dto/create-auth.dto.ts":
-/*!*****************************************!*\
-  !*** ./src/auth/dto/create-auth.dto.ts ***!
-  \*****************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "./src/auth/local.strategy.ts":
+/*!************************************!*\
+  !*** ./src/auth/local.strategy.ts ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateAuthDto = void 0;
-class CreateAuthDto {
-}
-exports.CreateAuthDto = CreateAuthDto;
-
-
-/***/ }),
-
-/***/ "./src/auth/dto/update-auth.dto.ts":
-/*!*****************************************!*\
-  !*** ./src/auth/dto/update-auth.dto.ts ***!
-  \*****************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UpdateAuthDto = void 0;
-const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const create_auth_dto_1 = __webpack_require__(/*! ./create-auth.dto */ "./src/auth/dto/create-auth.dto.ts");
-class UpdateAuthDto extends (0, swagger_1.PartialType)(create_auth_dto_1.CreateAuthDto) {
-}
-exports.UpdateAuthDto = UpdateAuthDto;
+exports.LocalStrategy = void 0;
+const passport_local_1 = __webpack_require__(/*! passport-local */ "passport-local");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
+let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
+    constructor(authService) {
+        super();
+        this.authService = authService;
+        this.authService = authService;
+    }
+    async validate(username, password) {
+        console.log("Token:", { username, password });
+        const user = await this.authService.login(username, password);
+        if (!user) {
+            throw new common_1.UnauthorizedException("local strategy failed");
+        }
+        return user;
+    }
+};
+exports.LocalStrategy = LocalStrategy;
+exports.LocalStrategy = LocalStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], LocalStrategy);
 
 
 /***/ }),
@@ -1831,40 +4946,6 @@ exports.OrdersService = OrdersService = __decorate([
 
 /***/ }),
 
-/***/ "./src/products/dto/create-product.dto.ts":
-/*!************************************************!*\
-  !*** ./src/products/dto/create-product.dto.ts ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateProductDto = void 0;
-class CreateProductDto {
-}
-exports.CreateProductDto = CreateProductDto;
-
-
-/***/ }),
-
-/***/ "./src/products/dto/update-product.dto.ts":
-/*!************************************************!*\
-  !*** ./src/products/dto/update-product.dto.ts ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UpdateProductDto = void 0;
-const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const create_product_dto_1 = __webpack_require__(/*! ./create-product.dto */ "./src/products/dto/create-product.dto.ts");
-class UpdateProductDto extends (0, swagger_1.PartialType)(create_product_dto_1.CreateProductDto) {
-}
-exports.UpdateProductDto = UpdateProductDto;
-
-
-/***/ }),
-
 /***/ "./src/products/products.controller.ts":
 /*!*********************************************!*\
   !*** ./src/products/products.controller.ts ***!
@@ -1886,71 +4967,132 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductsController = void 0;
+exports.ProductController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const products_service_1 = __webpack_require__(/*! ./products.service */ "./src/products/products.service.ts");
-const create_product_dto_1 = __webpack_require__(/*! ./dto/create-product.dto */ "./src/products/dto/create-product.dto.ts");
-const update_product_dto_1 = __webpack_require__(/*! ./dto/update-product.dto */ "./src/products/dto/update-product.dto.ts");
-let ProductsController = class ProductsController {
-    constructor(productsService) {
-        this.productsService = productsService;
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+let ProductController = class ProductController {
+    constructor(productService) {
+        this.productService = productService;
     }
-    create(createProductDto) {
-        return this.productsService.create(createProductDto);
+    async create(product, req) {
+        return this.productService.upset(product, req.user);
     }
-    findAll() {
-        return this.productsService.findAll();
+    async update(product, productID, req) {
+        return this.productService.update(productID, product, req.user);
     }
-    findOne(id) {
-        return this.productsService.findOne(+id);
+    async findbyId(params, query) {
+        return this.productService.findByAny(params, query);
     }
-    update(id, updateProductDto) {
-        return this.productsService.update(+id, updateProductDto);
+    async findAll(query) {
+        return this.productService.findAll(query);
     }
-    remove(id) {
-        return this.productsService.remove(+id);
+    async delete(ids, req) {
+        return this.productService.delete(ids, req.user);
     }
 };
-exports.ProductsController = ProductsController;
+exports.ProductController = ProductController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: "Create a new product" }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.ProductDto,
+        description: "Creating a new product Details",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof create_product_dto_1.CreateProductDto !== "undefined" && create_product_dto_1.CreateProductDto) === "function" ? _b : Object]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "create", null);
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.ProductDto !== "undefined" && dto_1.ProductDto) === "function" ? _b : Object, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Patch)(":productID"),
+    (0, swagger_1.ApiOperation)({ summary: "Update existing products" }),
+    (0, swagger_1.ApiParam)({
+        name: "productID",
+        description: "The productID to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.ProductDto,
+        description: "Updating existing products",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)("productID")),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "findAll", null);
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.ProductDto !== "undefined" && dto_1.ProductDto) === "function" ? _c : Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "update", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("by-any/:key/:value"),
+    (0, swagger_1.ApiOperation)({ summary: "Find a product by any key-value pair" }),
+    (0, swagger_1.ApiParam)({ name: "key", description: "The key to search by", type: String }),
+    (0, swagger_1.ApiParam)({
+        name: "value",
+        description: "The value to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of products per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "findOne", null);
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findbyId", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    (0, common_1.Get)(""),
+    (0, swagger_1.ApiOperation)({ summary: "Get all products" }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of products per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof update_product_dto_1.UpdateProductDto !== "undefined" && update_product_dto_1.UpdateProductDto) === "function" ? _c : Object]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "update", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: "Delete products by their IDs" }),
+    (0, swagger_1.ApiBody)({ type: [String], description: "Array of product IDs to delete" }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "remove", null);
-exports.ProductsController = ProductsController = __decorate([
-    (0, common_1.Controller)('products'),
-    __metadata("design:paramtypes", [typeof (_a = typeof products_service_1.ProductsService !== "undefined" && products_service_1.ProductsService) === "function" ? _a : Object])
-], ProductsController);
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "delete", null);
+exports.ProductController = ProductController = __decorate([
+    (0, swagger_1.ApiTags)("product"),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, common_1.Controller)('product'),
+    __metadata("design:paramtypes", [typeof (_a = typeof products_service_1.ProductService !== "undefined" && products_service_1.ProductService) === "function" ? _a : Object])
+], ProductController);
 
 
 /***/ }),
@@ -1978,8 +5120,8 @@ let ProductsModule = class ProductsModule {
 exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [products_controller_1.ProductsController],
-        providers: [products_service_1.ProductsService],
+        controllers: [products_controller_1.ProductController],
+        providers: [products_service_1.ProductService],
     })
 ], ProductsModule);
 
@@ -1999,64 +5141,405 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductsService = void 0;
+exports.ProductService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-let ProductsService = class ProductsService {
-    create(createProductDto) {
-        return 'This action adds a new product';
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let ProductService = class ProductService {
+    constructor(productModel) {
+        this.productModel = productModel;
     }
-    findAll() {
-        return `This action returns all products`;
+    async upset(createProductDto, userData) {
+        const created = await this.productModel.create({ ...createProductDto, userID: userData._id.toString() });
+        return (0, service_1.serviceResponse)({
+            data: created,
+            message: "Product plan created successfully",
+            status: true,
+        });
     }
-    findOne(id) {
-        return `This action returns a #${id} product`;
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.productModel
+            .find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.productModel,
+                query,
+                querys: {},
+            }),
+        });
     }
-    update(id, updateProductDto) {
-        return `This action updates a #${id} product`;
+    async findOne(id) {
+        try {
+            const plan = await this.productModel.findById(id).exec();
+            return (0, service_1.serviceResponse)({
+                data: plan,
+                message: "Product plan retrieved successfully",
+                status: true,
+            });
+        }
+        catch (error) { }
     }
-    remove(id) {
-        return `This action removes a #${id} product`;
+    async findByAny(params, query) {
+        const { key, value } = params;
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.productModel
+            .find({ [key]: value })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.productModel,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async update(id, updateProductDto, userData) {
+        try {
+            const updated = await this.productModel
+                .findByIdAndUpdate(id, updateProductDto, {
+                new: true,
+            })
+                .exec();
+            if (!updated) {
+                return (0, service_1.serviceResponse)({
+                    message: "Product plan not found",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                data: updated,
+                message: "Product plan updated successfully",
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
+    }
+    async delete(ids, userData) {
+        try {
+            const result = await this.productModel.deleteMany({
+                _id: { $in: ids },
+            });
+            if (result.deletedCount === 0) {
+                return (0, service_1.serviceResponse)({
+                    message: "No product plans found to delete",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                message: `${result.deletedCount} product plans deleted successfully`,
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
     }
 };
-exports.ProductsService = ProductsService;
-exports.ProductsService = ProductsService = __decorate([
-    (0, common_1.Injectable)()
-], ProductsService);
+exports.ProductService = ProductService;
+exports.ProductService = ProductService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.ProductModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], ProductService);
 
 
 /***/ }),
 
-/***/ "./src/users/dto/create-user.dto.ts":
-/*!******************************************!*\
-  !*** ./src/users/dto/create-user.dto.ts ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "./src/uploads/uploads.controller.ts":
+/*!*******************************************!*\
+  !*** ./src/uploads/uploads.controller.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateUserDto = void 0;
-class CreateUserDto {
-}
-exports.CreateUserDto = CreateUserDto;
-
-
-/***/ }),
-
-/***/ "./src/users/dto/update-user.dto.ts":
-/*!******************************************!*\
-  !*** ./src/users/dto/update-user.dto.ts ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UpdateUserDto = void 0;
+exports.UploadsController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const create_user_dto_1 = __webpack_require__(/*! ./create-user.dto */ "./src/users/dto/create-user.dto.ts");
-class UpdateUserDto extends (0, swagger_1.PartialType)(create_user_dto_1.CreateUserDto) {
+const uploads_service_1 = __webpack_require__(/*! ./uploads.service */ "./src/uploads/uploads.service.ts");
+const platform_express_1 = __webpack_require__(/*! @nestjs/platform-express */ "@nestjs/platform-express");
+const multer_1 = __webpack_require__(/*! multer */ "multer");
+const path_1 = __webpack_require__(/*! path */ "path");
+const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
+const fs_1 = __webpack_require__(/*! fs */ "fs");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let UploadsController = class UploadsController {
+    constructor(uploadsService) {
+        this.uploadsService = uploadsService;
+    }
+    uploadFile(req, files) {
+        const host = req.protocol + '://' + req.get('host');
+        const fileUrls = files?.map((file) => ({
+            originalname: file.originalname,
+            url: `${host}/v1/upload/file/${file.filename}`,
+        }));
+        return (0, service_1.serviceResponse)({
+            message: fileUrls.length > 0 ? 'Files uploaded successfully' : 'No files were uploaded.',
+            data: fileUrls,
+            status: fileUrls.length > 0,
+        });
+    }
+    getFile(filename, res) {
+        const filePath = (0, path_1.join)(__dirname, '..', 'uploads', filename);
+        if (!(0, fs_1.existsSync)(filePath)) {
+            throw new common_1.NotFoundException('File not found');
+        }
+        return res.sendFile(filePath);
+    }
+    async uploadImages(files, folder) {
+        if (!folder) {
+            throw new common_1.BadRequestException('Folder name is required as a query parameter.');
+        }
+        return this.uploadsService.uploadImages(files, folder);
+    }
+};
+exports.UploadsController = UploadsController;
+__decorate([
+    (0, common_1.Post)('file'),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 10, getMulterConfig())),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                files: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        format: 'binary',
+                    },
+                },
+            },
+        },
+    }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Files uploaded successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'No files uploaded' }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, typeof (_b = typeof Array !== "undefined" && Array) === "function" ? _b : Object]),
+    __metadata("design:returntype", typeof (_c = typeof service_1.ObjectReturnType !== "undefined" && service_1.ObjectReturnType) === "function" ? _c : Object)
+], UploadsController.prototype, "uploadFile", null);
+__decorate([
+    (0, common_1.Get)('file/:filename'),
+    __param(0, (0, common_1.Param)('filename')),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], UploadsController.prototype, "getFile", null);
+__decorate([
+    (0, common_1.Post)('cloudinary'),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload multiple images to Cloudinary' }),
+    (0, swagger_1.ApiQuery)({ name: 'folder', required: true, type: String, example: 'products' }),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                files: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        format: 'binary',
+                    },
+                },
+            },
+        },
+    }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Images uploaded successfully' }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 10)),
+    __param(0, (0, common_1.UploadedFiles)()),
+    __param(1, (0, common_1.Query)('folder')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, String]),
+    __metadata("design:returntype", Promise)
+], UploadsController.prototype, "uploadImages", null);
+exports.UploadsController = UploadsController = __decorate([
+    (0, swagger_1.ApiTags)('Uploads'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.Controller)('upload'),
+    __metadata("design:paramtypes", [typeof (_a = typeof uploads_service_1.UploadsService !== "undefined" && uploads_service_1.UploadsService) === "function" ? _a : Object])
+], UploadsController);
+function getMulterConfig() {
+    const uploadDir = './uploads';
+    if (!(0, fs_1.existsSync)(uploadDir)) {
+        (0, fs_1.mkdirSync)(uploadDir);
+    }
+    return {
+        storage: (0, multer_1.diskStorage)({
+            destination: uploadDir,
+            filename: (req, file, callback) => {
+                const uniqueId = `${(0, crypto_1.randomInt)(999)}-${(0, crypto_1.randomUUID)().replace(/\D/g, '').substring(0, 6)}-${Date.now()}`;
+                const sanitizedFilename = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '');
+                const finalFilename = `${uniqueId}-${sanitizedFilename}`;
+                callback(null, finalFilename);
+            },
+        }),
+    };
 }
-exports.UpdateUserDto = UpdateUserDto;
+
+
+/***/ }),
+
+/***/ "./src/uploads/uploads.module.ts":
+/*!***************************************!*\
+  !*** ./src/uploads/uploads.module.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UploadsModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const uploads_service_1 = __webpack_require__(/*! ./uploads.service */ "./src/uploads/uploads.service.ts");
+const uploads_controller_1 = __webpack_require__(/*! ./uploads.controller */ "./src/uploads/uploads.controller.ts");
+let UploadsModule = class UploadsModule {
+};
+exports.UploadsModule = UploadsModule;
+exports.UploadsModule = UploadsModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [uploads_controller_1.UploadsController],
+        providers: [uploads_service_1.UploadsService],
+        exports: [uploads_service_1.UploadsService],
+    })
+], UploadsModule);
+
+
+/***/ }),
+
+/***/ "./src/uploads/uploads.service.ts":
+/*!****************************************!*\
+  !*** ./src/uploads/uploads.service.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UploadsService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const multer_1 = __webpack_require__(/*! multer */ "multer");
+const path_1 = __webpack_require__(/*! path */ "path");
+const cloudinary_1 = __webpack_require__(/*! cloudinary */ "cloudinary");
+const streamifier = __webpack_require__(/*! streamifier */ "streamifier");
+const dotenv = __webpack_require__(/*! dotenv */ "dotenv");
+dotenv.config();
+cloudinary_1.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+let UploadsService = class UploadsService {
+    getMulterConfig() {
+        return {
+            storage: (0, multer_1.diskStorage)({
+                destination: './uploads',
+                filename: (req, file, callback) => {
+                    const filename = `${Date.now()}${(0, path_1.extname)(file.originalname)}`;
+                    callback(null, filename);
+                },
+            }),
+        };
+    }
+    async uploadImages(files, folder) {
+        const uploadResults = [];
+        for (const file of files) {
+            try {
+                const result = await this.uploadToCloudinary(file.buffer, folder);
+                uploadResults.push({
+                    originalname: result.public_id,
+                    url: result.secure_url,
+                });
+            }
+            catch (error) {
+                console.error(`Error uploading file ${file.originalname}:`, error);
+                uploadResults.push({
+                    originalname: file.originalname,
+                    url: null,
+                    error: error.message || 'Upload failed',
+                });
+            }
+        }
+        return uploadResults;
+    }
+    uploadToCloudinary(buffer, folder) {
+        return new Promise((resolve, reject) => {
+            const stream = cloudinary_1.v2.uploader.upload_stream({
+                folder,
+                resource_type: 'auto',
+                allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'pdf'],
+            }, (error, result) => {
+                if (error)
+                    return reject(error);
+                resolve(result);
+            });
+            streamifier.createReadStream(buffer).pipe(stream);
+        });
+    }
+};
+exports.UploadsService = UploadsService;
+exports.UploadsService = UploadsService = __decorate([
+    (0, common_1.Injectable)()
+], UploadsService);
 
 
 /***/ }),
@@ -2084,66 +5567,279 @@ var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
-const create_user_dto_1 = __webpack_require__(/*! ./dto/create-user.dto */ "./src/users/dto/create-user.dto.ts");
-const update_user_dto_1 = __webpack_require__(/*! ./dto/update-user.dto */ "./src/users/dto/update-user.dto.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 let UsersController = class UsersController {
-    constructor(usersService) {
-        this.usersService = usersService;
+    constructor(userService) {
+        this.userService = userService;
     }
-    create(createUserDto) {
-        return this.usersService.create(createUserDto);
+    async create(user, req) {
+        return this.userService.upset(user, req.user);
     }
-    findAll() {
-        return this.usersService.findAll();
+    async savePlayerId(body) {
+        return this.userService.savePlayerId(body);
     }
-    findOne(id) {
-        return this.usersService.findOne(+id);
+    async update(user, req) {
+        return this.userService.update(user, req.user);
     }
-    update(id, updateUserDto) {
-        return this.usersService.update(+id, updateUserDto);
+    async findbyId(params, query) {
+        return this.userService.findbyAny(params, query);
     }
-    remove(id) {
-        return this.usersService.remove(+id);
+    async findAll(query) {
+        return this.userService.findAll(query);
+    }
+    async delete(ids, req) {
+        return this.userService.delete(ids, req.user);
+    }
+    async deleteByEmails(ids, req) {
+        return this.userService.deleteByEmails(ids);
+    }
+    async findRecentUsers(period, query) {
+        return this.userService.findRecentUsers(period, query);
+    }
+    async countRecentUsers() {
+        return this.userService.countRecentUsers();
+    }
+    async getNotification(params, query) {
+        return this.userService.getNotification(params, query);
+    }
+    async getAllUserRefList(id) {
+        return this.userService.getAllUserRefList(id);
+    }
+    async markAllUserNotificationAsRead(req) {
+        return this.userService.markAllUserNotificationAsRead(req.user._id);
+    }
+    async getUnreadNotificationCount(req) {
+        return this.userService.getUnreadNotificationCount(req.user._id);
+    }
+    async changeUserStatus(userID, status, req) {
+        return this.userService.changeUserStatus(userID, status, req.user);
     }
 };
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.UserDTO,
+        description: 'Creating a new user Details',
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof create_user_dto_1.CreateUserDto !== "undefined" && create_user_dto_1.CreateUserDto) === "function" ? _b : Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.UserDTO !== "undefined" && dto_1.UserDTO) === "function" ? _b : Object, Object]),
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Post)('onesignal'),
+    (0, swagger_1.ApiOperation)({ summary: 'Save player ID' }),
+    (0, swagger_1.ApiBody)({
+        description: 'Saving player ID',
+        schema: {
+            type: 'object',
+            properties: {
+                playerId: { type: 'string', example: 'abcdef123456' },
+                userID: { type: 'string', example: 'user_001' },
+            },
+            required: ['playerId', 'userID'],
+        },
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "findAll", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "savePlayerId", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Update existing users' }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.UserDTO,
+        description: 'Updating existing users',
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof update_user_dto_1.UpdateUserDto !== "undefined" && update_user_dto_1.UpdateUserDto) === "function" ? _c : Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.UserDTO !== "undefined" && dto_1.UserDTO) === "function" ? _c : Object, Object]),
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Get)('by-any/:key/:value'),
+    (0, swagger_1.ApiOperation)({ summary: 'Find a user by any key-value pair' }),
+    (0, swagger_1.ApiParam)({ name: 'key', description: 'The key to search by', type: String }),
+    (0, swagger_1.ApiParam)({
+        name: 'value',
+        description: 'The value to search for',
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'page',
+        required: false,
+        description: 'Page number for pagination',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'limit',
+        required: false,
+        description: 'Number of users per page',
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findbyId", null);
+__decorate([
+    (0, common_1.Get)(''),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all users' }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiQuery)({
+        name: 'page',
+        required: false,
+        description: 'Page number for pagination',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'limit',
+        required: false,
+        description: 'Number of users per page',
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Delete)(''),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete users by their IDs' }),
+    (0, swagger_1.ApiBody)({ type: [String], description: 'Array of user IDs to delete' }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Delete)('email'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete users by their Emails' }),
+    (0, swagger_1.ApiBody)({ type: [String], description: 'Array of user IDs to delete' }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteByEmails", null);
+__decorate([
+    (0, common_1.Get)('period'),
+    (0, swagger_1.ApiQuery)({
+        name: 'page',
+        required: false,
+        description: 'Page number for pagination',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'limit',
+        required: false,
+        description: 'Number of users per page',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'period',
+        required: true,
+        description: `'day' | 'week' | 'month'`,
+        type: String,
+    }),
+    (0, swagger_1.ApiOperation)({ summary: '' }),
+    __param(0, (0, common_1.Query)('period')),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findRecentUsers", null);
+__decorate([
+    (0, common_1.Get)('count'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "countRecentUsers", null);
+__decorate([
+    (0, common_1.Get)('notification/by-any/:key/:value'),
+    (0, swagger_1.ApiOperation)({ summary: 'Find a user notification by any key-value pair' }),
+    (0, swagger_1.ApiParam)({ name: 'key', description: 'The key to search by', type: String }),
+    (0, swagger_1.ApiParam)({
+        name: 'value',
+        description: 'The value to search for',
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'limit',
+        required: false,
+        description: 'Number of users to return',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'skip',
+        required: false,
+        description: 'Number of users to skip for pagination',
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getNotification", null);
+__decorate([
+    (0, common_1.Get)('user-ref-list/:id'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiParam)({ name: '_id', description: 'The _id of the user', type: String }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all user ref list' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "remove", null);
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllUserRefList", null);
+__decorate([
+    (0, common_1.Patch)('notification/mark-all-as-read'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Mark all user notifications as read' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "markAllUserNotificationAsRead", null);
+__decorate([
+    (0, common_1.Get)('notification/unread-count'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Get unread notification count for user' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUnreadNotificationCount", null);
+__decorate([
+    (0, common_1.Patch)('change-status/:userID/:status'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Change user status' }),
+    (0, swagger_1.ApiParam)({ name: 'userID', description: 'The ID of the user to update', type: String }),
+    (0, swagger_1.ApiParam)({ enum: enum_1.UserStatus, example: enum_1.UserStatus.ACTIVE, name: 'status', description: 'The new status for the user', type: String }),
+    __param(0, (0, common_1.Param)('userID')),
+    __param(1, (0, common_1.Param)('status')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "changeUserStatus", null);
 exports.UsersController = UsersController = __decorate([
+    (0, swagger_1.ApiTags)('users'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object])
 ], UsersController);
@@ -2168,14 +5864,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const users_controller_1 = __webpack_require__(/*! ./users.controller */ "./src/users/users.controller.ts");
 let UsersModule = class UsersModule {
 };
 exports.UsersModule = UsersModule;
 exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
-        controllers: [users_controller_1.UsersController],
-        providers: [users_service_1.UsersService],
+        providers: [users_service_1.UsersService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService],
+        exports: [users_service_1.UsersService],
+        controllers: [users_controller_1.UsersController]
     })
 ], UsersModule);
 
@@ -2195,29 +5893,325 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersService = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const moment = __webpack_require__(/*! moment */ "moment");
 let UsersService = class UsersService {
-    create(createUserDto) {
-        return 'This action adds a new user';
+    constructor(userModel, activityLogModel, notificationActivity) {
+        this.userModel = userModel;
+        this.activityLogModel = activityLogModel;
+        this.notificationActivity = notificationActivity;
     }
-    findAll() {
-        return `This action returns all users`;
+    async upset(user, userData) {
+        try {
+            const created = await this.userModel.create(user);
+            this.notificationActivity.notificationActivity({
+                action: "create",
+                entityType: "User",
+                entityID: created._id.toString(),
+                userID: userData?._id,
+                details: `${userData?.fullname} created an user`,
+                playerIds: [userData?.playerId ?? ""],
+            });
+            return (0, service_1.serviceResponse)({
+                message: "created successfully",
+                data: created,
+            });
+        }
+        catch (error) {
+            throw new common_1.NotAcceptableException(error.message);
+        }
     }
-    findOne(id) {
-        return `This action returns a #${id} user`;
+    async update(user, userData) {
+        const updatedRole = await this.userModel.findByIdAndUpdate(user._id, user, {
+            new: true,
+        });
+        this.notificationActivity.notificationActivity({
+            action: "updated",
+            entityType: "User",
+            entityID: updatedRole._id.toString(),
+            userID: userData?._id,
+            playerIds: [userData?.playerId ?? ""],
+            details: `${userData?.fullname} updated an user`,
+        });
+        return (0, service_1.serviceResponse)({
+            message: "updated successfully",
+            data: updatedRole,
+        });
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async savePlayerId(body) {
+        const user = await this.userModel.findByIdAndUpdate(body.userID, { playerId: body.playerId }, { new: true });
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        return (0, service_1.serviceResponse)({
+            message: "Player ID saved successfully",
+            data: user,
+        });
     }
-    remove(id) {
-        return `This action removes a #${id} user`;
+    async findbyId(id) {
+        try {
+            const data = await this.userModel.findById(id);
+            if (!data) {
+                throw new common_1.NotFoundException();
+            }
+            return (0, service_1.serviceResponse)({
+                message: "Success",
+                data,
+            });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async findbyAny(params, query) {
+        const { key, value } = params;
+        const { page = 1, limit = 10 } = query;
+        const skip = (page - 1) * limit;
+        const result = await this.userModel
+            .find({ [key]: value })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        if (!result.length) {
+            throw new common_1.NotFoundException(value + " not found in field " + key);
+        }
+        return (0, service_1.serviceResponse)({
+            message: "Success",
+            data: result,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.userModel,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async findAll(query) {
+        const { page = 1, limit = 10 } = query;
+        const skip = (page - 1) * limit;
+        try {
+            const data = await this.userModel
+                .find()
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit);
+            return (0, service_1.serviceResponse)({
+                message: "Success",
+                data,
+                metadata: await (0, service_1.getMetadata)({ model: this.userModel, query, querys: {} }),
+            });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async delete(_id, userData) {
+        const user = await this.userModel.find({ _id });
+        for (let i = 0; i < user.length; i++) {
+        }
+        const data = await this.userModel.deleteMany({ _id });
+        try {
+            return (0, service_1.serviceResponse)({
+                message: "Success",
+                data,
+            });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async deleteByEmails(_id) {
+        const data = await this.userModel.deleteMany({ email: _id });
+        try {
+            return (0, service_1.serviceResponse)({
+                message: "Success",
+                data,
+            });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async findRecentUsers(period, query) {
+        const { page = 1, limit = 10 } = query;
+        const skip = (page - 1) * limit;
+        let startDate = moment().startOf("day");
+        let endDate = moment().endOf("day");
+        switch (period) {
+            case "day":
+                startDate = moment().subtract(1, "day").startOf("day");
+                endDate = moment().endOf("day");
+                break;
+            case "week":
+                startDate = moment().subtract(7, "days").startOf("day");
+                break;
+            case "month":
+                startDate = moment().subtract(1, "month").startOf("day");
+                break;
+        }
+        const result = await this.userModel
+            .find({ createdAt: { $gte: startDate.toDate(), $lte: endDate.toDate() } })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        return (0, service_1.serviceResponse)({
+            message: `Users registered in the last ${period}`,
+            data: result,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.userModel,
+                query,
+                querys: {
+                    createdAt: { $gte: startDate.toDate(), $lte: endDate.toDate() },
+                },
+            }),
+        });
+    }
+    async countRecentUsers() {
+        const today = moment().endOf("day");
+        const lastDayStart = moment().subtract(1, "day").startOf("day");
+        const lastWeekStart = moment().subtract(7, "days").startOf("day");
+        const lastMonthStart = moment().subtract(1, "month").startOf("day");
+        const userTypes = Object.values(enum_1.UserType);
+        const results = await Promise.all(userTypes.map(async (type) => {
+            const [dayCount, weekCount, monthCount, totalCount] = await Promise.all([
+                this.userModel.countDocuments({
+                    userType: type,
+                    createdAt: { $gte: lastDayStart.toDate(), $lte: today.toDate() },
+                }),
+                this.userModel.countDocuments({
+                    userType: type,
+                    createdAt: { $gte: lastWeekStart.toDate(), $lte: today.toDate() },
+                }),
+                this.userModel.countDocuments({
+                    userType: type,
+                    createdAt: {
+                        $gte: lastMonthStart.toDate(),
+                        $lte: today.toDate(),
+                    },
+                }),
+                this.userModel.countDocuments({ userType: type }),
+            ]);
+            return {
+                userType: type,
+                lastDay: dayCount,
+                lastWeek: weekCount,
+                lastMonth: monthCount,
+                total: totalCount,
+            };
+        }));
+        const data = results.reduce((acc, curr) => {
+            acc[curr.userType] = {
+                lastDay: curr.lastDay,
+                lastWeek: curr.lastWeek,
+                lastMonth: curr.lastMonth,
+                total: curr.total,
+            };
+            return acc;
+        }, {});
+        return (0, service_1.serviceResponse)({
+            message: "User count by type fetched successfully",
+            data,
+        });
+    }
+    async getNotification(params, query) {
+        const { key, value } = params;
+        const { page = 1, limit = 10 } = query;
+        const skip = (page - 1) * limit;
+        const result = await this.activityLogModel
+            .find({ [key]: value })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        return (0, service_1.serviceResponse)({
+            message: "Success",
+            data: result,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.activityLogModel,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async getAllUserRefList(_id) {
+        const data = await this.userModel
+            .find({ refBy: _id })
+            .select("fullname email phone profileImage state refCode refBy userType type ")
+            .populate("refBy", "fullname email phone profileImage state refCode refBy referral userType type createdAt ");
+        return (0, service_1.serviceResponse)({
+            message: "Success",
+            status: true,
+            data,
+        });
+    }
+    async markAllUserNotificationAsRead(userID) {
+        const result = await this.activityLogModel.updateMany({ userID, isRead: false }, { $set: { isRead: true } });
+        return (0, service_1.serviceResponse)({
+            message: "All notifications marked as read",
+            status: true,
+            data: result,
+        });
+    }
+    async getUnreadNotificationCount(userID) {
+        const count = await this.activityLogModel.countDocuments({
+            userID,
+            isRead: false,
+        });
+        return (0, service_1.serviceResponse)({
+            message: "Unread notification count fetched successfully",
+            status: true,
+            data: { count },
+        });
+    }
+    async changeUserStatus(userID, status, userData) {
+        try {
+            const updatedUser = await this.userModel.findByIdAndUpdate(userID, { status }, { new: true });
+            if (!updatedUser) {
+                return (0, service_1.serviceResponse)({
+                    message: "User not found",
+                    status: false,
+                });
+            }
+            this.notificationActivity.notificationActivity({
+                action: "update",
+                entityType: "User",
+                entityID: updatedUser._id.toString(),
+                userID: updatedUser?._id.toString(),
+                details: `${updatedUser?.fullname} changed user status to ${status}`,
+                playerIds: [updatedUser?.playerId ?? ""],
+            });
+            return (0, service_1.serviceResponse)({
+                message: "User status updated successfully",
+                status: true,
+                data: updatedUser,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
     }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __param(1, (0, mongoose_1.InjectModel)(schema_1.ActivityLogModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof service_1.NotificationService !== "undefined" && service_1.NotificationService) === "function" ? _c : Object])
 ], UsersService);
 
 
@@ -2293,6 +6287,16 @@ module.exports = require("@nestjs/mongoose");
 
 /***/ }),
 
+/***/ "@nestjs/passport":
+/*!***********************************!*\
+  !*** external "@nestjs/passport" ***!
+  \***********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/passport");
+
+/***/ }),
+
 /***/ "@nestjs/platform-express":
 /*!*******************************************!*\
   !*** external "@nestjs/platform-express" ***!
@@ -2333,6 +6337,26 @@ module.exports = require("@nestjs/throttler");
 
 /***/ }),
 
+/***/ "@nestjs/websockets":
+/*!*************************************!*\
+  !*** external "@nestjs/websockets" ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/websockets");
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/***/ ((module) => {
+
+module.exports = require("axios");
+
+/***/ }),
+
 /***/ "bcrypt":
 /*!*************************!*\
   !*** external "bcrypt" ***!
@@ -2340,6 +6364,16 @@ module.exports = require("@nestjs/throttler");
 /***/ ((module) => {
 
 module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "cloudinary":
+/*!*****************************!*\
+  !*** external "cloudinary" ***!
+  \*****************************/
+/***/ ((module) => {
+
+module.exports = require("cloudinary");
 
 /***/ }),
 
@@ -2373,6 +6407,26 @@ module.exports = require("helmet");
 
 /***/ }),
 
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("moment");
+
+/***/ }),
+
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+
 /***/ "mongoose-unique-validator":
 /*!********************************************!*\
   !*** external "mongoose-unique-validator" ***!
@@ -2383,6 +6437,86 @@ module.exports = require("mongoose-unique-validator");
 
 /***/ }),
 
+/***/ "multer":
+/*!*************************!*\
+  !*** external "multer" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("multer");
+
+/***/ }),
+
+/***/ "otplib":
+/*!*************************!*\
+  !*** external "otplib" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("otplib");
+
+/***/ }),
+
+/***/ "passport-facebook":
+/*!************************************!*\
+  !*** external "passport-facebook" ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = require("passport-facebook");
+
+/***/ }),
+
+/***/ "passport-google-oauth20":
+/*!******************************************!*\
+  !*** external "passport-google-oauth20" ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = require("passport-google-oauth20");
+
+/***/ }),
+
+/***/ "passport-jwt":
+/*!*******************************!*\
+  !*** external "passport-jwt" ***!
+  \*******************************/
+/***/ ((module) => {
+
+module.exports = require("passport-jwt");
+
+/***/ }),
+
+/***/ "passport-local":
+/*!*********************************!*\
+  !*** external "passport-local" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("passport-local");
+
+/***/ }),
+
+/***/ "socket.io":
+/*!****************************!*\
+  !*** external "socket.io" ***!
+  \****************************/
+/***/ ((module) => {
+
+module.exports = require("socket.io");
+
+/***/ }),
+
+/***/ "streamifier":
+/*!******************************!*\
+  !*** external "streamifier" ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = require("streamifier");
+
+/***/ }),
+
 /***/ "crypto":
 /*!*************************!*\
   !*** external "crypto" ***!
@@ -2390,6 +6524,26 @@ module.exports = require("mongoose-unique-validator");
 /***/ ((module) => {
 
 module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = require("path");
 
 /***/ })
 
