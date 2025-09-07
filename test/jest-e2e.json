@@ -1,0 +1,31 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/enum/(.*)": "<rootDir>/../libs/enum/src/$1",
+    "@app/enum": "<rootDir>/../libs/enum/src",
+    "@app/dto/(.*)": "<rootDir>/../libs/dto/src/$1",
+    "@app/dto": "<rootDir>/../libs/dto/src",
+    "@app/interface/(.*)": "<rootDir>/../libs/interface/src/$1",
+    "@app/interface": "<rootDir>/../libs/interface/src",
+    "@app/schema/(.*)": "<rootDir>/../libs/schema/src/$1",
+    "@app/schema": "<rootDir>/../libs/schema/src",
+    "@app/guard/(.*)": "<rootDir>/../libs/guard/src/$1",
+    "@app/guard": "<rootDir>/../libs/guard/src",
+    "@app/decorator/(.*)": "<rootDir>/../libs/decorator/src/$1",
+    "@app/decorator": "<rootDir>/../libs/decorator/src",
+    "@app/service/(.*)": "<rootDir>/../libs/service/src/$1",
+    "@app/service": "<rootDir>/../libs/service/src",
+    "@app/strategy/(.*)": "<rootDir>/../libs/strategy/src/$1",
+    "@app/strategy": "<rootDir>/../libs/strategy/src"
+  }
+}
