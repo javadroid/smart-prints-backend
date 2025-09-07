@@ -21,9 +21,8 @@ export class OrderDto {
     @ApiProperty({ description: 'Order status', example: 'pending' })
      status: string;
 
-    @ApiProperty({ description: 'Shipping address', example: '123 Main St, Anytown, USA' })
-     shippingAddress: string;
+    @ApiProperty({ description: 'Shipping address ID', example: '123' })
+     addressID: string;
 
-    @ApiProperty({ description: 'Order date', example: '2023-10-26T10:00:00Z' })
-     orderDate: Date;
+   
 }

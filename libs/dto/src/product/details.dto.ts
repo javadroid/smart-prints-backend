@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { CategoryDto } from "./categories.dto";
+import { CategoriesDto } from "./categories.dto";
 
 
 export class ProductDetailsDto {
@@ -15,8 +15,8 @@ export class ProductDetailsDto {
   @ApiProperty({ description: 'Product price', example: `₦${28.33}` })
   readonly price: number;
 
-  @ApiProperty({ description: 'Product category', type: CategoryDto })
-  readonly category: CategoryDto;
+  @ApiProperty({ description: 'Product category', type: CategoriesDto })
+  readonly category: CategoriesDto;
 
   @ApiProperty({ description: 'Product availability', example: 'Out of stock' })
   readonly Instock: string;

@@ -11,4 +11,6 @@ export * from './products/order.schema';
 
 
 export * from './reference/categories.schema';
+
+export * from './reference/address.schema';
 export * from './reference/product-type.schema';

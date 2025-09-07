@@ -71,6 +71,7 @@ __exportStar(__webpack_require__(/*! ./support.dto */ "./libs/dto/src/support.dt
 __exportStar(__webpack_require__(/*! ./reference/country.dto */ "./libs/dto/src/reference/country.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/state.dto */ "./libs/dto/src/reference/state.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/otp.dto */ "./libs/dto/src/reference/otp.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/address.dto */ "./libs/dto/src/reference/address.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/authenticator.dto */ "./libs/dto/src/reference/authenticator.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/categories.dto */ "./libs/dto/src/product/categories.dto.ts"), exports);
@@ -101,35 +102,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CategoryDto = void 0;
+exports.CategoriesDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-class CategoryDto {
+class CategoriesDto {
 }
-exports.CategoryDto = CategoryDto;
+exports.CategoriesDto = CategoriesDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Category name', example: 'Fruits & veggies', }),
+    (0, swagger_1.ApiProperty)({ description: 'Category name', example: 'Electronics' }),
     __metadata("design:type", String)
-], CategoryDto.prototype, "name", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Category description', example: 'Fresh fruits at your disposal' }),
-    __metadata("design:type", String)
-], CategoryDto.prototype, "description", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Category image URL', example: 'http://example.com/category.jpg' }),
-    __metadata("design:type", String)
-], CategoryDto.prototype, "imageUrl", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Category ID', example: 'cat123' }),
-    __metadata("design:type", String)
-], CategoryDto.prototype, "id", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Category slug', example: 'tubers' }),
-    __metadata("design:type", String)
-], CategoryDto.prototype, "slug", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Indicates if the category can be added to the basket', example: true }),
-    __metadata("design:type", Boolean)
-], CategoryDto.prototype, "addToBasket", void 0);
+], CategoriesDto.prototype, "name", void 0);
 
 
 /***/ }),
@@ -175,8 +156,8 @@ __decorate([
     __metadata("design:type", Number)
 ], ProductDetailsDto.prototype, "price", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product category', type: categories_dto_1.CategoryDto }),
-    __metadata("design:type", typeof (_a = typeof categories_dto_1.CategoryDto !== "undefined" && categories_dto_1.CategoryDto) === "function" ? _a : Object)
+    (0, swagger_1.ApiProperty)({ description: 'Product category', type: categories_dto_1.CategoriesDto }),
+    __metadata("design:type", typeof (_a = typeof categories_dto_1.CategoriesDto !== "undefined" && categories_dto_1.CategoriesDto) === "function" ? _a : Object)
 ], ProductDetailsDto.prototype, "category", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Product availability', example: 'Out of stock' }),
@@ -281,7 +262,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
@@ -313,13 +293,9 @@ __decorate([
     __metadata("design:type", String)
 ], OrderDto.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Shipping address', example: '123 Main St, Anytown, USA' }),
+    (0, swagger_1.ApiProperty)({ description: 'Shipping address ID', example: '123' }),
     __metadata("design:type", String)
-], OrderDto.prototype, "shippingAddress", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Order date', example: '2023-10-26T10:00:00Z' }),
-    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
-], OrderDto.prototype, "orderDate", void 0);
+], OrderDto.prototype, "addressID", void 0);
 
 
 /***/ }),
@@ -342,14 +318,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductDto = exports.RatingDto = void 0;
+exports.ProductDto = exports.DesignAreaDto = exports.DesignRectDto = exports.MockupsDto = exports.ProductSizeDto = exports.ProductColorDto = exports.RatingDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 class RatingDto {
 }
 exports.RatingDto = RatingDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Rating given by the user for the ride', example: '4.5' }),
+    (0, swagger_1.ApiProperty)({ description: 'Rating given by the user for the ride', example: 4.5 }),
     __metadata("design:type", Number)
 ], RatingDto.prototype, "rating", void 0);
 __decorate([
@@ -364,11 +340,98 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Date of the rating', example: '2025-03-22T08:30:00Z' }),
     __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], RatingDto.prototype, "date", void 0);
+class ProductColorDto {
+}
+exports.ProductColorDto = ProductColorDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'White' }),
+    __metadata("design:type", String)
+], ProductColorDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '#FFFFFF' }),
+    __metadata("design:type", String)
+], ProductColorDto.prototype, "hex", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'bg-white' }),
+    __metadata("design:type", String)
+], ProductColorDto.prototype, "className", void 0);
+class ProductSizeDto {
+}
+exports.ProductSizeDto = ProductSizeDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'M' }),
+    __metadata("design:type", String)
+], ProductSizeDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Medium' }),
+    __metadata("design:type", String)
+], ProductSizeDto.prototype, "label", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: true }),
+    __metadata("design:type", Boolean)
+], ProductSizeDto.prototype, "inStock", void 0);
+class MockupsDto {
+}
+exports.MockupsDto = MockupsDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "front", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "back", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "right", void 0);
+class DesignRectDto {
+}
+exports.DesignRectDto = DesignRectDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '27%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "top", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '33%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '37%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "width", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '50%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "height", void 0);
+class DesignAreaDto {
+}
+exports.DesignAreaDto = DesignAreaDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "front", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "back", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "right", void 0);
 class ProductDto {
 }
 exports.ProductDto = ProductDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod123' }),
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "id", void 0);
 __decorate([
@@ -380,43 +443,71 @@ __decorate([
     __metadata("design:type", String)
 ], ProductDto.prototype, "description", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product price', example: 28.33 }),
+    (0, swagger_1.ApiProperty)({ description: 'Product price (legacy)', example: 28.33, required: false }),
     __metadata("design:type", Number)
 ], ProductDto.prototype, "price", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product category ID', example: '6568zsdsadD' }),
+    (0, swagger_1.ApiProperty)({ description: 'Product base price', example: 25.0 }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "basePrice", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product sale price', example: 20.0, required: false }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "salePrice", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product category ID (legacy)', example: '6568zsdsadD', required: false }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "categoryID", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'quantity', example: 5 }),
+    (0, swagger_1.ApiProperty)({ description: 'Product category', example: 'apparel' }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'quantity', example: 5, required: false }),
     __metadata("design:type", Number)
 ], ProductDto.prototype, "quantity", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product image URL', example: ['http://example.com/image.jpg'] }),
+    (0, swagger_1.ApiProperty)({ description: 'Product mockups images', type: MockupsDto, required: false }),
+    __metadata("design:type", MockupsDto)
+], ProductDto.prototype, "mockups", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Design area configuration', type: DesignAreaDto, required: false }),
+    __metadata("design:type", DesignAreaDto)
+], ProductDto.prototype, "designArea", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product image URLs (legacy)', example: ['http://example.com/image.jpg'], required: false }),
     __metadata("design:type", Array)
 ], ProductDto.prototype, "imageUrls", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: [RatingDto], description: 'Product rating', }),
+    (0, swagger_1.ApiProperty)({ type: [ProductColorDto], description: 'Available colors for the product', required: false }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "availableColors", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [ProductSizeDto], description: 'Available sizes for the product', required: false }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "availableSizes", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Size guide URL', required: false }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "sizeGuide", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [RatingDto], description: 'Product rating', required: false }),
     __metadata("design:type", Array)
 ], ProductDto.prototype, "rating", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Measurement ooh', example: "'kg','litre','count','pack'" }),
+    (0, swagger_1.ApiProperty)({ description: 'Measurement unit', example: "kg", required: false }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "measurement", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'distance', example: 200 }),
+    (0, swagger_1.ApiProperty)({ description: 'distance', example: 200, required: false }),
     __metadata("design:type", Number)
 ], ProductDto.prototype, "distance", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'status', enum: enum_1.ProductStatusEnum, example: enum_1.ProductStatusEnum.PENDING }),
+    (0, swagger_1.ApiProperty)({ description: 'status', enum: enum_1.ProductStatusEnum, example: enum_1.ProductStatusEnum.PENDING, required: false }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Farm ID where the product is sourced', example: 'farm123' }),
-    __metadata("design:type", String)
-], ProductDto.prototype, "farmID", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product type', example: ['vegetable', 'fruit'] }),
+    (0, swagger_1.ApiProperty)({ description: 'Product type', example: ['vegetable', 'fruit'], required: false }),
     __metadata("design:type", Array)
 ], ProductDto.prototype, "type", void 0);
 
@@ -470,6 +561,64 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Date when the review was created', example: '2023-10-01T12:00:00Z' }),
     __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], ReviewsDto.prototype, "createdAt", void 0);
+
+
+/***/ }),
+
+/***/ "./libs/dto/src/reference/address.dto.ts":
+/*!***********************************************!*\
+  !*** ./libs/dto/src/reference/address.dto.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AddressDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class AddressDto {
+}
+exports.AddressDto = AddressDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Address ID', example: 'addr123' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user456' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Street address', example: '123 Main St' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "street", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'City', example: 'Anytown' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "city", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State/Province', example: 'CA' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "state", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Postal code', example: '90210' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "postalCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country', example: 'USA' }),
+    __metadata("design:type", String)
+], AddressDto.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Is this the default address?', example: true }),
+    __metadata("design:type", Boolean)
+], AddressDto.prototype, "isDefault", void 0);
 
 
 /***/ }),
@@ -821,7 +970,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserDTO = exports.Refferal = exports.RefreshTokenDTO = exports.VerifyAuthenticationDto = exports.SetAuthenticatorDto = exports.ForgotPasswordDTO = exports.LoginDTO = exports.DeleteAccountDTO = exports.ChangePasswordDTO = exports.BankAccountDTO = exports.UserIDDTO = void 0;
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
@@ -1081,59 +1230,6 @@ __decorate([
     }),
     __metadata("design:type", Boolean)
 ], UserDTO.prototype, "isSuperAdmin", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Date of birth of the user',
-        example: '1990-01-01T00:00:00.000Z',
-        type: Date,
-    }),
-    __metadata("design:type", typeof (_g = typeof Date !== "undefined" && Date) === "function" ? _g : Object)
-], UserDTO.prototype, "dob", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'California' }),
-    __metadata("design:type", String)
-], UserDTO.prototype, "state", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'USA' }),
-    __metadata("design:type", String)
-], UserDTO.prototype, "country", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Los Angeles County', required: false }),
-    __metadata("design:type", String)
-], UserDTO.prototype, "localGovernmentArea", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'single', enum: ['single', 'married'], required: false }),
-    __metadata("design:type", String)
-], UserDTO.prototype, "maritalStatus", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Social media profiles with platforms as keys and handles as values',
-        example: { twitter: 'user_handle', facebook: 'user_handle' },
-        required: false,
-    }),
-    __metadata("design:type", typeof (_h = typeof Record !== "undefined" && Record) === "function" ? _h : Object)
-], UserDTO.prototype, "socialMediaProfile", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Residential address of the user',
-        example: '123 Main St, Springfield, USA',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], UserDTO.prototype, "residentialAddress", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Bank account information',
-        example: [
-            {
-                bankName: 'Bank of America',
-                accountName: 'John Doe',
-                accountNumber: '987654321',
-            },
-        ],
-    }),
-    __metadata("design:type", Array)
-], UserDTO.prototype, "bankAccount", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'referral details' }),
     __metadata("design:type", Refferal)
@@ -1700,6 +1796,7 @@ __exportStar(__webpack_require__(/*! ./products/product.schema */ "./libs/schema
 __exportStar(__webpack_require__(/*! ./products/farm.schema */ "./libs/schema/src/products/farm.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./products/order.schema */ "./libs/schema/src/products/order.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/categories.schema */ "./libs/schema/src/reference/categories.schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./reference/address.schema */ "./libs/schema/src/reference/address.schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/product-type.schema */ "./libs/schema/src/reference/product-type.schema.ts"), exports);
 
 
@@ -1905,33 +2002,33 @@ let OrderModel = class OrderModel {
 };
 exports.OrderModel = OrderModel;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], OrderModel.prototype, "id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ ref: 'UserModel' }),
     __metadata("design:type", String)
 ], OrderModel.prototype, "userID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ ref: 'ProductModel' }),
     __metadata("design:type", String)
 ], OrderModel.prototype, "productID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], OrderModel.prototype, "quantity", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], OrderModel.prototype, "totalPrice", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], OrderModel.prototype, "status", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ ref: 'AddressModel' }),
     __metadata("design:type", String)
-], OrderModel.prototype, "shippingAddress", void 0);
+], OrderModel.prototype, "addressID", void 0);
 exports.OrderModel = OrderModel = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], OrderModel);
@@ -1980,6 +2077,88 @@ __decorate([
     (0, mongoose_1.Prop)({ default: Date.now }),
     __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], Rating.prototype, "date", void 0);
+class ProductColor {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "hex", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "className", void 0);
+class ProductSize {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductSize.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductSize.prototype, "label", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Boolean)
+], ProductSize.prototype, "inStock", void 0);
+class Mockups {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "front", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "back", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "right", void 0);
+class DesignRect {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "top", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "width", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "height", void 0);
+class DesignArea {
+}
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "front", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "back", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "right", void 0);
 let ProductModel = class ProductModel {
 };
 exports.ProductModel = ProductModel;
@@ -2000,7 +2179,7 @@ __decorate([
     __metadata("design:type", String)
 ], ProductModel.prototype, "farmID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({}),
+    (0, mongoose_1.Prop)({ type: [String] }),
     __metadata("design:type", Array)
 ], ProductModel.prototype, "type", void 0);
 __decorate([
@@ -2013,16 +2192,48 @@ __decorate([
 ], ProductModel.prototype, "price", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
+    __metadata("design:type", Number)
+], ProductModel.prototype, "basePrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", Number)
+], ProductModel.prototype, "salePrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], ProductModel.prototype, "categoryID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], ProductModel.prototype, "category", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], ProductModel.prototype, "quantity", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: Mockups }),
+    __metadata("design:type", Mockups)
+], ProductModel.prototype, "mockups", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignArea }),
+    __metadata("design:type", DesignArea)
+], ProductModel.prototype, "designArea", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: [String], default: [] }),
     __metadata("design:type", Array)
 ], ProductModel.prototype, "imageUrls", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [ProductColor], default: [] }),
+    __metadata("design:type", Array)
+], ProductModel.prototype, "availableColors", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [ProductSize], default: [] }),
+    __metadata("design:type", Array)
+], ProductModel.prototype, "availableSizes", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductModel.prototype, "sizeGuide", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: [Rating] }),
     __metadata("design:type", Array)
@@ -2053,6 +2264,68 @@ exports.ProductSchema.pre('save', async function (next, error) {
 
 /***/ }),
 
+/***/ "./libs/schema/src/reference/address.schema.ts":
+/*!*****************************************************!*\
+  !*** ./libs/schema/src/reference/address.schema.ts ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AddressSchema = exports.AddressModel = void 0;
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+let AddressModel = class AddressModel {
+};
+exports.AddressModel = AddressModel;
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "id", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "userID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "street", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "city", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "state", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "postalCode", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], AddressModel.prototype, "country", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], AddressModel.prototype, "isDefault", void 0);
+exports.AddressModel = AddressModel = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], AddressModel);
+exports.AddressSchema = mongoose_1.SchemaFactory.createForClass(AddressModel);
+
+
+/***/ }),
+
 /***/ "./libs/schema/src/reference/categories.schema.ts":
 /*!********************************************************!*\
   !*** ./libs/schema/src/reference/categories.schema.ts ***!
@@ -2076,7 +2349,7 @@ let CategoriesModel = class CategoriesModel {
 };
 exports.CategoriesModel = CategoriesModel;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, unique: true }),
+    (0, mongoose_1.Prop)({ required: true, }),
     __metadata("design:type", String)
 ], CategoriesModel.prototype, "name", void 0);
 exports.CategoriesModel = CategoriesModel = __decorate([
@@ -3692,7 +3965,7 @@ const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const dto_2 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
-class RegisterDTO extends (0, swagger_1.PickType)(dto_2.UserDTO, ['title', 'isAdmin', 'isSuperAdmin', 'userType', 'useRefCode', 'firstname', 'fullname', 'lastname', 'email', 'password', 'gender', 'phone', "profileImage", 'residentialAddress']) {
+class RegisterDTO extends (0, swagger_1.PickType)(dto_2.UserDTO, ['title', 'isAdmin', 'isSuperAdmin', 'userType', 'useRefCode', 'firstname', 'fullname', 'lastname', 'email', 'password', 'gender', 'phone', "profileImage",]) {
 }
 let AuthController = class AuthController {
     constructor(authService) {
@@ -4634,65 +4907,126 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const categories_service_1 = __webpack_require__(/*! ./categories.service */ "./src/categories/categories.service.ts");
-const create_category_dto_1 = __webpack_require__(/*! ./dto/create-category.dto */ "./src/categories/dto/create-category.dto.ts");
-const update_category_dto_1 = __webpack_require__(/*! ./dto/update-category.dto */ "./src/categories/dto/update-category.dto.ts");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService) {
         this.categoriesService = categoriesService;
     }
-    create(createCategoryDto) {
-        return this.categoriesService.create(createCategoryDto);
+    async create(categories, req) {
+        return this.categoriesService.upset(categories, req.user);
     }
-    findAll() {
-        return this.categoriesService.findAll();
+    async update(categories, categoriesID, req) {
+        return this.categoriesService.update(categoriesID, categories, req.user);
     }
-    findOne(id) {
-        return this.categoriesService.findOne(+id);
+    async findbyId(params, query) {
+        return this.categoriesService.findByAny(params, query);
     }
-    update(id, updateCategoryDto) {
-        return this.categoriesService.update(+id, updateCategoryDto);
+    async findAll(query) {
+        return this.categoriesService.findAll(query);
     }
-    remove(id) {
-        return this.categoriesService.remove(+id);
+    async delete(ids, req) {
+        return this.categoriesService.delete(ids, req.user);
     }
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: "Create a new categories" }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.CategoriesDto,
+        description: "Creating a new categories Details",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof create_category_dto_1.CreateCategoryDto !== "undefined" && create_category_dto_1.CreateCategoryDto) === "function" ? _b : Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.CategoriesDto !== "undefined" && dto_1.CategoriesDto) === "function" ? _b : Object, Object]),
+    __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Patch)(":categoriesID"),
+    (0, swagger_1.ApiOperation)({ summary: "Update existing categoriess" }),
+    (0, swagger_1.ApiParam)({
+        name: "categoriesID",
+        description: "The categoriesID to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiBody)({
+        type: dto_1.CategoriesDto,
+        description: "Updating existing categoriess",
+    }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)("categoriesID")),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], CategoriesController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], CategoriesController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof update_category_dto_1.UpdateCategoryDto !== "undefined" && update_category_dto_1.UpdateCategoryDto) === "function" ? _c : Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.CategoriesDto !== "undefined" && dto_1.CategoriesDto) === "function" ? _c : Object, String, Object]),
+    __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("by-any/:key/:value"),
+    (0, swagger_1.ApiOperation)({ summary: "Find a categories by any key-value pair" }),
+    (0, swagger_1.ApiParam)({ name: "key", description: "The key to search by", type: String }),
+    (0, swagger_1.ApiParam)({
+        name: "value",
+        description: "The value to search for",
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of categoriess per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], CategoriesController.prototype, "remove", null);
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "findbyId", null);
+__decorate([
+    (0, common_1.Get)(""),
+    (0, swagger_1.ApiOperation)({ summary: "Get all categoriess" }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of categoriess per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Delete)(),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: "Delete categoriess by their IDs" }),
+    (0, swagger_1.ApiBody)({ type: [String], description: "Array of categories IDs to delete" }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "delete", null);
 exports.CategoriesController = CategoriesController = __decorate([
+    (0, swagger_1.ApiTags)("categories"),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [typeof (_a = typeof categories_service_1.CategoriesService !== "undefined" && categories_service_1.CategoriesService) === "function" ? _a : Object])
 ], CategoriesController);
@@ -4744,64 +5078,140 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 let CategoriesService = class CategoriesService {
-    create(createCategoryDto) {
-        return 'This action adds a new category';
+    constructor(categoriesModel) {
+        this.categoriesModel = categoriesModel;
     }
-    findAll() {
-        return `This action returns all categories`;
+    async upset(createCategoriesDto, userData) {
+        const created = await this.categoriesModel.create({ ...createCategoriesDto, userID: userData._id.toString() });
+        return (0, service_1.serviceResponse)({
+            data: created,
+            message: "Categories plan created successfully",
+            status: true,
+        });
     }
-    findOne(id) {
-        return `This action returns a #${id} category`;
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.categoriesModel
+            .find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Categories plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.categoriesModel,
+                query,
+                querys: {},
+            }),
+        });
     }
-    update(id, updateCategoryDto) {
-        return `This action updates a #${id} category`;
+    async findOne(id) {
+        try {
+            const plan = await this.categoriesModel.findById(id).exec();
+            return (0, service_1.serviceResponse)({
+                data: plan,
+                message: "Categories plan retrieved successfully",
+                status: true,
+            });
+        }
+        catch (error) { }
     }
-    remove(id) {
-        return `This action removes a #${id} category`;
+    async findByAny(params, query) {
+        const { key, value } = params;
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.categoriesModel
+            .find({ [key]: value })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Categories plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.categoriesModel,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async update(id, updateCategoriesDto, userData) {
+        try {
+            const updated = await this.categoriesModel
+                .findByIdAndUpdate(id, updateCategoriesDto, {
+                new: true,
+            })
+                .exec();
+            if (!updated) {
+                return (0, service_1.serviceResponse)({
+                    message: "Categories plan not found",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                data: updated,
+                message: "Categories plan updated successfully",
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
+    }
+    async delete(ids, userData) {
+        try {
+            const result = await this.categoriesModel.deleteMany({
+                _id: { $in: ids },
+            });
+            if (result.deletedCount === 0) {
+                return (0, service_1.serviceResponse)({
+                    message: "No categories plans found to delete",
+                    status: false,
+                });
+            }
+            return (0, service_1.serviceResponse)({
+                message: `${result.deletedCount} categories plans deleted successfully`,
+                status: true,
+            });
+        }
+        catch (error) {
+            return (0, service_1.serviceResponse)({
+                message: error.message,
+                status: false,
+            });
+        }
     }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.CategoriesModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], CategoriesService);
-
-
-/***/ }),
-
-/***/ "./src/categories/dto/create-category.dto.ts":
-/*!***************************************************!*\
-  !*** ./src/categories/dto/create-category.dto.ts ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateCategoryDto = void 0;
-class CreateCategoryDto {
-}
-exports.CreateCategoryDto = CreateCategoryDto;
-
-
-/***/ }),
-
-/***/ "./src/categories/dto/update-category.dto.ts":
-/*!***************************************************!*\
-  !*** ./src/categories/dto/update-category.dto.ts ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UpdateCategoryDto = void 0;
-const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const create_category_dto_1 = __webpack_require__(/*! ./create-category.dto */ "./src/categories/dto/create-category.dto.ts");
-class UpdateCategoryDto extends (0, swagger_1.PartialType)(create_category_dto_1.CreateCategoryDto) {
-}
-exports.UpdateCategoryDto = UpdateCategoryDto;
 
 
 /***/ }),

@@ -6,7 +6,7 @@ export type CategoriesDoc = CategoriesModel & Document;
 
 @Schema()
 export class CategoriesModel {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, })
   name: string;
 
 

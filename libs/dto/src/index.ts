@@ -6,6 +6,7 @@ export * from './support.dto';
 export * from './reference/country.dto';
 export * from './reference/state.dto';
 export * from './reference/otp.dto';
+export * from './reference/address.dto';
 export * from './reference/authenticator.dto';
 export * from './product/product.dto';
 

@@ -190,56 +190,6 @@ gender: string;
   })
   isSuperAdmin?: boolean;
 
-  @ApiProperty({
-    description: 'Date of birth of the user',
-    example: '1990-01-01T00:00:00.000Z',
-    type: Date,
-  })
-  dob?: Date;
-  // Voter Location
-  @ApiProperty({ example: 'California' })
-  state?: string;
-
-  @ApiProperty({ example: 'USA' })
-  country?: string;
-
-  @ApiProperty({ example: 'Los Angeles County', required: false })
-  localGovernmentArea?: string;
-
-  @ApiProperty({  example: 'single', enum:['single','married'], required: false })
-  maritalStatus?: string;
-
-  @ApiProperty({
-    description:
-      'Social media profiles with platforms as keys and handles as values',
-    example: { twitter: 'user_handle', facebook: 'user_handle' },
-    required: false,
-  })
-  socialMediaProfile?: Record<string, string>;
-
-
-  @ApiProperty({
-    description: 'Residential address of the user',
-    example: '123 Main St, Springfield, USA',
-    required: false,
-  })
-  residentialAddress?: string;
-
-  @ApiProperty({
-    description: 'Bank account information',
-    example: [
-      {
-        bankName: 'Bank of America',
-        accountName: 'John Doe',
-        accountNumber: '987654321',
-      },
-    ],
-  })
-  bankAccount?: BankAccountDTO[];
-
-
-
-
 
   @ApiProperty({ description: 'referral details' })
   referral: Refferal;

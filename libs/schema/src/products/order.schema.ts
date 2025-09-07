@@ -6,26 +6,26 @@ export type OrderDoc = HydratedDocument<OrderModel>;
 
 @Schema({ timestamps: true })
 export class OrderModel {
-  @Prop({ required: true })
+  @Prop({  })
   id: string;
 
-  @Prop({ required: true })
+  @Prop({ ref: 'UserModel' })
   userID: string;
 
-  @Prop({ required: true })
+  @Prop({ ref: 'ProductModel' })
   productID: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   quantity: number;
 
-  @Prop({ required: true })
+  @Prop({  })
   totalPrice: number;
 
-  @Prop({ required: true })
+  @Prop({  })
   status: string;
 
-  @Prop({ required: true })
-  shippingAddress: string;
+  @Prop({ ref: 'AddressModel' })
+  addressID: string;
 
  
 }

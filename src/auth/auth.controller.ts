@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '@app/guard';
 
   class RegisterDTO extends PickType(
     UserDTO,
-    ['title','isAdmin','isSuperAdmin', 'userType','useRefCode','firstname' , 'fullname' , 'lastname' , 'email' , 'password' ,  'gender' , 'phone' ,"profileImage", 'residentialAddress']
+    ['title','isAdmin','isSuperAdmin', 'userType','useRefCode','firstname' , 'fullname' , 'lastname' , 'email' , 'password' ,  'gender' , 'phone' ,"profileImage", ]
 ) {}
 
 @ApiBearerAuth('access-token')

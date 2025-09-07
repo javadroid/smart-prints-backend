@@ -26,6 +26,8 @@
     "@app/service/(.*)": "<rootDir>/../libs/service/src/$1",
     "@app/service": "<rootDir>/../libs/service/src",
     "@app/strategy/(.*)": "<rootDir>/../libs/strategy/src/$1",
-    "@app/strategy": "<rootDir>/../libs/strategy/src"
+    "@app/strategy": "<rootDir>/../libs/strategy/src",
+    "@app/reference/(.*)": "<rootDir>/../libs/reference/src/$1",
+    "@app/reference": "<rootDir>/../libs/reference/src"
   }
 }

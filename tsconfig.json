@@ -65,6 +65,12 @@
       ],
       "@app/strategy/*": [
         "libs/strategy/src/*"
+      ],
+      "@app/reference": [
+        "libs/reference/src"
+      ],
+      "@app/reference/*": [
+        "libs/reference/src/*"
       ]
     }
   }
