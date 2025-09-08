@@ -15,13 +15,13 @@ import { Refferal } from "@app/dto";
 export type UserDoc = HydratedDocument<UserModel>;
 
 class BankAccount {
-  @Prop({ required: true })
+  @Prop({  })
   bankName: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   accountNumber: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   accountName: string;
   @Prop({  })
   bankCode: string;
@@ -43,30 +43,30 @@ class NextOfKin {
 
   
 
-  @Prop({ required: true })
+  @Prop({  })
   firstName: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   lastName: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   relationship: string;
 
-  @Prop({ required: true, enum: Gender })
+  @Prop({ enum: Gender })
   gender: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   phoneNumber: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   residentialAddress: string;
 }
 
 class BankStatement {
-  @Prop({ required: true })
+  @Prop({  })
   documentUrl: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   statementDate: string;
 
   @Prop({
@@ -83,13 +83,13 @@ class BankStatement {
 
 
 class Referral {
-  @Prop({ required: true })
+  @Prop({  })
   refCode: string;
 
   @Prop({ enum: ["active", "inactive"] })
   status?: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   max: number;
 
   @Prop({ default: 0 })
@@ -118,22 +118,22 @@ export class UserModel {
   @Prop()
   emailStatus?: string;
 
-  @Prop({ required: true, unique:true })
+  @Prop({ unique:true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   fullname: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   firstname: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   lastname: string;
 
   @Prop()
   phone?: string;
 
-  @Prop({ required: true })
+  @Prop({  })
   password: string;
 
   @Prop()

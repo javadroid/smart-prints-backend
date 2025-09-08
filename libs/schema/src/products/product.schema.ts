@@ -88,7 +88,7 @@ export class ProductModel {
   @Prop()
   id: string;
 
-  @Prop({ default: true })
+  @Prop({ default: false })
   isFeatured?: boolean;
 
 

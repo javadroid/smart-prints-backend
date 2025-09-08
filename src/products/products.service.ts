@@ -1,30 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProductModel, ProductDoc, FarmModel, FarmDoc } from '@app/schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ProductDto, UserDTO } from '@app/dto';
-import { ObjectReturnType, serviceResponse, getMetadata } from '@app/service';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { ProductModel, ProductDoc, FarmModel, FarmDoc } from "@app/schema";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { ProductDto, UserDTO } from "@app/dto";
+import { ObjectReturnType, serviceResponse, getMetadata } from "@app/service";
 
 @Injectable()
 export class ProductService {
- constructor(
+  constructor(
     @InjectModel(ProductModel.name)
-    private productModel: Model<ProductDoc>,
-    //     @InjectModel(FarmModel.name)
-    // private framModel: Model<FarmDoc>,
-  
-  ){
+    private productModel: Model<ProductDoc>
+  ) //     @InjectModel(FarmModel.name)
+  // private framModel: Model<FarmDoc>,
 
- }
+  {}
   async upset(
     createProductDto: ProductDto,
     userData: UserDTO
   ): Promise<ObjectReturnType> {
     //check if farm exists
-  //   const farm = await this.framModel.findOne({ _id: createProductDto.farmID, userID: userData._id.toString() });
-  //   if (!farm) {
-  //  throw  new NotFoundException('Farm not found or you do not have permission to add products to this farm');
-  //   }
+    //   const farm = await this.framModel.findOne({ _id: createProductDto.farmID, userID: userData._id.toString() });
+    //   if (!farm) {
+    //  throw  new NotFoundException('Farm not found or you do not have permission to add products to this farm');
+    //   }
     const created = await this.productModel.create(createProductDto);
     return serviceResponse({
       data: created,
@@ -37,7 +35,7 @@ export class ProductService {
   async findAll(query: any): Promise<ObjectReturnType> {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
-
+  
     const plans = await this.productModel
       .find()
       .skip(skip)
@@ -127,9 +125,8 @@ export class ProductService {
     }
   }
 
-    async delete(ids: string[], userData: UserDTO): Promise<ObjectReturnType> {
+  async delete(ids: string[], userData: UserDTO): Promise<ObjectReturnType> {
     try {
-      
       const result = await this.productModel.deleteMany({
         _id: { $in: ids },
       });
@@ -152,5 +149,4 @@ export class ProductService {
       });
     }
   }
-
 }
