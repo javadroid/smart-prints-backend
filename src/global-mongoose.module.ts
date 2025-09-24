@@ -7,6 +7,8 @@ import {
   CartSchema,
   CategoriesModel,
   CategoriesSchema,
+  DesignModel,
+  DesignSchema,
   OrderModel,
   OrderSchema,
   OTPModel,
@@ -57,7 +59,8 @@ const DBLINK =
     MongooseModule.forFeature([{ name: OTPModel.name, schema: OTPSchema }]),
         MongooseModule.forFeature([{ name: CartModel.name, schema: CartSchema }]),
 
-  
+   MongooseModule.forFeature([{ name: DesignModel.name, schema: DesignSchema }]),
+
 
 
 
