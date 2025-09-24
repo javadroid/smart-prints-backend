@@ -77,6 +77,7 @@ __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/pr
 __exportStar(__webpack_require__(/*! ./product/cart.dto */ "./libs/dto/src/product/cart.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/cart.dto */ "./libs/dto/src/product/cart.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/design.dto */ "./libs/dto/src/product/design.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product/categories.dto */ "./libs/dto/src/product/categories.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/details.dto */ "./libs/dto/src/product/details.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/reviews.dto */ "./libs/dto/src/product/reviews.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/notifications.dto */ "./libs/dto/src/product/notifications.dto.ts"), exports);
@@ -5919,15 +5920,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DesignsModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const designs_service_1 = __webpack_require__(/*! ./designs.service */ "./src/designs/designs.service.ts");
 const designs_controller_1 = __webpack_require__(/*! ./designs.controller */ "./src/designs/designs.controller.ts");
+const designs_service_1 = __webpack_require__(/*! ./designs.service */ "./src/designs/designs.service.ts");
 let DesignsModule = class DesignsModule {
 };
 exports.DesignsModule = DesignsModule;
 exports.DesignsModule = DesignsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [designs_controller_1.DesignsController],
-        providers: [designs_service_1.DesignsService],
+        controllers: [designs_controller_1.DesignController],
+        providers: [designs_service_1.DesignService],
     })
 ], DesignsModule);
 
