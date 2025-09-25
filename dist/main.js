@@ -4723,6 +4723,8 @@ let AuthService = class AuthService {
             "password",
             "userType",
             "status",
+            "isAdmin",
+            "isSuperAdmin",
             "emailStatus",
         ]);
         if (user) {
