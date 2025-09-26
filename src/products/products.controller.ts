@@ -98,12 +98,12 @@ export class ProductController {
     return this.productService.findAll(query);
   }
 
-  @Delete()
+  @Delete(":id")
   @UseGuards(JwtAuthGuard)
   
   @ApiOperation({ summary: "Delete products by their IDs" })
-  @ApiBody({ type: [String], description: "Array of product IDs to delete" })
-  async delete(@Body() ids: string[],  @Req() req: any) {
+ 
+  async delete(@Param("id") ids: string,  @Req() req: any) {
     return this.productService.delete(ids, req.user);
   }
   

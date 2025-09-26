@@ -125,21 +125,14 @@ export class ProductService {
     }
   }
 
-  async delete(ids: string[], userData: UserDTO): Promise<ObjectReturnType> {
+  async delete(ids: string, userData: UserDTO): Promise<ObjectReturnType> {
     try {
-      const result = await this.productModel.deleteMany({
-        _id: { $in: ids },
-      });
+      const result = await this.productModel.findByIdAndDelete(ids);
 
-      if (result.deletedCount === 0) {
-        return serviceResponse({
-          message: "No product plans found to delete",
-          status: false,
-        });
-      }
+     
 
       return serviceResponse({
-        message: `${result.deletedCount} product plans deleted successfully`,
+        message: `product deleted successfully`,
         status: true,
       });
     } catch (error) {
