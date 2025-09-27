@@ -15,15 +15,7 @@ export class CartService {
   async upset(createCartDto: CartDto, userData: any): Promise<ObjectReturnType> {
     // create or update the cart for a user (replace items)
     const existing = await this.cartModel.findOne({ userID: userData._id.toString() });
-    if (existing) {
-      existing.items = createCartDto.items;
-      existing.subtotal = createCartDto.subtotal;
-      existing.tax = createCartDto.tax || 0;
-      existing.shipping = createCartDto.shipping || 0;
-      existing.total = createCartDto.total;
-      const saved = await existing.save();
-      return serviceResponse({ data: saved, message: 'Cart updated', status: true });
-    }
+   
     const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
     return serviceResponse({ data: created, message: 'Cart created', status: true });
   }

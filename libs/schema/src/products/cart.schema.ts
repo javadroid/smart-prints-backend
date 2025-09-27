@@ -1,52 +1,35 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
 export type CartDoc = CartModel & Document;
+class ProductColor {
+  @Prop()
+  name: string;
 
-@Schema({ timestamps: true })
-export class CartItem {
-  @Prop({ required: true })
-  productID: string;
+  @Prop()
+  hex: string;
 
-  @Prop({ required: false })
-  color?: string;
-
-  @Prop({ required: false })
-  size?: string;
-
-  @Prop({ required: true, default: 1 })
-  quantity: number;
-
-  @Prop({ required: true })
-  unitPrice: number;
-
-  @Prop({ required: true })
-  lineTotal: number;
+  @Prop()
+  className: string;
 }
-
-export const CartItemSchema = SchemaFactory.createForClass(CartItem);
-
 @Schema({ timestamps: true })
 export class CartModel {
-  @Prop({ required: true })
+  @Prop({})
   userID: string;
-
-  @Prop({ type: [CartItemSchema], default: [] })
-  items: CartItem[];
-
-  @Prop({ required: true, default: 0 })
-  subtotal: number;
-
-  @Prop({ required: false, default: 0 })
-  tax?: number;
-
-  @Prop({ required: false, default: 0 })
-  shipping?: number;
-
-  @Prop({ required: true, default: 0 })
-  total: number;
+  @Prop({})
+  _id?: string;
+  @Prop({})
+  id: string;
+  @Prop({})
+  productID: string;
+  @Prop({})
+  color: ProductColor;
+  @Prop({})
+  price: number;
+  @Prop({})
+  designImage: string;
+  @Prop({ type:Object}) // URL to the uploaded design/mockup image
+  metadata?: Record<string, any>; // Optional metadata (e.g., size, custom notes)
 }
 
 export const CartSchema = SchemaFactory.createForClass(CartModel);
-
-

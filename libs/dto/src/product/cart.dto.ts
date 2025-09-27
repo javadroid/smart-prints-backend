@@ -1,44 +1,28 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { ProductColorDto } from "./product.dto";
 
 export class CartItemDto {
-  @ApiProperty({ description: 'Product ID', example: 'prod_123' })
-  productID: string;
+  @ApiProperty({ description: 'MongoDB Object ID of the item', required: false })
+  _id?: string;
 
-  @ApiProperty({ description: 'Selected color (optional)', required: false })
-  color?: string;
+  @ApiProperty({ description: 'Item ID (client-side)', example: 'item_123' })
+  id: string;
 
-  @ApiProperty({ description: 'Selected size (optional)', required: false })
-  size?: string;
-
-  @ApiProperty({ description: 'Quantity', example: 1 })
-  quantity: number;
-
-  @ApiProperty({ description: 'Unit price', example: 25.0 })
-  unitPrice: number;
-
-  @ApiProperty({ description: 'Line total', example: 25.0 })
-  lineTotal: number;
-}
-
-export class CartDto {
-  @ApiProperty({ description: 'Cart ID', required: false })
-  id?: string;
-
-  @ApiProperty({ description: 'User ID', example: 'user_123' })
+  @ApiProperty({ description: 'User ID who owns the cart item', example: 'user_123' })
   userID: string;
 
-  @ApiProperty({ description: 'Array of cart items', type: [CartItemDto] })
-  items: CartItemDto[];
+  @ApiProperty({ description: 'Product ID being added to the cart', example: 'prod_456' })
+  productID: string;
 
-  @ApiProperty({ description: 'Cart subtotal', example: 100.0 })
-  subtotal: number;
+  @ApiProperty({ description: 'Selected color of the product',  })
+  color: ProductColorDto;
 
-  @ApiProperty({ description: 'Tax (optional)', required: false, example: 0.0 })
-  tax?: number;
+  @ApiProperty({ description: 'Price of the product', example: 29.99 })
+  price: number;
 
-  @ApiProperty({ description: 'Shipping (optional)', required: false, example: 0.0 })
-  shipping?: number;
+  @ApiProperty({ description: 'URL to the design/mockup image', example: 'https://example.com/image.png' })
+  designImage: string;
 
-  @ApiProperty({ description: 'Total amount', example: 100.0 })
-  total: number;
+  @ApiProperty({ description: 'Optional metadata (e.g., size, custom notes)', required: false })
+  metadata?: any;
 }
