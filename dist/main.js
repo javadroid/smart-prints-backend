@@ -8055,7 +8055,10 @@ const helmet_1 = __webpack_require__(/*! helmet */ "helmet");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use((0, helmet_1.default)());
-    app.enableCors({ origin: true, credentials: true });
+    app.enableCors({ origin: true, credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    });
     app.use(express.json({ limit: "50mb" }));
     app.use(express.urlencoded({ limit: "50mb", extended: true }));
     const config = app.get(config_1.ConfigService);
