@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { ProductColorDto } from "./product.dto";
 
-export class CartItemDto {
+export class CartDto {
   @ApiProperty({ description: 'MongoDB Object ID of the item', required: false })
   _id?: string;
 

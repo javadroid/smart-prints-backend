@@ -104,67 +104,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CartDto = exports.CartItemDto = void 0;
+exports.CartDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-class CartItemDto {
-}
-exports.CartItemDto = CartItemDto;
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod_123' }),
-    __metadata("design:type", String)
-], CartItemDto.prototype, "productID", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Selected color (optional)', required: false }),
-    __metadata("design:type", String)
-], CartItemDto.prototype, "color", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Selected size (optional)', required: false }),
-    __metadata("design:type", String)
-], CartItemDto.prototype, "size", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Quantity', example: 1 }),
-    __metadata("design:type", Number)
-], CartItemDto.prototype, "quantity", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Unit price', example: 25.0 }),
-    __metadata("design:type", Number)
-], CartItemDto.prototype, "unitPrice", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Line total', example: 25.0 }),
-    __metadata("design:type", Number)
-], CartItemDto.prototype, "lineTotal", void 0);
+const product_dto_1 = __webpack_require__(/*! ./product.dto */ "./libs/dto/src/product/product.dto.ts");
 class CartDto {
 }
 exports.CartDto = CartDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Cart ID', required: false }),
+    (0, swagger_1.ApiProperty)({ description: 'MongoDB Object ID of the item', required: false }),
+    __metadata("design:type", String)
+], CartDto.prototype, "_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Item ID (client-side)', example: 'item_123' }),
     __metadata("design:type", String)
 ], CartDto.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user_123' }),
+    (0, swagger_1.ApiProperty)({ description: 'User ID who owns the cart item', example: 'user_123' }),
     __metadata("design:type", String)
 ], CartDto.prototype, "userID", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Array of cart items', type: [CartItemDto] }),
-    __metadata("design:type", Array)
-], CartDto.prototype, "items", void 0);
+    (0, swagger_1.ApiProperty)({ description: 'Product ID being added to the cart', example: 'prod_456' }),
+    __metadata("design:type", String)
+], CartDto.prototype, "productID", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Cart subtotal', example: 100.0 }),
-    __metadata("design:type", Number)
-], CartDto.prototype, "subtotal", void 0);
+    (0, swagger_1.ApiProperty)({ description: 'Selected color of the product', }),
+    __metadata("design:type", typeof (_a = typeof product_dto_1.ProductColorDto !== "undefined" && product_dto_1.ProductColorDto) === "function" ? _a : Object)
+], CartDto.prototype, "color", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Tax (optional)', required: false, example: 0.0 }),
+    (0, swagger_1.ApiProperty)({ description: 'Price of the product', example: 29.99 }),
     __metadata("design:type", Number)
-], CartDto.prototype, "tax", void 0);
+], CartDto.prototype, "price", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Shipping (optional)', required: false, example: 0.0 }),
-    __metadata("design:type", Number)
-], CartDto.prototype, "shipping", void 0);
+    (0, swagger_1.ApiProperty)({ description: 'URL to the design/mockup image', example: 'https://example.com/image.png' }),
+    __metadata("design:type", String)
+], CartDto.prototype, "designImage", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Total amount', example: 100.0 }),
-    __metadata("design:type", Number)
-], CartDto.prototype, "total", void 0);
+    (0, swagger_1.ApiProperty)({ description: 'Optional metadata (e.g., size, custom notes)', required: false }),
+    __metadata("design:type", Object)
+], CartDto.prototype, "metadata", void 0);
 
 
 /***/ }),
@@ -2023,67 +2002,59 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CartSchema = exports.CartModel = exports.CartItemSchema = exports.CartItem = void 0;
+exports.CartSchema = exports.CartModel = void 0;
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-let CartItem = class CartItem {
-};
-exports.CartItem = CartItem;
+class ProductColor {
+}
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], CartItem.prototype, "productID", void 0);
+], ProductColor.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], CartItem.prototype, "color", void 0);
+], ProductColor.prototype, "hex", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], CartItem.prototype, "size", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true, default: 1 }),
-    __metadata("design:type", Number)
-], CartItem.prototype, "quantity", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", Number)
-], CartItem.prototype, "unitPrice", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", Number)
-], CartItem.prototype, "lineTotal", void 0);
-exports.CartItem = CartItem = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
-], CartItem);
-exports.CartItemSchema = mongoose_1.SchemaFactory.createForClass(CartItem);
+], ProductColor.prototype, "className", void 0);
 let CartModel = class CartModel {
 };
 exports.CartModel = CartModel;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], CartModel.prototype, "userID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: [exports.CartItemSchema], default: [] }),
-    __metadata("design:type", Array)
-], CartModel.prototype, "items", void 0);
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, default: 0 }),
-    __metadata("design:type", Number)
-], CartModel.prototype, "subtotal", void 0);
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: 0 }),
-    __metadata("design:type", Number)
-], CartModel.prototype, "tax", void 0);
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "productID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false, default: 0 }),
-    __metadata("design:type", Number)
-], CartModel.prototype, "shipping", void 0);
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", ProductColor)
+], CartModel.prototype, "color", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, default: 0 }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
-], CartModel.prototype, "total", void 0);
+], CartModel.prototype, "price", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "designImage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Object }),
+    __metadata("design:type", typeof (_a = typeof Record !== "undefined" && Record) === "function" ? _a : Object)
+], CartModel.prototype, "metadata", void 0);
 exports.CartModel = CartModel = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], CartModel);
@@ -5304,15 +5275,6 @@ let CartService = class CartService {
     }
     async upset(createCartDto, userData) {
         const existing = await this.cartModel.findOne({ userID: userData._id.toString() });
-        if (existing) {
-            existing.items = createCartDto.items;
-            existing.subtotal = createCartDto.subtotal;
-            existing.tax = createCartDto.tax || 0;
-            existing.shipping = createCartDto.shipping || 0;
-            existing.total = createCartDto.total;
-            const saved = await existing.save();
-            return (0, service_1.serviceResponse)({ data: saved, message: 'Cart updated', status: true });
-        }
         const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
         return (0, service_1.serviceResponse)({ data: created, message: 'Cart created', status: true });
     }
@@ -6617,14 +6579,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Delete)(),
+    (0, common_1.Delete)(":id"),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Delete products by their IDs" }),
-    (0, swagger_1.ApiBody)({ type: [String], description: "Array of product IDs to delete" }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "delete", null);
 exports.ProductController = ProductController = __decorate([
@@ -6787,17 +6748,9 @@ let ProductService = class ProductService {
     }
     async delete(ids, userData) {
         try {
-            const result = await this.productModel.deleteMany({
-                _id: { $in: ids },
-            });
-            if (result.deletedCount === 0) {
-                return (0, service_1.serviceResponse)({
-                    message: "No product plans found to delete",
-                    status: false,
-                });
-            }
+            const result = await this.productModel.findByIdAndDelete(ids);
             return (0, service_1.serviceResponse)({
-                message: `${result.deletedCount} product plans deleted successfully`,
+                message: `product deleted successfully`,
                 status: true,
             });
         }
