@@ -13,5 +13,7 @@ export class DesignDto {
 
     @ApiProperty({ description: 'User ID', example: 'user_123' })
      userID: string;
+    @ApiProperty({ description: 'Tags', example: ['tag1', 'tag2'], required: false, type: [String] })
+     tags?: string[];
     
     }

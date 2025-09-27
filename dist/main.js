@@ -216,6 +216,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'User ID', example: 'user_123' }),
     __metadata("design:type", String)
 ], DesignDto.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Tags', example: ['tag1', 'tag2'], required: false, type: [String] }),
+    __metadata("design:type", Array)
+], DesignDto.prototype, "tags", void 0);
 
 
 /***/ }),
@@ -2101,6 +2105,10 @@ __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], DesignModel.prototype, "url", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String] }),
+    __metadata("design:type", Array)
+], DesignModel.prototype, "tags", void 0);
 exports.DesignModel = DesignModel = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], DesignModel);

@@ -19,6 +19,9 @@ export class DesignModel {
   @Prop({  })
   url: string;
 
+  @Prop({ type: [String] }) 
+  tags?: string[]; 
+
 }
 
 export const DesignSchema = SchemaFactory.createForClass(DesignModel);
