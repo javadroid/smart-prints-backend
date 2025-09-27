@@ -127,30 +127,10 @@ export class DesignService {
     }
   }
 
-    async delete(ids: string[], userData: UserDTO): Promise<ObjectReturnType> {
-    try {
-      
-      const result = await this.designModel.deleteMany({
-        _id: { $in: ids },
-      });
-
-      if (result.deletedCount === 0) {
-        return serviceResponse({
-          message: "No design plans found to delete",
-          status: false,
-        });
-      }
-
-      return serviceResponse({
-        message: `${result.deletedCount} design plans deleted successfully`,
-        status: true,
-      });
-    } catch (error) {
-      return serviceResponse({
-        message: error.message,
-        status: false,
-      });
-    }
+  async delete(ids: string): Promise<ObjectReturnType> {
+    const result = await this.designModel.findByIdAndDelete(ids);
+    if (!result) return serviceResponse({ message: 'No designs deleted', status: false });
+    return serviceResponse({ message: `Design deleted`,  status: true });
   }
 
 }

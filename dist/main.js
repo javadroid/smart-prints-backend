@@ -5192,13 +5192,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(''),
-    (0, swagger_1.ApiOperation)({ summary: 'Delete carts by IDs' }),
-    (0, swagger_1.ApiBody)({ schema: { type: 'array', items: { type: 'string' } } }),
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete cart by ID' }),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "delete", null);
 exports.CartController = CartController = __decorate([
@@ -5300,10 +5299,10 @@ let CartService = class CartService {
         return (0, service_1.serviceResponse)({ data: updated, message: 'Cart updated', status: true });
     }
     async delete(ids) {
-        const result = await this.cartModel.deleteMany({ _id: { $in: ids } });
-        if (result.deletedCount === 0)
+        const result = await this.cartModel.findByIdAndDelete(ids);
+        if (!result)
             return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
-        return (0, service_1.serviceResponse)({ message: `${result.deletedCount} cart(s) deleted`, status: true });
+        return (0, service_1.serviceResponse)({ message: `Cart deleted`, status: true });
     }
 };
 exports.CartService = CartService;
@@ -5760,8 +5759,8 @@ let DesignController = class DesignController {
     async findAll(query) {
         return this.designService.findAll(query);
     }
-    async delete(ids, req) {
-        return this.designService.delete(ids, req.user);
+    async delete(ids) {
+        return this.designService.delete(ids);
     }
 };
 exports.DesignController = DesignController;
@@ -5848,14 +5847,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DesignController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Delete)(),
+    (0, common_1.Delete)(":id"),
+    (0, swagger_1.ApiOperation)({ summary: "Delete design by ID" }),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: "Delete designs by their IDs" }),
-    (0, swagger_1.ApiBody)({ type: [String], description: "Array of design IDs to delete" }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], DesignController.prototype, "delete", null);
 exports.DesignController = DesignController = __decorate([
@@ -6016,28 +6013,11 @@ let DesignService = class DesignService {
             });
         }
     }
-    async delete(ids, userData) {
-        try {
-            const result = await this.designModel.deleteMany({
-                _id: { $in: ids },
-            });
-            if (result.deletedCount === 0) {
-                return (0, service_1.serviceResponse)({
-                    message: "No design plans found to delete",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                message: `${result.deletedCount} design plans deleted successfully`,
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
+    async delete(ids) {
+        const result = await this.designModel.findByIdAndDelete(ids);
+        if (!result)
+            return (0, service_1.serviceResponse)({ message: 'No designs deleted', status: false });
+        return (0, service_1.serviceResponse)({ message: `Design deleted`, status: true });
     }
 };
 exports.DesignService = DesignService;
@@ -6159,8 +6139,8 @@ let OrderController = class OrderController {
     async findAll(query) {
         return this.orderService.findAll(query);
     }
-    async delete(ids, req) {
-        return this.orderService.delete(ids, req.user);
+    async delete(ids) {
+        return this.orderService.delete(ids);
     }
 };
 exports.OrderController = OrderController;
@@ -6247,14 +6227,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Delete)(),
+    (0, common_1.Delete)(":id"),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: "Delete orders by their IDs" }),
-    (0, swagger_1.ApiBody)({ type: [String], description: "Array of order IDs to delete" }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
+    (0, swagger_1.ApiOperation)({ summary: "Delete order by ID" }),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "delete", null);
 exports.OrderController = OrderController = __decorate([
@@ -6415,28 +6393,11 @@ let OrderService = class OrderService {
             });
         }
     }
-    async delete(ids, userData) {
-        try {
-            const result = await this.orderModel.deleteMany({
-                _id: { $in: ids },
-            });
-            if (result.deletedCount === 0) {
-                return (0, service_1.serviceResponse)({
-                    message: "No order plans found to delete",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                message: `${result.deletedCount} order plans deleted successfully`,
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
+    async delete(id) {
+        const result = await this.orderModel.findByIdAndDelete(id);
+        if (!result)
+            return (0, service_1.serviceResponse)({ message: "No orders deleted", status: false });
+        return (0, service_1.serviceResponse)({ message: `Order deleted`, status: true });
     }
 };
 exports.OrderService = OrderService;

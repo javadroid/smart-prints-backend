@@ -127,30 +127,11 @@ export class OrderService {
     }
   }
 
-    async delete(ids: string[], userData: UserDTO): Promise<ObjectReturnType> {
-    try {
-      
-      const result = await this.orderModel.deleteMany({
-        _id: { $in: ids },
-      });
-
-      if (result.deletedCount === 0) {
-        return serviceResponse({
-          message: "No order plans found to delete",
-          status: false,
-        });
-      }
-
-      return serviceResponse({
-        message: `${result.deletedCount} order plans deleted successfully`,
-        status: true,
-      });
-    } catch (error) {
-      return serviceResponse({
-        message: error.message,
-        status: false,
-      });
-    }
+  async delete(id: string): Promise<ObjectReturnType> {
+    const result = await this.orderModel.findByIdAndDelete(id);
+    if (!result)
+      return serviceResponse({ message: "No orders deleted", status: false });
+    return serviceResponse({ message: `Order deleted`, status: true });
   }
 
 }

@@ -44,11 +44,11 @@ export class CartController {
     return this.cartService.update(cartID, cart);
   }
 
-  @Delete('')
-  @ApiOperation({ summary: 'Delete carts by IDs' })
-  @ApiBody({ schema: { type: 'array', items: { type: 'string' } } })
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete cart by ID' })
+ 
   @UseGuards(JwtAuthGuard)
-  async delete(@Body() ids: string[]) {
+  async delete(@Param("id") ids: string) {
     return this.cartService.delete(ids);
   }
 }

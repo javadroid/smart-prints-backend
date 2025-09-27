@@ -98,13 +98,13 @@ export class OrderController {
     return this.orderService.findAll(query);
   }
 
-  @Delete()
+  @Delete(":id")
   @UseGuards(JwtAuthGuard)
   
-  @ApiOperation({ summary: "Delete orders by their IDs" })
-  @ApiBody({ type: [String], description: "Array of order IDs to delete" })
-  async delete(@Body() ids: string[],  @Req() req: any) {
-    return this.orderService.delete(ids, req.user);
+  @ApiOperation({ summary: "Delete order by ID" })
+ 
+  async delete(@Param("id") ids: string) {
+    return this.orderService.delete(ids);
   }
   
 }

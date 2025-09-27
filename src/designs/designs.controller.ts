@@ -98,13 +98,10 @@ export class DesignController {
     return this.designService.findAll(query);
   }
 
-  @Delete()
+  @Delete(":id")
+  @ApiOperation({ summary: "Delete design by ID" }) 
   @UseGuards(JwtAuthGuard)
-  
-  @ApiOperation({ summary: "Delete designs by their IDs" })
-  @ApiBody({ type: [String], description: "Array of design IDs to delete" })
-  async delete(@Body() ids: string[],  @Req() req: any) {
-    return this.designService.delete(ids, req.user);
+  async delete(@Param("id") ids: string) {
+    return this.designService.delete(ids);
   }
-  
 }

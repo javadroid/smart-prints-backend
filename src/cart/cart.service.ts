@@ -45,9 +45,9 @@ export class CartService {
     return serviceResponse({ data: updated, message: 'Cart updated', status: true });
   }
 
-  async delete(ids: string[]): Promise<ObjectReturnType> {
-    const result = await this.cartModel.deleteMany({ _id: { $in: ids } });
-    if (result.deletedCount === 0) return serviceResponse({ message: 'No carts deleted', status: false });
-    return serviceResponse({ message: `${result.deletedCount} cart(s) deleted`, status: true });
+  async delete(ids: string): Promise<ObjectReturnType> {
+    const result = await this.cartModel.findByIdAndDelete(ids);
+    if (!result) return serviceResponse({ message: 'No carts deleted', status: false });
+    return serviceResponse({ message: `Cart deleted`,  status: true });
   }
 }
