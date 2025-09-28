@@ -18,6 +18,7 @@ import { GlobalMongooseModule } from 'src/global-mongoose.module';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
 import { DesignsModule } from './designs/designs.module';
+import { AdminModule } from './admin/admin.module';
 
 
 
@@ -51,7 +52,7 @@ import { DesignsModule } from './designs/designs.module';
         }]),
   AuthModule,
   UploadsModule,
-  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, ],
+  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, AdminModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

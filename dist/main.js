@@ -4159,6 +4159,169 @@ exports.XStrategy = XStrategy = __decorate([
 
 /***/ }),
 
+/***/ "./src/admin/admin.controller.ts":
+/*!***************************************!*\
+  !*** ./src/admin/admin.controller.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AdminController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const admin_service_1 = __webpack_require__(/*! ./admin.service */ "./src/admin/admin.service.ts");
+let AdminController = class AdminController {
+    constructor(adminService) {
+        this.adminService = adminService;
+    }
+    async getDashboardStats() {
+        return this.adminService.getDashboardStats();
+    }
+};
+exports.AdminController = AdminController;
+__decorate([
+    (0, common_1.Get)('dashboard-stats'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getDashboardStats", null);
+exports.AdminController = AdminController = __decorate([
+    (0, common_1.Controller)('admin'),
+    __metadata("design:paramtypes", [typeof (_a = typeof admin_service_1.AdminService !== "undefined" && admin_service_1.AdminService) === "function" ? _a : Object])
+], AdminController);
+
+
+/***/ }),
+
+/***/ "./src/admin/admin.module.ts":
+/*!***********************************!*\
+  !*** ./src/admin/admin.module.ts ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AdminModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const admin_service_1 = __webpack_require__(/*! ./admin.service */ "./src/admin/admin.service.ts");
+const admin_controller_1 = __webpack_require__(/*! ./admin.controller */ "./src/admin/admin.controller.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let AdminModule = class AdminModule {
+};
+exports.AdminModule = AdminModule;
+exports.AdminModule = AdminModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [admin_controller_1.AdminController],
+        providers: [admin_service_1.AdminService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService, service_1.FlutterwaveService],
+    })
+], AdminModule);
+
+
+/***/ }),
+
+/***/ "./src/admin/admin.service.ts":
+/*!************************************!*\
+  !*** ./src/admin/admin.service.ts ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AdminService = void 0;
+const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+let AdminService = class AdminService {
+    constructor(cartModel, categoriesModel, notificationActivity, userModel, productModel, orderModel, designModel) {
+        this.cartModel = cartModel;
+        this.categoriesModel = categoriesModel;
+        this.notificationActivity = notificationActivity;
+        this.userModel = userModel;
+        this.productModel = productModel;
+        this.orderModel = orderModel;
+        this.designModel = designModel;
+    }
+    async getDashboardStats() {
+        const totalUsers = await this.userModel.countDocuments().exec();
+        const totalProducts = await this.productModel.countDocuments().exec();
+        const totalDesigns = await this.designModel.countDocuments().exec();
+        const totalOrders = await this.orderModel.countDocuments().exec();
+        const totalCarts = await this.cartModel.countDocuments().exec();
+        const totalCategories = await this.categoriesModel.countDocuments().exec();
+        const totalCompletedOrders = await this.orderModel
+            .countDocuments({ status: "completed" })
+            .exec();
+        const totalPendingOrders = await this.orderModel
+            .countDocuments({ status: "pending" })
+            .exec();
+        const totalCancelledOrders = await this.orderModel
+            .countDocuments({ status: "cancelled" })
+            .exec();
+        const totalUsersWithOrders = await this.orderModel
+            .distinct("userID")
+            .exec();
+        return (0, service_1.serviceResponse)({ message: "Dashboard stats retrieved", status: true,
+            data: {
+                totalUsers,
+                totalProducts,
+                totalDesigns,
+                totalOrders,
+                totalCarts,
+                totalCategories,
+                totalCompletedOrders,
+                totalPendingOrders,
+                totalCancelledOrders,
+                totalUsersWithOrders: totalUsersWithOrders.length,
+            }
+        });
+    }
+};
+exports.AdminService = AdminService;
+exports.AdminService = AdminService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, mongoose_1.InjectModel)(schema_1.CartModel.name)),
+    __param(1, (0, mongoose_1.InjectModel)(schema_1.CategoriesModel.name)),
+    __param(3, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
+    __param(4, (0, mongoose_1.InjectModel)(schema_1.ProductModel.name)),
+    __param(5, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
+    __param(6, (0, mongoose_1.InjectModel)(schema_1.DesignModel.name)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof service_1.NotificationService !== "undefined" && service_1.NotificationService) === "function" ? _c : Object, typeof (_d = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _d : Object, typeof (_e = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _e : Object, typeof (_f = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _f : Object, typeof (_g = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _g : Object])
+], AdminService);
+
+
+/***/ }),
+
 /***/ "./src/app.controller.ts":
 /*!*******************************!*\
   !*** ./src/app.controller.ts ***!
@@ -4264,6 +4427,7 @@ const global_mongoose_module_1 = __webpack_require__(/*! src/global-mongoose.mod
 const categories_module_1 = __webpack_require__(/*! ./categories/categories.module */ "./src/categories/categories.module.ts");
 const orders_module_1 = __webpack_require__(/*! ./orders/orders.module */ "./src/orders/orders.module.ts");
 const designs_module_1 = __webpack_require__(/*! ./designs/designs.module */ "./src/designs/designs.module.ts");
+const admin_module_1 = __webpack_require__(/*! ./admin/admin.module */ "./src/admin/admin.module.ts");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -4296,7 +4460,7 @@ exports.AppModule = AppModule = __decorate([
                 }]),
             auth_module_1.AuthModule,
             uploads_module_1.UploadsModule,
-            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule,
+            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, admin_module_1.AdminModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
