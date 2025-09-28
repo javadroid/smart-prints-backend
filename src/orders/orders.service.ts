@@ -3,15 +3,16 @@ import { OrderModel, OrderDoc, FarmModel, FarmDoc } from '@app/schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { OrderDto, UserDTO } from '@app/dto';
-import { ObjectReturnType, serviceResponse, getMetadata } from '@app/service';
+import { ObjectReturnType, serviceResponse, getMetadata, FlutterwaveService } from '@app/service';
+import { randomUUID } from 'crypto';
+import e from 'express';
 
 @Injectable()
 export class OrderService {
  constructor(
     @InjectModel(OrderModel.name)
     private orderModel: Model<OrderDoc>,
-    //     @InjectModel(FarmModel.name)
-    // private framModel: Model<FarmDoc>,
+   private flutterwave: FlutterwaveService,
   
   ){
 
@@ -20,14 +21,33 @@ export class OrderService {
     createOrderDto: OrderDto,
     userData: UserDTO
   ): Promise<ObjectReturnType> {
-    //check if farm exists
-  //   const farm = await this.framModel.findOne({ _id: createOrderDto.farmID, userID: userData._id.toString() });
-  //   if (!farm) {
-  //  throw  new NotFoundException('Farm not found or you do not have permission to add orders to this farm');
-  //   }
-    const created = await this.orderModel.create({ ...createOrderDto, userID: userData._id.toString() });
-    return serviceResponse({
-      data: created,
+     const tx_ref=`smartprints-${userData.id}-${randomUUID().replace(/\D/g, "").substring(0, 10)}`
+     const created = new this.orderModel({ ...createOrderDto,tx_ref, userID: userData._id.toString() });
+  
+  const paymentrequest={
+    amount:createOrderDto.totalPrice,
+    currency:"NGN",
+   tx_ref,
+    redirect_url:"http://localhost:5173/#/order-success/"+created._id.toString(),
+    payment_options:"card,banktransfer,ussd",
+    customer:{
+      phonenumber:userData.phone,
+      name:userData.fullname??userData.username??userData.firstname??createOrderDto.fullName,
+      email:userData.email
+    },
+    customizations:{
+      title:"Smart Prints",
+      logo:"https://smartprints.vercel.app/logo.png",
+      description:"Order Payment"
+    }
+  }
+ const payment = await this.flutterwave.initiateCheckout(paymentrequest);
+ console.log(payment,payment.data.link.split("pay/")[1])
+
+ created.flutterwaveRef = payment.data.link.split("pay/")[1] ;
+ await created.save();
+     return serviceResponse({
+      data: payment.data.link,
       message: "Order plan created successfully",
 
       status: true,
@@ -41,6 +61,8 @@ export class OrderService {
     const plans = await this.orderModel
       .find()
       .skip(skip)
+      .populate("userID")
+     .populate("products.productID")
       .limit(limit)
       .sort({ createdAt: -1 })
       .exec();
@@ -57,7 +79,8 @@ export class OrderService {
   }
   async findOne(id: string): Promise<ObjectReturnType> {
     try {
-      const plan = await this.orderModel.findById(id).exec();
+      const plan = await this.orderModel.findById(id).populate("userID")
+     .populate("products.productID").exec();
 
       return serviceResponse({
         data: plan,
@@ -72,18 +95,30 @@ export class OrderService {
     params: { key: string; value: string },
     query: any
   ): Promise<ObjectReturnType> {
-    const { key, value } = params;
+
+    try {
+      const { key, value } = params;
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
 
-    const plans = await this.orderModel
+
+    const orders = await this.orderModel
       .find({ [key]: value })
       .skip(skip)
       .limit(limit)
+      .populate("userID")
+     .populate("products.productID")
       .sort({ createdAt: -1 })
       .exec();
+
+      if(['_id'] .includes(key)){
+        
+        console.log(orders[0].tx_ref)
+ const v= await this.flutterwave.verifyCheckout(orders[0].tx_ref);
+ console.log(v)
+}
     return serviceResponse({
-      data: plans,
+      data: orders,
       message: "Order plans retrieved successfully",
       status: true,
       metadata: await getMetadata({
@@ -92,6 +127,10 @@ export class OrderService {
         querys: { [key]: value },
       }),
     });
+    } catch (error) {
+   throw new NotFoundException(error.message);
+    }
+    
   }
 
   //edit

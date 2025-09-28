@@ -104,4 +104,27 @@ export class DesignController {
   async delete(@Param("id") ids: string) {
     return this.designService.delete(ids);
   }
+//search designs by tags
+  @Get("by-tags/:tag")
+  // @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Find designs by tag" })
+  @ApiParam({ name: "tag", description: "The tag to search by", type: String })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    type: Number,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of designs per page",
+    type: Number,
+  })
+  async searchByTags(
+    @Param("tag") tag: string,
+    @Query() query: any
+  ) {
+    return this.designService.searchByTags(tag, query);
+  }
 }

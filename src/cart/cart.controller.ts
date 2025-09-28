@@ -51,4 +51,13 @@ export class CartController {
   async delete(@Param("id") ids: string) {
     return this.cartService.delete(ids);
   }
+
+  // Clear user cart
+  @Delete('clear/user/:userID')
+  @ApiOperation({ summary: 'Clear cart by user ID' })
+  @ApiParam({ name: 'userID', required: true, type: String })
+  @UseGuards(JwtAuthGuard)
+  async clearUserCart(@Param('userID') userID: string) {
+    return this.cartService.clearUserCart(userID);
+  }
 }

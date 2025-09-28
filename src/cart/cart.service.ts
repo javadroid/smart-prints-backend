@@ -13,9 +13,7 @@ export class CartService {
   ) {}
 
   async upset(createCartDto: CartDto, userData: any): Promise<ObjectReturnType> {
-    // create or update the cart for a user (replace items)
-    const existing = await this.cartModel.findOne({ userID: userData._id.toString() });
-   
+
     const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
     return serviceResponse({ data: created, message: 'Cart created', status: true });
   }
@@ -35,7 +33,7 @@ export class CartService {
   }
 
   async findByUser(userID: string): Promise<ObjectReturnType> {
-    const cart = await this.cartModel.findOne({ userID }).exec();
+    const cart = await this.cartModel.find({ userID }).populate("productID").exec();
     return serviceResponse({ data: cart, message: 'Cart retrieved', status: true });
   }
 
@@ -50,4 +48,12 @@ export class CartService {
     if (!result) return serviceResponse({ message: 'No carts deleted', status: false });
     return serviceResponse({ message: `Cart deleted`,  status: true });
   }
+
+  //clear user cart
+  async clearUserCart(userID: string): Promise<ObjectReturnType> {
+    const result = await this.cartModel.deleteMany({ userID });
+    if (result.deletedCount === 0) return serviceResponse({ message: 'No carts deleted', status: false });
+    return serviceResponse({ message: `${result.deletedCount} cart(s) deleted`, status: true });
+}
+
 }

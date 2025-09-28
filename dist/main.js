@@ -129,6 +129,10 @@ __decorate([
     __metadata("design:type", String)
 ], CartDto.prototype, "productID", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Name of the product', example: 'Cool T-Shirt' }),
+    __metadata("design:type", String)
+], CartDto.prototype, "productName", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Selected color of the product', }),
     __metadata("design:type", typeof (_a = typeof product_dto_1.ProductColorDto !== "undefined" && product_dto_1.ProductColorDto) === "function" ? _a : Object)
 ], CartDto.prototype, "color", void 0);
@@ -374,6 +378,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const cart_dto_1 = __webpack_require__(/*! ./cart.dto */ "./libs/dto/src/product/cart.dto.ts");
 class OrderDto {
 }
 exports.OrderDto = OrderDto;
@@ -386,13 +391,13 @@ __decorate([
     __metadata("design:type", String)
 ], OrderDto.prototype, "userID", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'prod789' }),
+    (0, swagger_1.ApiProperty)({ description: 'Full name of the person placing the order', example: 'John Doe' }),
     __metadata("design:type", String)
-], OrderDto.prototype, "productID", void 0);
+], OrderDto.prototype, "fullName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Quantity of the product', example: 2 }),
-    __metadata("design:type", Number)
-], OrderDto.prototype, "quantity", void 0);
+    (0, swagger_1.ApiProperty)({ description: 'products', type: [cart_dto_1.CartDto] }),
+    __metadata("design:type", Array)
+], OrderDto.prototype, "products", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Total price of the order', example: 120.50 }),
     __metadata("design:type", Number)
@@ -404,7 +409,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Shipping address ID', example: '123' }),
     __metadata("design:type", String)
-], OrderDto.prototype, "addressID", void 0);
+], OrderDto.prototype, "address", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Array of image URLs related to the order', example: ['http://example.com/image1.jpg', 'http://example.com/image2.jpg'] }),
     __metadata("design:type", Array)
@@ -2034,15 +2039,15 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
-], CartModel.prototype, "_id", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({}),
-    __metadata("design:type", String)
 ], CartModel.prototype, "id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({}),
+    (0, mongoose_1.Prop)({ ref: 'ProductModel' }),
     __metadata("design:type", String)
 ], CartModel.prototype, "productID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], CartModel.prototype, "productName", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", ProductColor)
@@ -2245,10 +2250,72 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSchema = exports.OrderModel = void 0;
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+let ProductColor = class ProductColor {
+};
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "hex", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], ProductColor.prototype, "className", void 0);
+ProductColor = __decorate([
+    (0, mongoose_1.Schema)()
+], ProductColor);
+let CartModel = class CartModel {
+};
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "userID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "_id", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "id", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], CartModel.prototype, "productName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], CartModel.prototype, "fullName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "productID", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", ProductColor)
+], CartModel.prototype, "color", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", Number)
+], CartModel.prototype, "price", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], CartModel.prototype, "designImage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Object }),
+    __metadata("design:type", typeof (_a = typeof Record !== "undefined" && Record) === "function" ? _a : Object)
+], CartModel.prototype, "metadata", void 0);
+CartModel = __decorate([
+    (0, mongoose_1.Schema)()
+], CartModel);
 let OrderModel = class OrderModel {
 };
 exports.OrderModel = OrderModel;
@@ -2261,13 +2328,17 @@ __decorate([
     __metadata("design:type", String)
 ], OrderModel.prototype, "userID", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ ref: 'ProductModel' }),
-    __metadata("design:type", String)
-], OrderModel.prototype, "productID", void 0);
+    (0, mongoose_1.Prop)({ type: [CartModel] }),
+    __metadata("design:type", Array)
+], OrderModel.prototype, "products", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({}),
-    __metadata("design:type", Number)
-], OrderModel.prototype, "quantity", void 0);
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], OrderModel.prototype, "flutterwaveRef", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], OrderModel.prototype, "tx_ref", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
@@ -2275,19 +2346,23 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: [String] }),
     __metadata("design:type", Array)
-], OrderModel.prototype, "imagesUrls", void 0);
+], OrderModel.prototype, "imageUrls", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: Object }),
-    __metadata("design:type", typeof (_a = typeof Record !== "undefined" && Record) === "function" ? _a : Object)
+    __metadata("design:type", typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object)
 ], OrderModel.prototype, "orderDetails", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({}),
+    (0, mongoose_1.Prop)({ default: 'pending' }),
     __metadata("design:type", String)
 ], OrderModel.prototype, "status", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ ref: 'AddressModel' }),
+    (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
-], OrderModel.prototype, "addressID", void 0);
+], OrderModel.prototype, "address", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Object }),
+    __metadata("design:type", typeof (_c = typeof Record !== "undefined" && Record) === "function" ? _c : Object)
+], OrderModel.prototype, "shippingAddress", void 0);
 exports.OrderModel = OrderModel = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], OrderModel);
@@ -3312,6 +3387,37 @@ let FlutterwaveService = class FlutterwaveService {
             Authorization: `Bearer ${this.secretKey}`,
             "Content-Type": "application/json",
         };
+    }
+    async initiateCheckout(data) {
+        try {
+            const options = {
+                method: 'POST',
+                url: 'https://api.flutterwave.com/v3/payments',
+                headers: this.headers,
+                data
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error('Error initiating checkout:', error.response?.data || error.message);
+            throw error;
+        }
+    }
+    async verifyCheckout(tx_ref) {
+        try {
+            const options = {
+                method: 'GET',
+                url: `https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${encodeURIComponent(tx_ref)}`,
+                headers: this.headers,
+            };
+            const response = await axios_1.default.request(options);
+            return response.data;
+        }
+        catch (error) {
+            console.error('Error verifying checkout transaction:', error.response?.data || error.message);
+            throw error.response?.data;
+        }
     }
     async handleWebhook(req) {
         try {
@@ -5153,6 +5259,9 @@ let CartController = class CartController {
     async delete(ids) {
         return this.cartService.delete(ids);
     }
+    async clearUserCart(userID) {
+        return this.cartService.clearUserCart(userID);
+    }
 };
 exports.CartController = CartController;
 __decorate([
@@ -5208,6 +5317,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Delete)('clear/user/:userID'),
+    (0, swagger_1.ApiOperation)({ summary: 'Clear cart by user ID' }),
+    (0, swagger_1.ApiParam)({ name: 'userID', required: true, type: String }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('userID')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "clearUserCart", null);
 exports.CartController = CartController = __decorate([
     (0, swagger_1.ApiTags)('cart'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
@@ -5281,7 +5400,6 @@ let CartService = class CartService {
         this.cartModel = cartModel;
     }
     async upset(createCartDto, userData) {
-        const existing = await this.cartModel.findOne({ userID: userData._id.toString() });
         const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
         return (0, service_1.serviceResponse)({ data: created, message: 'Cart created', status: true });
     }
@@ -5297,7 +5415,7 @@ let CartService = class CartService {
         return (0, service_1.serviceResponse)({ data: carts, message: 'Carts retrieved', status: true, metadata: await (0, service_1.getMetadata)({ model: this.cartModel, query, querys: {} }) });
     }
     async findByUser(userID) {
-        const cart = await this.cartModel.findOne({ userID }).exec();
+        const cart = await this.cartModel.find({ userID }).populate("productID").exec();
         return (0, service_1.serviceResponse)({ data: cart, message: 'Cart retrieved', status: true });
     }
     async update(id, updateCartDto) {
@@ -5311,6 +5429,12 @@ let CartService = class CartService {
         if (!result)
             return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
         return (0, service_1.serviceResponse)({ message: `Cart deleted`, status: true });
+    }
+    async clearUserCart(userID) {
+        const result = await this.cartModel.deleteMany({ userID });
+        if (result.deletedCount === 0)
+            return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
+        return (0, service_1.serviceResponse)({ message: `${result.deletedCount} cart(s) deleted`, status: true });
     }
 };
 exports.CartService = CartService;
@@ -5770,6 +5894,9 @@ let DesignController = class DesignController {
     async delete(ids) {
         return this.designService.delete(ids);
     }
+    async searchByTags(tag, query) {
+        return this.designService.searchByTags(tag, query);
+    }
 };
 exports.DesignController = DesignController;
 __decorate([
@@ -5863,6 +5990,28 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], DesignController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Get)("by-tags/:tag"),
+    (0, swagger_1.ApiOperation)({ summary: "Find designs by tag" }),
+    (0, swagger_1.ApiParam)({ name: "tag", description: "The tag to search by", type: String }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of designs per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)("tag")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], DesignController.prototype, "searchByTags", null);
 exports.DesignController = DesignController = __decorate([
     (0, swagger_1.ApiTags)("design"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
@@ -6026,6 +6175,26 @@ let DesignService = class DesignService {
         if (!result)
             return (0, service_1.serviceResponse)({ message: 'No designs deleted', status: false });
         return (0, service_1.serviceResponse)({ message: `Design deleted`, status: true });
+    }
+    async searchByTags(tag, query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.designModel
+            .find({ tags: { $regex: new RegExp(tag, 'i') } })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Design plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.designModel,
+                query,
+                querys: { tags: tag },
+            }),
+        });
     }
 };
 exports.DesignService = DesignService;
@@ -6271,13 +6440,15 @@ exports.OrdersModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orders/orders.service.ts");
 const orders_controller_1 = __webpack_require__(/*! ./orders.controller */ "./src/orders/orders.controller.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 let OrdersModule = class OrdersModule {
 };
 exports.OrdersModule = OrdersModule;
 exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
+        imports: [],
         controllers: [orders_controller_1.OrderController],
-        providers: [orders_service_1.OrderService],
+        providers: [orders_service_1.OrderService, service_1.FlutterwaveService],
     })
 ], OrdersModule);
 
@@ -6303,7 +6474,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -6311,14 +6482,38 @@ const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
 const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
 let OrderService = class OrderService {
-    constructor(orderModel) {
+    constructor(orderModel, flutterwave) {
         this.orderModel = orderModel;
+        this.flutterwave = flutterwave;
     }
     async upset(createOrderDto, userData) {
-        const created = await this.orderModel.create({ ...createOrderDto, userID: userData._id.toString() });
+        const tx_ref = `smartprints-${userData.id}-${(0, crypto_1.randomUUID)().replace(/\D/g, "").substring(0, 10)}`;
+        const created = new this.orderModel({ ...createOrderDto, tx_ref, userID: userData._id.toString() });
+        const paymentrequest = {
+            amount: createOrderDto.totalPrice,
+            currency: "NGN",
+            tx_ref,
+            redirect_url: "http://localhost:5173/#/order-success/" + created._id.toString(),
+            payment_options: "card,banktransfer,ussd",
+            customer: {
+                phonenumber: userData.phone,
+                name: userData.fullname ?? userData.username ?? userData.firstname ?? createOrderDto.fullName,
+                email: userData.email
+            },
+            customizations: {
+                title: "Smart Prints",
+                logo: "https://smartprints.vercel.app/logo.png",
+                description: "Order Payment"
+            }
+        };
+        const payment = await this.flutterwave.initiateCheckout(paymentrequest);
+        console.log(payment, payment.data.link.split("pay/")[1]);
+        created.flutterwaveRef = payment.data.link.split("pay/")[1];
+        await created.save();
         return (0, service_1.serviceResponse)({
-            data: created,
+            data: payment.data.link,
             message: "Order plan created successfully",
             status: true,
         });
@@ -6329,6 +6524,8 @@ let OrderService = class OrderService {
         const plans = await this.orderModel
             .find()
             .skip(skip)
+            .populate("userID")
+            .populate("products.productID")
             .limit(limit)
             .sort({ createdAt: -1 })
             .exec();
@@ -6345,7 +6542,8 @@ let OrderService = class OrderService {
     }
     async findOne(id) {
         try {
-            const plan = await this.orderModel.findById(id).exec();
+            const plan = await this.orderModel.findById(id).populate("userID")
+                .populate("products.productID").exec();
             return (0, service_1.serviceResponse)({
                 data: plan,
                 message: "Order plan retrieved successfully",
@@ -6355,25 +6553,37 @@ let OrderService = class OrderService {
         catch (error) { }
     }
     async findByAny(params, query) {
-        const { key, value } = params;
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.orderModel
-            .find({ [key]: value })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Order plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.orderModel,
-                query,
-                querys: { [key]: value },
-            }),
-        });
+        try {
+            const { key, value } = params;
+            const { limit = 10, page = 1 } = query;
+            const skip = (page - 1) * limit;
+            const orders = await this.orderModel
+                .find({ [key]: value })
+                .skip(skip)
+                .limit(limit)
+                .populate("userID")
+                .populate("products.productID")
+                .sort({ createdAt: -1 })
+                .exec();
+            if (['_id'].includes(key)) {
+                console.log(orders[0].tx_ref);
+                const v = await this.flutterwave.verifyCheckout(orders[0].tx_ref);
+                console.log(v);
+            }
+            return (0, service_1.serviceResponse)({
+                data: orders,
+                message: "Order plans retrieved successfully",
+                status: true,
+                metadata: await (0, service_1.getMetadata)({
+                    model: this.orderModel,
+                    query,
+                    querys: { [key]: value },
+                }),
+            });
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
     }
     async update(id, updateOrderDto, userData) {
         try {
@@ -6412,7 +6622,7 @@ exports.OrderService = OrderService;
 exports.OrderService = OrderService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _b : Object])
 ], OrderService);
 
 
@@ -8055,9 +8265,11 @@ const helmet_1 = __webpack_require__(/*! helmet */ "helmet");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use((0, helmet_1.default)());
-    app.enableCors({ origin: true, credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+    app.enableCors({
+        origin: true,
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
     });
     app.use(express.json({ limit: "50mb" }));
     app.use(express.urlencoded({ limit: "50mb", extended: true }));

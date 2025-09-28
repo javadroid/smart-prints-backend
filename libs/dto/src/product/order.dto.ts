@@ -1,5 +1,6 @@
 
 import { ApiProperty } from "@nestjs/swagger";
+import { CartDto } from "./cart.dto";
 
 
 export class OrderDto {
@@ -9,12 +10,13 @@ export class OrderDto {
     @ApiProperty({ description: 'User ID', example: 'user456' })
      userID: string;
 
-    @ApiProperty({ description: 'Product ID', example: 'prod789' })
-     productID: string;
+    @ApiProperty({ description: 'Full name of the person placing the order', example: 'John Doe' })
+     fullName: string;
+     
+    @ApiProperty({ description: 'products',  type:[CartDto] })
+     products: CartDto[];
 
-    @ApiProperty({ description: 'Quantity of the product', example: 2 })
-     quantity: number;
-
+ 
     @ApiProperty({ description: 'Total price of the order', example: 120.50 })
      totalPrice: number;
 
@@ -22,7 +24,7 @@ export class OrderDto {
      status: string;
 
     @ApiProperty({ description: 'Shipping address ID', example: '123' })
-     addressID: string;
+     address: string;
 
         @ApiProperty({ description: 'Array of image URLs related to the order', example: ['http://example.com/image1.jpg', 'http://example.com/image2.jpg'] })
     imageUrls?: string[];

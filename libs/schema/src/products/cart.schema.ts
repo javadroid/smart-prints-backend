@@ -16,12 +16,13 @@ class ProductColor {
 export class CartModel {
   @Prop({})
   userID: string;
-  @Prop({})
-  _id?: string;
+
   @Prop({})
   id: string;
-  @Prop({})
+  @Prop({ref: 'ProductModel' })
   productID: string;
+  @Prop()
+  productName: string;
   @Prop({})
   color: ProductColor;
   @Prop({})
@@ -29,7 +30,7 @@ export class CartModel {
   @Prop({})
   designImage: string;
   @Prop({ type:Object}) // URL to the uploaded design/mockup image
-  metadata?: Record<string, any>; // Optional metadata (e.g., size, custom notes)
+  metadata?:  Record<string, any>; // Optional metadata (e.g., size, custom notes)
 }
 
 export const CartSchema = SchemaFactory.createForClass(CartModel);

@@ -14,6 +14,9 @@ export class CartDto {
   @ApiProperty({ description: 'Product ID being added to the cart', example: 'prod_456' })
   productID: string;
 
+  @ApiProperty({ description: 'Name of the product', example: 'Cool T-Shirt' })
+  productName: string;
+
   @ApiProperty({ description: 'Selected color of the product',  })
   color: ProductColorDto;
 

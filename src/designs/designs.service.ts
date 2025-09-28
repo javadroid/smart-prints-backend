@@ -133,6 +133,27 @@ export class DesignService {
     return serviceResponse({ message: `Design deleted`,  status: true });
   }
 
+  //search by tags
+  async searchByTags(tag: string, query: any): Promise<ObjectReturnType> {
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+    const plans = await this.designModel
+        .find({ tags: { $regex: new RegExp(tag, 'i') } })
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .exec();
+    return serviceResponse({
+      data: plans,
+      message: "Design plans retrieved successfully",
+      status: true,
+      metadata: await getMetadata({
+        model: this.designModel,
+        query,
+        querys: { tags: tag },
+      }),
+    });
+  }
 }
 
 
