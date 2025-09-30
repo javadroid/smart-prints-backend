@@ -81,7 +81,7 @@ export class DesignController {
   @Get("")
   // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Get all designs" })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiQuery({
     name: "page",
     required: false,
