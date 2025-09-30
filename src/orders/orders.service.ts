@@ -28,7 +28,8 @@ export class OrderService {
     amount:createOrderDto.totalPrice,
     currency:"NGN",
    tx_ref,
-    redirect_url:"http://localhost:5173/#/order-success/"+created._id.toString(),
+    // redirect_url:"http://localhost:5173/#/order-success/"+created._id.toString(),
+    redirect_url:"https://smart-prints-custom-apparel.onrender.com/order-success/"+created._id.toString(),
     payment_options:"card,banktransfer,ussd",
     customer:{
       phonenumber:userData.phone,
