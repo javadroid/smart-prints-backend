@@ -114,7 +114,7 @@ export class ProductModel {
 
   @Prop({  })
   basePrice: number;
-  @Prop({ default:false })
+  @Prop({ default:true })
     backgroundIn:boolean;
   @Prop({ required: false })
   salePrice?: number;
