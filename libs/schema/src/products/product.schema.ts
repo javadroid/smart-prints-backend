@@ -111,9 +111,11 @@ export class ProductModel {
   @Prop({  })
   price?: number; // legacy
 
+
   @Prop({  })
   basePrice: number;
-
+  @Prop({ default:false })
+    backgroundIn:boolean;
   @Prop({ required: false })
   salePrice?: number;
 
