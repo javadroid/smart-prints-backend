@@ -102,8 +102,9 @@ export class ProductModel {
   farmID: string;
 
   @Prop({ type: [String] })
-  type: string[];
-
+  types: string[];
+  @Prop({  })
+  image: string;
   @Prop({  })
   description: string;
 
@@ -124,7 +125,8 @@ export class ProductModel {
 
   @Prop({  })
   quantity?: number;
-
+   @Prop({enum:['custom' , 'store'] ,default:'custom'})
+  type: string;
   @Prop({ type: Mockups })
   mockups?: Mockups;
 

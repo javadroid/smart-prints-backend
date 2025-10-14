@@ -17,6 +17,9 @@ export class CartDto {
   @ApiProperty({ description: 'Name of the product', example: 'Cool T-Shirt' })
   productName: string;
 
+    @ApiProperty({ description: 'Name of the product', enum:['custom' , 'store'] ,example:'custom'})
+  type: string;
+
   @ApiProperty({ description: 'Selected color of the product',  })
   color: ProductColorDto;
 

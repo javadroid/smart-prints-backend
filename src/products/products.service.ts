@@ -91,7 +91,32 @@ export class ProductService {
       }),
     });
   }
+//find by any
+  async findByMany(
+    body: ProductDto,
+    query: any
+  ): Promise<ObjectReturnType> {
+    
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
 
+    const plans = await this.productModel
+      .find(body)
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .exec();
+    return serviceResponse({
+      data: plans,
+      message: "Product plans retrieved successfully",
+      status: true,
+      metadata: await getMetadata({
+        model: this.productModel,
+        query,
+        querys: { body },
+      }),
+    });
+  }
   //edit
   async update(
     id: string,

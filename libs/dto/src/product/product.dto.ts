@@ -146,5 +146,10 @@ export class ProductDto {
   
 
   @ApiProperty({ description: 'Product type', example: ['vegetable', 'fruit'], required: false })
-  type?: string[];
+  types?: string[];
+   @ApiProperty({ description: 'Name of the product', enum:['custom' , 'store'] ,example:'custom'})
+  type: string;
+
+   @ApiProperty({ description: 'Image', })
+  image: string;
 }

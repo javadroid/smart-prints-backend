@@ -77,7 +77,17 @@ export class ProductController {
   ) {
     return this.productService.findByAny(params, query);
   }
-
+@Post("by-many")
+  @ApiBody({
+    required: false,
+    type: ProductDto,
+  })
+  async findbyMany(
+    @Body() params: ProductDto,
+    @Query() query: any
+  ) {
+    return this.productService.findByMany(params, query);
+  }
   @Get("")
   // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Get all products" })

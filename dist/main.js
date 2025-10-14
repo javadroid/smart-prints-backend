@@ -133,6 +133,10 @@ __decorate([
     __metadata("design:type", String)
 ], CartDto.prototype, "productName", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Name of the product', enum: ['custom', 'store'], example: 'custom' }),
+    __metadata("design:type", String)
+], CartDto.prototype, "type", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Selected color of the product', }),
     __metadata("design:type", typeof (_a = typeof product_dto_1.ProductColorDto !== "undefined" && product_dto_1.ProductColorDto) === "function" ? _a : Object)
 ], CartDto.prototype, "color", void 0);
@@ -635,7 +639,15 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Product type', example: ['vegetable', 'fruit'], required: false }),
     __metadata("design:type", Array)
+], ProductDto.prototype, "types", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Name of the product', enum: ['custom', 'store'], example: 'custom' }),
+    __metadata("design:type", String)
 ], ProductDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Image', }),
+    __metadata("design:type", String)
+], ProductDto.prototype, "image", void 0);
 
 
 /***/ }),
@@ -2045,6 +2057,10 @@ __decorate([
     __metadata("design:type", String)
 ], CartModel.prototype, "productID", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ enum: ['custom', 'store'], default: 'custom' }),
+    __metadata("design:type", String)
+], CartModel.prototype, "type", void 0);
+__decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], CartModel.prototype, "productName", void 0);
@@ -2519,7 +2535,11 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: [String] }),
     __metadata("design:type", Array)
-], ProductModel.prototype, "type", void 0);
+], ProductModel.prototype, "types", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({}),
+    __metadata("design:type", String)
+], ProductModel.prototype, "image", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
@@ -2548,6 +2568,10 @@ __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], ProductModel.prototype, "quantity", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ enum: ['custom', 'store'], default: 'custom' }),
+    __metadata("design:type", String)
+], ProductModel.prototype, "type", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: Mockups }),
     __metadata("design:type", Mockups)
@@ -6127,7 +6151,6 @@ __decorate([
 __decorate([
     (0, common_1.Get)(""),
     (0, swagger_1.ApiOperation)({ summary: "Get all designs" }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiQuery)({
         name: "page",
         required: false,
@@ -6659,7 +6682,7 @@ let OrderService = class OrderService {
             amount: createOrderDto.totalPrice,
             currency: "NGN",
             tx_ref,
-            redirect_url: "http://localhost:5173/#/order-success/" + created._id.toString(),
+            redirect_url: "https://smart-prints-custom-apparel.onrender.com/order-success/" + created._id.toString(),
             payment_options: "card,banktransfer,ussd",
             customer: {
                 phonenumber: userData.phone,
@@ -6811,7 +6834,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -6831,6 +6854,9 @@ let ProductController = class ProductController {
     }
     async findbyId(params, query) {
         return this.productService.findByAny(params, query);
+    }
+    async findbyMany(params, query) {
+        return this.productService.findByMany(params, query);
     }
     async findAll(query) {
         return this.productService.findAll(query);
@@ -6901,6 +6927,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "findbyId", null);
+__decorate([
+    (0, common_1.Post)("by-many"),
+    (0, swagger_1.ApiBody)({
+        required: false,
+        type: dto_1.ProductDto,
+    }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof dto_1.ProductDto !== "undefined" && dto_1.ProductDto) === "function" ? _d : Object, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findbyMany", null);
 __decorate([
     (0, common_1.Get)(""),
     (0, swagger_1.ApiOperation)({ summary: "Get all products" }),
@@ -7060,6 +7098,26 @@ let ProductService = class ProductService {
                 model: this.productModel,
                 query,
                 querys: { [key]: value },
+            }),
+        });
+    }
+    async findByMany(body, query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const plans = await this.productModel
+            .find(body)
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 })
+            .exec();
+        return (0, service_1.serviceResponse)({
+            data: plans,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getMetadata)({
+                model: this.productModel,
+                query,
+                querys: { body },
             }),
         });
     }

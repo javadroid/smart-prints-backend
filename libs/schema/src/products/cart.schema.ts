@@ -21,6 +21,10 @@ export class CartModel {
   id: string;
   @Prop({ref: 'ProductModel' })
   productID: string;
+
+
+   @Prop({enum:['custom' , 'store'] ,default:'custom'})
+  type: string;
   @Prop()
   productName: string;
   @Prop({})
