@@ -97,7 +97,7 @@ export class ProductService {
     query: any
   ): Promise<ObjectReturnType> {
     
-    const { limit = 10, page = 1 } = query;
+    const { limit = 20, page = 1 } = query;
     const skip = (page - 1) * limit;
 
     const plans = await this.productModel
