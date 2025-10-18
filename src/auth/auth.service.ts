@@ -67,8 +67,6 @@ export class AuthService {
         }
         checkUserRefId = user._id.toString();
       }
-
-      
       const referral = {
         refBy: checkUserRefId,
        
@@ -181,7 +179,7 @@ export class AuthService {
     };
     console.log(payload);
     const access_token = this.jwtService.sign(payload, 
-      // { expiresIn: "1d" }
+     { expiresIn: "30d"},
     );
     const refresh_token = this.jwtService.sign(payload, {
       expiresIn: "30d",
