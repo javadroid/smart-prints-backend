@@ -141,7 +141,9 @@ export class OrderService {
         message: "Order plan retrieved successfully",
         status: true,
       });
-    } catch (error) {}
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   //find by any

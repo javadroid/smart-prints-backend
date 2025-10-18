@@ -283,8 +283,6 @@ export class AuthService {
     };
   }
 
-
-
   async refreshToken(token: string) {
     console.log(token);
     const payload = this.jwtService.verify(token);
