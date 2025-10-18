@@ -1,54 +1,60 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { OrderModel, OrderDoc, FarmModel, FarmDoc } from '@app/schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { OrderDto, UserDTO } from '@app/dto';
-import { ObjectReturnType, serviceResponse, getMetadata, FlutterwaveService } from '@app/service';
-import { randomUUID } from 'crypto';
-import e from 'express';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { OrderModel, OrderDoc, FarmModel, FarmDoc } from "@app/schema";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { OrderDto, UserDTO } from "@app/dto";
+import {
+  ObjectReturnType,
+  serviceResponse,
+  getMetadata,
+  FlutterwaveService,
+} from "@app/service";
+import { randomUUID } from "crypto";
+import e from "express";
+import { PaystackService } from "@app/service/payment/paystack";
 
 @Injectable()
 export class OrderService {
- constructor(
+  constructor(
     @InjectModel(OrderModel.name)
     private orderModel: Model<OrderDoc>,
-   private flutterwave: FlutterwaveService,
-  
-  ){
-
- }
+    private flutterwave: FlutterwaveService,
+    private paystack: PaystackService
+  ) {}
   async upset(
     createOrderDto: OrderDto,
     userData: UserDTO
   ): Promise<ObjectReturnType> {
-     const tx_ref=`smartprints-${userData.id}-${randomUUID().replace(/\D/g, "").substring(0, 10)}`
-     const created = new this.orderModel({ ...createOrderDto,tx_ref, userID: userData._id.toString() });
-  
-  const paymentrequest={
-    amount:createOrderDto.totalPrice,
-    currency:"NGN",
-   tx_ref,
-    // redirect_url:"http://localhost:5173/#/order-success/"+created._id.toString(),
-    redirect_url:"https://smart-prints-custom-apparel.onrender.com/order-success/"+created._id.toString(),
-    payment_options:"card,banktransfer,ussd",
-    customer:{
-      phonenumber:userData.phone,
-      name:userData.fullname??userData.username??userData.firstname??createOrderDto.fullName,
-      email:userData.email
-    },
-    customizations:{
-      title:"Smart Prints",
-      logo:"https://smartprints.vercel.app/logo.png",
-      description:"Order Payment"
-    }
-  }
- const payment = await this.flutterwave.initiateCheckout(paymentrequest);
- console.log(payment,payment.data.link.split("pay/")[1])
+    const tx_ref = `smartprints-${userData.id}-${randomUUID()
+      .replace(/\D/g, "")
+      .substring(0, 10)}`;
+    const created = new this.orderModel({
+      ...createOrderDto,
+      tx_ref,
+      userID: userData._id.toString(),
+    });
 
- created.flutterwaveRef = payment.data.link.split("pay/")[1] ;
- await created.save();
-     return serviceResponse({
-      data: payment.data.link,
+    const paymentrequest = {
+      amount: createOrderDto.totalPrice,
+      currency: "NGN",
+      email: userData.email,
+      callback_url:
+        "https://smart-prints-custom-apparel.onrender.com/order-success/" +
+        created._id.toString(),
+      metadata: {
+        tx_ref,
+        userId: userData._id.toString(),
+      },
+    };
+    const payment = await this.paystack.createPaymentLink(paymentrequest);
+    console.log(payment);
+
+    created.paystackRef = payment.data.reference;
+    created.authorization_url = payment.data.authorization_url;
+    created.accessCode = payment.data.access_code;
+    await created.save();
+    return serviceResponse({
+      data: payment.data.authorization_url,
       message: "Order plan created successfully",
 
       status: true,
@@ -63,7 +69,7 @@ export class OrderService {
       .find()
       .skip(skip)
       .populate("userID")
-     .populate("products.productID")
+      .populate("products.productID")
       .limit(limit)
       .sort({ createdAt: -1 })
       .exec();
@@ -80,9 +86,56 @@ export class OrderService {
   }
   async findOne(id: string): Promise<ObjectReturnType> {
     try {
-      const plan = await this.orderModel.findById(id).populate("userID")
-     .populate("products.productID").exec();
+      const plan = await this.orderModel
+        .findById(id)
+        .populate("userID")
+        .populate("products.productID")
+        .exec();
 
+      return serviceResponse({
+        data: plan,
+        message: "Order plan retrieved successfully",
+        status: true,
+      });
+    } catch (error) {}
+  }
+  async verifyOrderPayment(id: string): Promise<ObjectReturnType> {
+    try {
+      const plan = await this.orderModel
+        .findById(id)
+        .populate("userID")
+        .populate("products.productID")
+        .exec();
+      if (!plan) {
+        throw new NotFoundException("Order not found");
+      }
+      if (!plan.paystackRef) {
+        throw new NotFoundException(
+          "No payment reference found for this order"
+        );
+      }
+      if (plan.isPaid) {
+        return serviceResponse({
+          data: plan,
+          message: "Order already paid",
+          status: true,
+        });
+      }
+      const v = await this.paystack.verifyPaymentLink(plan.paystackRef);
+      if (v.data.status === "success") {
+        plan.isPaid = true;
+        plan.status = "paid";
+        await plan.save();
+      } else if ( ["abandoned","ongoing"].includes(v.data.status)) {
+        plan.isPaid = false;
+        plan.status = "abandoned";
+        await plan.save();
+      } else {
+        plan.isPaid = false;
+        plan.status = "cancelled";
+        await plan.save();
+      }
+      console.log(v);
       return serviceResponse({
         data: plan,
         message: "Order plan retrieved successfully",
@@ -96,42 +149,33 @@ export class OrderService {
     params: { key: string; value: string },
     query: any
   ): Promise<ObjectReturnType> {
-
     try {
       const { key, value } = params;
-    const { limit = 10, page = 1 } = query;
-    const skip = (page - 1) * limit;
+      const { limit = 10, page = 1 } = query;
+      const skip = (page - 1) * limit;
 
+      const orders = await this.orderModel
+        .find({ [key]: value })
+        .skip(skip)
+        .limit(limit)
+        .populate("userID")
+        .populate("products.productID")
+        .sort({ createdAt: -1 })
+        .exec();
 
-    const orders = await this.orderModel
-      .find({ [key]: value })
-      .skip(skip)
-      .limit(limit)
-      .populate("userID")
-     .populate("products.productID")
-      .sort({ createdAt: -1 })
-      .exec();
-
-      if(['_id'] .includes(key)){
-        
-        console.log(orders[0].tx_ref)
- const v= await this.flutterwave.verifyCheckout(orders[0].tx_ref);
- console.log(v)
-}
-    return serviceResponse({
-      data: orders,
-      message: "Order plans retrieved successfully",
-      status: true,
-      metadata: await getMetadata({
-        model: this.orderModel,
-        query,
-        querys: { [key]: value },
-      }),
-    });
+      return serviceResponse({
+        data: orders,
+        message: "Order plans retrieved successfully",
+        status: true,
+        metadata: await getMetadata({
+          model: this.orderModel,
+          query,
+          querys: { [key]: value },
+        }),
+      });
     } catch (error) {
-   throw new NotFoundException(error.message);
+      throw new NotFoundException(error.message);
     }
-    
   }
 
   //edit
@@ -173,5 +217,4 @@ export class OrderService {
       return serviceResponse({ message: "No orders deleted", status: false });
     return serviceResponse({ message: `Order deleted`, status: true });
   }
-
 }

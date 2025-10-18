@@ -106,5 +106,14 @@ export class OrderController {
   async delete(@Param("id") ids: string) {
     return this.orderService.delete(ids);
   }
+
+  // Verify order payment
+  @Get("verify-payment/:id")
+  @ApiOperation({ summary: "Verify order payment by ID" })
+  @ApiParam({ name: "id", required: true, type: String })
+  @UseGuards(JwtAuthGuard)
+  async verifyOrderPayment(@Param("id") id: string) {
+    return this.orderService.verifyOrderPayment(id);
+  }
   
 }

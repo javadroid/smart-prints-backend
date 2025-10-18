@@ -51,7 +51,16 @@ export class OrderModel {
   @Prop()
   flutterwaveRef: string;
   @Prop()
+  paystackRef: string;
+   @Prop()
+  authorization_url: string;
+   @Prop()
+  accessCode: string;
+  @Prop()
   tx_ref: string;
+
+  @Prop({ default: false })
+  isPaid: boolean;
 
   @Prop({  })
   totalPrice: number;

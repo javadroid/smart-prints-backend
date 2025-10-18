@@ -2354,7 +2354,23 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
+], OrderModel.prototype, "paystackRef", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], OrderModel.prototype, "authorization_url", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], OrderModel.prototype, "accessCode", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
 ], OrderModel.prototype, "tx_ref", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], OrderModel.prototype, "isPaid", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
@@ -2552,6 +2568,10 @@ __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", Number)
 ], ProductModel.prototype, "basePrice", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: true }),
+    __metadata("design:type", Boolean)
+], ProductModel.prototype, "backgroundIn", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", Number)
@@ -3679,6 +3699,74 @@ const CreateSubaccount = {
         created_at: "2021-10-04T18:38:25.000Z",
     },
 };
+
+
+/***/ }),
+
+/***/ "./libs/service/src/payment/paystack.ts":
+/*!**********************************************!*\
+  !*** ./libs/service/src/payment/paystack.ts ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PaystackService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const axios_1 = __webpack_require__(/*! axios */ "axios");
+let PaystackService = class PaystackService {
+    constructor(configService) {
+        this.configService = configService;
+        this.baseUrl = "https://api.paystack.co";
+        this.secretKey = this.configService.get("PAYSTACK_SECRET_KEY");
+        this.secretHash = this.configService.get("PAYSTACK_ENCRYPTION_KEY");
+        this.headers = {
+            accept: "application/json",
+            Authorization: `Bearer ${this.secretKey}`,
+            "Content-Type": "application/json",
+        };
+    }
+    async createPaymentLink(data) {
+        try {
+            const response = await axios_1.default.post(`${this.baseUrl}/transaction/initialize`, {
+                amount: data.amount * 100,
+                email: data.email,
+                currency: data.currency || "NGN",
+                callback_url: data.callback_url,
+                metadata: data.metadata,
+            }, { headers: this.headers });
+            return response.data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(error?.response?.data || "Failed to create payment link", error?.response?.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async verifyPaymentLink(reference) {
+        try {
+            const response = await axios_1.default.get(`${this.baseUrl}/transaction/verify/${reference}`, { headers: this.headers });
+            return response.data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(error?.response?.data || "Failed to verify payment", error?.response?.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+};
+exports.PaystackService = PaystackService;
+exports.PaystackService = PaystackService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
+], PaystackService);
 
 
 /***/ }),
@@ -6506,6 +6594,9 @@ let OrderController = class OrderController {
     async delete(ids) {
         return this.orderService.delete(ids);
     }
+    async verifyOrderPayment(id) {
+        return this.orderService.verifyOrderPayment(id);
+    }
 };
 exports.OrderController = OrderController;
 __decorate([
@@ -6599,6 +6690,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Get)("verify-payment/:id"),
+    (0, swagger_1.ApiOperation)({ summary: "Verify order payment by ID" }),
+    (0, swagger_1.ApiParam)({ name: "id", required: true, type: String }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "verifyOrderPayment", null);
 exports.OrderController = OrderController = __decorate([
     (0, swagger_1.ApiTags)("order"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
@@ -6628,6 +6729,7 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orders/orders.service.ts");
 const orders_controller_1 = __webpack_require__(/*! ./orders.controller */ "./src/orders/orders.controller.ts");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const paystack_1 = __webpack_require__(/*! @app/service/payment/paystack */ "./libs/service/src/payment/paystack.ts");
 let OrdersModule = class OrdersModule {
 };
 exports.OrdersModule = OrdersModule;
@@ -6635,7 +6737,7 @@ exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         controllers: [orders_controller_1.OrderController],
-        providers: [orders_service_1.OrderService, service_1.FlutterwaveService],
+        providers: [orders_service_1.OrderService, service_1.FlutterwaveService, paystack_1.PaystackService],
     })
 ], OrdersModule);
 
@@ -6661,7 +6763,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -6670,37 +6772,41 @@ const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose
 const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
+const paystack_1 = __webpack_require__(/*! @app/service/payment/paystack */ "./libs/service/src/payment/paystack.ts");
 let OrderService = class OrderService {
-    constructor(orderModel, flutterwave) {
+    constructor(orderModel, flutterwave, paystack) {
         this.orderModel = orderModel;
         this.flutterwave = flutterwave;
+        this.paystack = paystack;
     }
     async upset(createOrderDto, userData) {
-        const tx_ref = `smartprints-${userData.id}-${(0, crypto_1.randomUUID)().replace(/\D/g, "").substring(0, 10)}`;
-        const created = new this.orderModel({ ...createOrderDto, tx_ref, userID: userData._id.toString() });
+        const tx_ref = `smartprints-${userData.id}-${(0, crypto_1.randomUUID)()
+            .replace(/\D/g, "")
+            .substring(0, 10)}`;
+        const created = new this.orderModel({
+            ...createOrderDto,
+            tx_ref,
+            userID: userData._id.toString(),
+        });
         const paymentrequest = {
             amount: createOrderDto.totalPrice,
             currency: "NGN",
-            tx_ref,
-            redirect_url: "https://smart-prints-custom-apparel.onrender.com/order-success/" + created._id.toString(),
-            payment_options: "card,banktransfer,ussd",
-            customer: {
-                phonenumber: userData.phone,
-                name: userData.fullname ?? userData.username ?? userData.firstname ?? createOrderDto.fullName,
-                email: userData.email
+            email: userData.email,
+            callback_url: "https://smart-prints-custom-apparel.onrender.com/order-success/" +
+                created._id.toString(),
+            metadata: {
+                tx_ref,
+                userId: userData._id.toString(),
             },
-            customizations: {
-                title: "Smart Prints",
-                logo: "https://smartprints.vercel.app/logo.png",
-                description: "Order Payment"
-            }
         };
-        const payment = await this.flutterwave.initiateCheckout(paymentrequest);
-        console.log(payment, payment.data.link.split("pay/")[1]);
-        created.flutterwaveRef = payment.data.link.split("pay/")[1];
+        const payment = await this.paystack.createPaymentLink(paymentrequest);
+        console.log(payment);
+        created.paystackRef = payment.data.reference;
+        created.authorization_url = payment.data.authorization_url;
+        created.accessCode = payment.data.access_code;
         await created.save();
         return (0, service_1.serviceResponse)({
-            data: payment.data.link,
+            data: payment.data.authorization_url,
             message: "Order plan created successfully",
             status: true,
         });
@@ -6729,8 +6835,56 @@ let OrderService = class OrderService {
     }
     async findOne(id) {
         try {
-            const plan = await this.orderModel.findById(id).populate("userID")
-                .populate("products.productID").exec();
+            const plan = await this.orderModel
+                .findById(id)
+                .populate("userID")
+                .populate("products.productID")
+                .exec();
+            return (0, service_1.serviceResponse)({
+                data: plan,
+                message: "Order plan retrieved successfully",
+                status: true,
+            });
+        }
+        catch (error) { }
+    }
+    async verifyOrderPayment(id) {
+        try {
+            const plan = await this.orderModel
+                .findById(id)
+                .populate("userID")
+                .populate("products.productID")
+                .exec();
+            if (!plan) {
+                throw new common_1.NotFoundException("Order not found");
+            }
+            if (!plan.paystackRef) {
+                throw new common_1.NotFoundException("No payment reference found for this order");
+            }
+            if (plan.isPaid) {
+                return (0, service_1.serviceResponse)({
+                    data: plan,
+                    message: "Order already paid",
+                    status: true,
+                });
+            }
+            const v = await this.paystack.verifyPaymentLink(plan.paystackRef);
+            if (v.data.status === "success") {
+                plan.isPaid = true;
+                plan.status = "paid";
+                await plan.save();
+            }
+            else if (["abandoned", "ongoing"].includes(v.data.status)) {
+                plan.isPaid = false;
+                plan.status = "abandoned";
+                await plan.save();
+            }
+            else {
+                plan.isPaid = false;
+                plan.status = "cancelled";
+                await plan.save();
+            }
+            console.log(v);
             return (0, service_1.serviceResponse)({
                 data: plan,
                 message: "Order plan retrieved successfully",
@@ -6752,11 +6906,6 @@ let OrderService = class OrderService {
                 .populate("products.productID")
                 .sort({ createdAt: -1 })
                 .exec();
-            if (['_id'].includes(key)) {
-                console.log(orders[0].tx_ref);
-                const v = await this.flutterwave.verifyCheckout(orders[0].tx_ref);
-                console.log(v);
-            }
             return (0, service_1.serviceResponse)({
                 data: orders,
                 message: "Order plans retrieved successfully",
@@ -6809,7 +6958,7 @@ exports.OrderService = OrderService;
 exports.OrderService = OrderService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _b : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _b : Object, typeof (_c = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _c : Object])
 ], OrderService);
 
 
@@ -7102,7 +7251,7 @@ let ProductService = class ProductService {
         });
     }
     async findByMany(body, query) {
-        const { limit = 10, page = 1 } = query;
+        const { limit = 20, page = 1 } = query;
         const skip = (page - 1) * limit;
         const plans = await this.productModel
             .find(body)
