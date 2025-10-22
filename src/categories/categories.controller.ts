@@ -1,12 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CategoriesDto } from '@app/dto';
-import { JwtAuthGuard } from '@app/guard';
+import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@app/decorator';
+import { UserType } from '@app/enum';
 
 @ApiTags("categories")
 @ApiBearerAuth("access-token")
-
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

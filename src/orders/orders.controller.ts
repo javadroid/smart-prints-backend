@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, UseGuards } from '@nestjs/common';
 import { OrderService } from './orders.service';
 import { OrderDto } from '@app/dto';
-import { JwtAuthGuard } from '@app/guard';
+import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@app/decorator';
+import { UserType } from '@app/enum';
 
 @ApiTags("order")
 @ApiBearerAuth("access-token")
@@ -29,6 +31,8 @@ export class OrderController {
   }
 
   @Patch(":orderID")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing orders" })
   @ApiParam({
     name: "orderID",

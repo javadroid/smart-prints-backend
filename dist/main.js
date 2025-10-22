@@ -33,12 +33,15 @@ __exportStar(__webpack_require__(/*! ./roles.decorator */ "./libs/decorator/src/
 /*!***********************************************!*\
   !*** ./libs/decorator/src/roles.decorator.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ROLES_KEY = void 0;
+exports.Roles = exports.ROLES_KEY = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 exports.ROLES_KEY = 'roles';
+const Roles = (...roles) => (0, common_1.SetMetadata)(exports.ROLES_KEY, roles);
+exports.Roles = Roles;
 
 
 /***/ }),
@@ -1786,11 +1789,11 @@ let RolesGuard = class RolesGuard {
             context.getClass(),
         ]);
         const { user } = context.switchToHttp().getRequest();
-        const hasRole = () => user.roles.some((role) => requiredRoles.includes(role));
+        const hasRole = () => (user.isAdmin || user.isSuperAdmin);
         if (!user || !hasRole()) {
             throw new common_1.ForbiddenException('You do not have permission to access this resource');
         }
-        return requiredRoles.some((role) => user.roles?.includes(role));
+        return (user.isAdmin || user.isSuperAdmin);
     }
 };
 exports.RolesGuard = RolesGuard;
@@ -4292,6 +4295,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const admin_service_1 = __webpack_require__(/*! ./admin.service */ "./src/admin/admin.service.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 let AdminController = class AdminController {
     constructor(adminService) {
         this.adminService = adminService;
@@ -4303,12 +4310,17 @@ let AdminController = class AdminController {
 exports.AdminController = AdminController;
 __decorate([
     (0, common_1.Get)('dashboard-stats'),
+    (0, common_1.UseGuards)(guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "getDashboardStats", null);
 exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __metadata("design:paramtypes", [typeof (_a = typeof admin_service_1.AdminService !== "undefined" && admin_service_1.AdminService) === "function" ? _a : Object])
 ], AdminController);
 
@@ -4571,6 +4583,7 @@ exports.AppModule = AppModule = __decorate([
                     limit: 10,
                 }]),
             auth_module_1.AuthModule,
+            admin_module_1.AdminModule,
             uploads_module_1.UploadsModule,
             users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, admin_module_1.AdminModule,
         ],
@@ -5127,7 +5140,7 @@ let AuthService = class AuthService {
             email: user.email,
         };
         console.log(payload);
-        const access_token = this.jwtService.sign(payload);
+        const access_token = this.jwtService.sign(payload, { expiresIn: "30d" });
         const refresh_token = this.jwtService.sign(payload, {
             expiresIn: "30d",
             secret: this.config.get("JWT_SECRET2"),
@@ -5818,6 +5831,8 @@ const categories_service_1 = __webpack_require__(/*! ./categories.service */ "./
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService) {
         this.categoriesService = categoriesService;
@@ -5935,6 +5950,8 @@ __decorate([
 exports.CategoriesController = CategoriesController = __decorate([
     (0, swagger_1.ApiTags)("categories"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [typeof (_a = typeof categories_service_1.CategoriesService !== "undefined" && categories_service_1.CategoriesService) === "function" ? _a : Object])
 ], CategoriesController);
@@ -6575,6 +6592,8 @@ const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orde
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 let OrderController = class OrderController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -6615,6 +6634,8 @@ __decorate([
 ], OrderController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(":orderID"),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: "Update existing orders" }),
     (0, swagger_1.ApiParam)({
         name: "orderID",
@@ -6891,7 +6912,9 @@ let OrderService = class OrderService {
                 status: true,
             });
         }
-        catch (error) { }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
     }
     async findByAny(params, query) {
         try {
@@ -6991,6 +7014,8 @@ const products_service_1 = __webpack_require__(/*! ./products.service */ "./src/
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
@@ -7017,12 +7042,13 @@ let ProductController = class ProductController {
 exports.ProductController = ProductController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: "Create a new product" }),
     (0, swagger_1.ApiBody)({
         type: dto_1.ProductDto,
         description: "Creating a new product Details",
     }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -7031,6 +7057,8 @@ __decorate([
 ], ProductController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(":productID"),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: "Update existing products" }),
     (0, swagger_1.ApiParam)({
         name: "productID",
@@ -7615,6 +7643,7 @@ const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -7884,6 +7913,8 @@ exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)('users'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('users'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __metadata("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object])
 ], UsersController);
 

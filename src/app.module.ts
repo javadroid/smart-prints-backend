@@ -51,6 +51,7 @@ import { AdminModule } from './admin/admin.module';
           limit: 10,
         }]),
   AuthModule,
+  AdminModule,
   UploadsModule,
   UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, AdminModule, ],
   controllers: [AppController],

@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, UseGuards } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { ProductDto } from '@app/dto';
-import { JwtAuthGuard } from '@app/guard';
+import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@app/decorator';
+import { UserType } from '@app/enum';
 
 @ApiTags("product")
 @ApiBearerAuth("access-token")
@@ -12,12 +14,14 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
    @Post()
+   @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new product" })
   @ApiBody({
     type: ProductDto,
     description: "Creating a new product Details",
   })
-  @UseGuards(JwtAuthGuard)
+ 
   async create(@Body() product: ProductDto, @Req() req: any) {
     // await this.organizationAbilityFactory.checkAbility(
     //   product.organizationID,
@@ -29,6 +33,8 @@ export class ProductController {
   }
 
   @Patch(":productID")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing products" })
   @ApiParam({
     name: "productID",

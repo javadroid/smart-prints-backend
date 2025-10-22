@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { JwtAuthGuard } from '@app/guard';
+import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,11 +26,15 @@ import {
 
 import {  UserDTO } from '@app/dto';
 import { UsersService } from './users.service';
-import { UserStatus } from '@app/enum';
+import { UserStatus, UserType } from '@app/enum';
+import { Roles } from '@app/decorator';
 
 @ApiTags('users')
 @ApiBearerAuth('access-token')
 @Controller('users')
+
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
 export class UsersController {
   constructor(
     private userService: UsersService,
