@@ -87,6 +87,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/reference/tsconfig.lib.json"
       }
+    },
+    "sql-schema": {
+      "type": "library",
+      "root": "libs/sql-schema",
+      "entryFile": "index",
+      "sourceRoot": "libs/sql-schema/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/sql-schema/tsconfig.lib.json"
+      }
     }
   }
 }

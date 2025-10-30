@@ -37,7 +37,7 @@ export class AppController {
   async getLgaState(@Query("stateName") stateName?: string
   ): Promise<any> {
    
-    let data = JSON.parse(
+    const data = JSON.parse(
       readFileSync("allnigeria_polling_units_with_coords.json", "utf-8")
     );
 let state

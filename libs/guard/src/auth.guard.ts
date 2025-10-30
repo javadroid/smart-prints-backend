@@ -12,11 +12,16 @@ import { InjectModel } from '@nestjs/mongoose';
   import { Request } from 'express';
 import { Model } from 'mongoose';
 import { UserModel, UserDoc } from '@app/schema';
+import { UserSqlModel } from '@app/sql-schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
   
   @Injectable()
   export class AuthGuard implements CanActivate {
     constructor(
-        @InjectModel(UserModel.name) private userModel: Model<UserDoc>,
+        
+          @InjectRepository(UserSqlModel)
+    private readonly userRepository: Repository<UserSqlModel>,
         private jwtService: JwtService,
         private configService:ConfigService
     
@@ -37,8 +42,8 @@ import { UserModel, UserDoc } from '@app/schema';
             secret: this.configService.get("JWT_SECRET")
           }
         );
-       const user=await this.userModel.findById(payload.sub)
-     
+       const user=await this.userRepository.findOneBy({_id:payload.sub})
+     console.log(user)
         request['user'] = user;
         request['userID'] = user._id;
       } catch {

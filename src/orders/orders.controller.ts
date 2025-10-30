@@ -5,13 +5,14 @@ import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@app/decorator';
 import { UserType } from '@app/enum';
+import { OrderSqlService } from './order-sql.service';
 
 @ApiTags("order")
 @ApiBearerAuth("access-token")
 
 @Controller('orders')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(private readonly orderService: OrderSqlService) {}
 
    @Post()
   @ApiOperation({ summary: "Create a new order" })
@@ -27,7 +28,7 @@ export class OrderController {
     //   Action.Create,
     //   OrderModel,
     // );
-    return this.orderService.upset(order, req.user);
+    return this.orderService.create(order, req.user);
   }
 
   @Patch(":orderID")
@@ -51,7 +52,7 @@ export class OrderController {
     //   Action.Update,
     //   OrderModel,
     // );
-    return this.orderService.update( orderID, order, req.user);
+    return this.orderService.update( orderID, order, );
   }
 
   @Get("by-any/:key/:value")
@@ -108,7 +109,7 @@ export class OrderController {
   @ApiOperation({ summary: "Delete order by ID" })
  
   async delete(@Param("id") ids: string) {
-    return this.orderService.delete(ids);
+    return this.orderService.remove(ids);
   }
 
   // Verify order payment

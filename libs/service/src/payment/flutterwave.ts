@@ -17,8 +17,8 @@ export class FlutterwaveService {
   private readonly headers: any;
   constructor(
     private configService: ConfigService,
-    @InjectModel(WalletModel.name) private walletModel: Model<WalletDoc>,
-    @InjectModel(UserModel.name) private userModel: Model<UserDoc>,
+    // @InjectModel(WalletModel.name) private walletModel: Model<WalletDoc>,
+    // @InjectModel(UserModel.name) private userModel: Model<UserDoc>,
    
 
   ) {
@@ -159,25 +159,25 @@ async verifyCheckout(tx_ref: string): Promise<any> {
       const response = await axios.request(options);
       const responseType = response.data as typeof CreateSubaccount;
 
-      const user = await this.userModel.findOne({ email });
+      // const user = await this.userModel.findOne({ email });
 
-      await this.walletModel.create({
-        accountNumber: responseType.data.nuban,
-        accountName: account_name,
-        userID: user?._id.toString(),
-        barter_id: responseType.data.barter_id,
-        bankCode: responseType.data.bank_code,
-        bankName: responseType.data.bank_name,
-        customerCode: responseType.data.account_reference,
-        currency: "NGN",
-      });
+      // await this.walletModel.create({
+      //   accountNumber: responseType.data.nuban,
+      //   accountName: account_name,
+      //   userID: user?._id.toString(),
+      //   barter_id: responseType.data.barter_id,
+      //   bankCode: responseType.data.bank_code,
+      //   bankName: responseType.data.bank_name,
+      //   customerCode: responseType.data.account_reference,
+      //   currency: "NGN",
+      // });
       return responseType;
     } catch (error) {
       console.error(
         "Error creating virtual account:",
         error.response?.data || error.message
       );
-      throw error;
+      throw error.response?.data;
     }
   }
   // wallet-to-wallet transfers
@@ -272,9 +272,10 @@ async verifyCheckout(tx_ref: string): Promise<any> {
 
   //fetch available balance on a payout subaccount.
   async getAvailableBalance(userID: string): Promise<any> {
-    const wallet = await this.walletModel.findOne({
-      userID
-    });
+    const wallet = null as any
+    // await this.walletModel.findOne({
+    //   userID
+    // });
     if(!wallet){
       throw new Error("Wallet not found");
     }

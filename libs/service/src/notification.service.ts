@@ -19,58 +19,58 @@ interface NotificationInterface {
 export class NotificationService {
   constructor(
     private readonly notificationGateway: NotificationGateway,
-    @InjectModel(ActivityLogModel.name)
-    private activityLogModel: Model<ActivityLogDoc>
+    // @InjectModel(ActivityLogModel.name)
+    // private activityLogModel: Model<ActivityLogDoc>
   ) {}
 
   private readonly oneSignalUrl = "https://onesignal.com/api/v1/notifications";
   private readonly appId = process.env.ONESIGNAL_APP_ID;
   private readonly apiKey = process.env.ONESIGNAL_API_KEY;
 
-  async notificationActivity({
-    entityType,
-    userID,
-    details,
-    action,
-    entityID,
-    playerIds,
-  }: NotificationInterface) {
-    await this.activityLogModel.create({
-      entityType,
-      userID,
-      details,
-      action,
-      entityID,
-    });
+  // async notificationActivity({
+  //   entityType,
+  //   userID,
+  //   details,
+  //   action,
+  //   entityID,
+  //   playerIds,
+  // }: NotificationInterface) {
+  //   await this.activityLogModel.create({
+  //     entityType,
+  //     userID,
+  //     details,
+  //     action,
+  //     entityID,
+  //   });
 
-    // Send real-time notification
-    this.notificationGateway.sendNotification(userID.toString(), {
-      action,
-      entityType,
-      entityID,
-      details,
-    });
+  //   // Send real-time notification
+  //   this.notificationGateway.sendNotification(userID.toString(), {
+  //     action,
+  //     entityType,
+  //     entityID,
+  //     details,
+  //   });
 
-    try {
-      const payload = {
-        app_id: this.appId,
-        headings: { en: details },
-        contents: { en: details },
-        include_player_ids: playerIds,
-      };
+  //   try {
+  //     const payload = {
+  //       app_id: this.appId,
+  //       headings: { en: details },
+  //       contents: { en: details },
+  //       include_player_ids: playerIds,
+  //     };
 
-      const response = await axios.post(this.oneSignalUrl, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Basic ${this.apiKey}`,
-        },
-      });
+  //     const response = await axios.post(this.oneSignalUrl, payload, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Basic ${this.apiKey}`,
+  //       },
+  //     });
 
-      console.log(`Notification sent: ${response.status}`);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     console.log(`Notification sent: ${response.status}`);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   private optionsBuilder(method: string, endpoint: string, data?: any) {
     return {

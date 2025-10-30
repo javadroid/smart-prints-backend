@@ -71,6 +71,12 @@
       ],
       "@app/reference/*": [
         "libs/reference/src/*"
+      ],
+      "@app/sql-schema": [
+        "libs/sql-schema/src"
+      ],
+      "@app/sql-schema/*": [
+        "libs/sql-schema/src/*"
       ]
     }
   }

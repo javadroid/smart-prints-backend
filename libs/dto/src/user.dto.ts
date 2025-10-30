@@ -95,11 +95,14 @@ export class RefreshTokenDTO {
 
 export class Refferal {
   @ApiProperty({ description: 'referral code' })
+  refBy: string;
+  @ApiProperty({ description: 'referral code' })
   refCode: string;
   @ApiProperty({ description: 'status', enum: ['active', 'inactive'] })
   status?: string;
   @ApiProperty({ description: 'max referal' })
   max: number;
+
 
   @ApiProperty({ description: 'amount', default: 0 })
   amount: number;

@@ -1253,6 +1253,10 @@ exports.Refferal = Refferal;
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'referral code' }),
     __metadata("design:type", String)
+], Refferal.prototype, "refBy", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'referral code' }),
+    __metadata("design:type", String)
 ], Refferal.prototype, "refCode", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'status', enum: ['active', 'inactive'] }),
@@ -1621,12 +1625,12 @@ exports.AuthGuard = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
 let AuthGuard = class AuthGuard {
-    constructor(userModel, jwtService, configService) {
-        this.userModel = userModel;
+    constructor(userRepository, jwtService, configService) {
+        this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.configService = configService;
     }
@@ -1640,7 +1644,8 @@ let AuthGuard = class AuthGuard {
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: this.configService.get("JWT_SECRET")
             });
-            const user = await this.userModel.findById(payload.sub);
+            const user = await this.userRepository.findOneBy({ _id: payload.sub });
+            console.log(user);
             request['user'] = user;
             request['userID'] = user._id;
         }
@@ -1657,8 +1662,8 @@ let AuthGuard = class AuthGuard {
 exports.AuthGuard = AuthGuard;
 exports.AuthGuard = AuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object, typeof (_c = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _c : Object])
+    __param(0, (0, typeorm_1.InjectRepository)(sql_schema_1.UserSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object, typeof (_c = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _c : Object])
 ], AuthGuard);
 
 
@@ -3306,58 +3311,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationService = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! mongoose */ "mongoose");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const mongoose_2 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
 const axios_1 = __webpack_require__(/*! axios */ "axios");
 const notification_gateway_1 = __webpack_require__(/*! ./notification.gateway */ "./libs/service/src/notification.gateway.ts");
 let NotificationService = class NotificationService {
-    constructor(notificationGateway, activityLogModel) {
+    constructor(notificationGateway) {
         this.notificationGateway = notificationGateway;
-        this.activityLogModel = activityLogModel;
         this.oneSignalUrl = "https://onesignal.com/api/v1/notifications";
         this.appId = process.env.ONESIGNAL_APP_ID;
         this.apiKey = process.env.ONESIGNAL_API_KEY;
-    }
-    async notificationActivity({ entityType, userID, details, action, entityID, playerIds, }) {
-        await this.activityLogModel.create({
-            entityType,
-            userID,
-            details,
-            action,
-            entityID,
-        });
-        this.notificationGateway.sendNotification(userID.toString(), {
-            action,
-            entityType,
-            entityID,
-            details,
-        });
-        try {
-            const payload = {
-                app_id: this.appId,
-                headings: { en: details },
-                contents: { en: details },
-                include_player_ids: playerIds,
-            };
-            const response = await axios_1.default.post(this.oneSignalUrl, payload, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Basic ${this.apiKey}`,
-                },
-            });
-            console.log(`Notification sent: ${response.status}`);
-        }
-        catch (error) {
-            console.log(error);
-        }
     }
     optionsBuilder(method, endpoint, data) {
         return {
@@ -3385,8 +3350,7 @@ let NotificationService = class NotificationService {
 exports.NotificationService = NotificationService;
 exports.NotificationService = NotificationService = __decorate([
     (0, common_1.Injectable)(),
-    __param(1, (0, mongoose_2.InjectModel)(schema_1.ActivityLogModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof notification_gateway_1.NotificationGateway !== "undefined" && notification_gateway_1.NotificationGateway) === "function" ? _a : Object, typeof (_b = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _b : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof notification_gateway_1.NotificationGateway !== "undefined" && notification_gateway_1.NotificationGateway) === "function" ? _a : Object])
 ], NotificationService);
 
 
@@ -3408,24 +3372,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlutterwaveService = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const schema_2 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
 const axios_1 = __webpack_require__(/*! axios */ "axios");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
 let FlutterwaveService = class FlutterwaveService {
-    constructor(configService, walletModel, userModel) {
+    constructor(configService) {
         this.configService = configService;
-        this.walletModel = walletModel;
-        this.userModel = userModel;
         this.baseUrl = "";
         this.secretKey = this.configService.get("FLUTTERWAVE_SECRET_KEY");
         this.secretHash = this.configService.get("FLUTTERWAVEEncryptionKey");
@@ -3517,22 +3472,11 @@ let FlutterwaveService = class FlutterwaveService {
             };
             const response = await axios_1.default.request(options);
             const responseType = response.data;
-            const user = await this.userModel.findOne({ email });
-            await this.walletModel.create({
-                accountNumber: responseType.data.nuban,
-                accountName: account_name,
-                userID: user?._id.toString(),
-                barter_id: responseType.data.barter_id,
-                bankCode: responseType.data.bank_code,
-                bankName: responseType.data.bank_name,
-                customerCode: responseType.data.account_reference,
-                currency: "NGN",
-            });
             return responseType;
         }
         catch (error) {
             console.error("Error creating virtual account:", error.response?.data || error.message);
-            throw error;
+            throw error.response?.data;
         }
     }
     async walletToWalletTransfer(data) {
@@ -3589,9 +3533,7 @@ let FlutterwaveService = class FlutterwaveService {
         }
     }
     async getAvailableBalance(userID) {
-        const wallet = await this.walletModel.findOne({
-            userID
-        });
+        const wallet = null;
         if (!wallet) {
             throw new Error("Wallet not found");
         }
@@ -3680,9 +3622,7 @@ let FlutterwaveService = class FlutterwaveService {
 exports.FlutterwaveService = FlutterwaveService;
 exports.FlutterwaveService = FlutterwaveService = __decorate([
     (0, common_1.Injectable)(),
-    __param(1, (0, mongoose_1.InjectModel)(schema_2.WalletModel.name)),
-    __param(2, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _c : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
 ], FlutterwaveService);
 const CreateSubaccount = {
     status: "success",
@@ -3784,6 +3724,7 @@ exports.PaystackService = PaystackService = __decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.serviceResponse = serviceResponse;
 exports.getMetadata = getMetadata;
+exports.getSqlMetadata = getSqlMetadata;
 function serviceResponse({ message, data, status, metadata }) {
     return {
         message,
@@ -3795,6 +3736,16 @@ function serviceResponse({ message, data, status, metadata }) {
 async function getMetadata({ model, query, querys, }) {
     const { page = 1, limit = 10 } = query;
     const total = await model.countDocuments(querys);
+    return {
+        total,
+        totalPage: Math.ceil(total / limit),
+        currentPage: page,
+        limit: limit,
+    };
+}
+async function getSqlMetadata({ model, query, querys, }) {
+    const { page = 1, limit = 10 } = query;
+    const total = await model.count(querys);
     return {
         total,
         totalPage: Math.ceil(total / limit),
@@ -4019,6 +3970,891 @@ exports.WebSocketGatewayService = WebSocketGatewayService = __decorate([
 
 /***/ }),
 
+/***/ "./libs/sql-schema/src/cart.sql-schema.ts":
+/*!************************************************!*\
+  !*** ./libs/sql-schema/src/cart.sql-schema.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartSqlModel = void 0;
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+class ProductColor {
+}
+let CartSqlModel = class CartSqlModel {
+};
+exports.CartSqlModel = CartSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => sql_schema_1.ProductSqlModel, { eager: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'productID' }),
+    __metadata("design:type", typeof (_a = typeof sql_schema_1.ProductSqlModel !== "undefined" && sql_schema_1.ProductSqlModel) === "function" ? _a : Object)
+], CartSqlModel.prototype, "product", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "productID", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ['custom', 'store'],
+        default: 'custom',
+    }),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "productName", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'simple-json',
+        nullable: true,
+    }),
+    __metadata("design:type", ProductColor)
+], CartSqlModel.prototype, "color", void 0);
+__decorate([
+    (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], CartSqlModel.prototype, "price", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CartSqlModel.prototype, "designImage", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'simple-json',
+        nullable: true,
+    }),
+    __metadata("design:type", typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object)
+], CartSqlModel.prototype, "metadata", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
+], CartSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
+], CartSqlModel.prototype, "updatedAt", void 0);
+exports.CartSqlModel = CartSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'carts' })
+], CartSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/categories.sql-schema.ts":
+/*!******************************************************!*\
+  !*** ./libs/sql-schema/src/categories.sql-schema.ts ***!
+  \******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CategoriesSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+let CategoriesSqlModel = class CategoriesSqlModel {
+};
+exports.CategoriesSqlModel = CategoriesSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], CategoriesSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CategoriesSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], CategoriesSqlModel.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], CategoriesSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], CategoriesSqlModel.prototype, "updatedAt", void 0);
+exports.CategoriesSqlModel = CategoriesSqlModel = __decorate([
+    (0, typeorm_1.Entity)()
+], CategoriesSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/design.sql-schema.ts":
+/*!**************************************************!*\
+  !*** ./libs/sql-schema/src/design.sql-schema.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DesignSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! ./user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+let DesignSqlModel = class DesignSqlModel {
+};
+exports.DesignSqlModel = DesignSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], DesignSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DesignSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DesignSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_sql_schema_1.UserSqlModel, { eager: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'userID' }),
+    __metadata("design:type", typeof (_a = typeof user_sql_schema_1.UserSqlModel !== "undefined" && user_sql_schema_1.UserSqlModel) === "function" ? _a : Object)
+], DesignSqlModel.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DesignSqlModel.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DesignSqlModel.prototype, "url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'simple-array',
+        nullable: true,
+        comment: 'Stores an array of string tags.',
+    }),
+    __metadata("design:type", Array)
+], DesignSqlModel.prototype, "tags", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], DesignSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
+], DesignSqlModel.prototype, "updatedAt", void 0);
+exports.DesignSqlModel = DesignSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'designs' })
+], DesignSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/index.ts":
+/*!**************************************!*\
+  !*** ./libs/sql-schema/src/index.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(/*! ./user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./order.sql-schema */ "./libs/sql-schema/src/order.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./categories.sql-schema */ "./libs/sql-schema/src/categories.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./cart.sql-schema */ "./libs/sql-schema/src/cart.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./design.sql-schema */ "./libs/sql-schema/src/design.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts"), exports);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/order.sql-schema.ts":
+/*!*************************************************!*\
+  !*** ./libs/sql-schema/src/order.sql-schema.ts ***!
+  \*************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d, _e;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OrderSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! ./user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const _1 = __webpack_require__(/*! . */ "./libs/sql-schema/src/index.ts");
+let OrderSqlModel = class OrderSqlModel {
+};
+exports.OrderSqlModel = OrderSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_sql_schema_1.UserSqlModel, (user) => user._id),
+    (0, typeorm_1.JoinColumn)({ name: 'userID' }),
+    __metadata("design:type", typeof (_a = typeof user_sql_schema_1.UserSqlModel !== "undefined" && user_sql_schema_1.UserSqlModel) === "function" ? _a : Object)
+], OrderSqlModel.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => _1.CartSqlModel, (cart) => cart._id),
+    __metadata("design:type", Array)
+], OrderSqlModel.prototype, "products", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "flutterwaveRef", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "paystackRef", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "authorization_url", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "accessCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "tx_ref", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], OrderSqlModel.prototype, "isPaid", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'decimal',
+        precision: 10,
+        scale: 2,
+    }),
+    __metadata("design:type", Number)
+], OrderSqlModel.prototype, "totalPrice", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'simple-array', nullable: true }),
+    __metadata("design:type", Array)
+], OrderSqlModel.prototype, "imageUrls", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object)
+], OrderSqlModel.prototype, "orderDetails", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'pending' }),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], OrderSqlModel.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", typeof (_c = typeof Record !== "undefined" && Record) === "function" ? _c : Object)
+], OrderSqlModel.prototype, "shippingAddress", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
+], OrderSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
+], OrderSqlModel.prototype, "updatedAt", void 0);
+exports.OrderSqlModel = OrderSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'orders' })
+], OrderSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/otp.sql-schema.ts":
+/*!***********************************************!*\
+  !*** ./libs/sql-schema/src/otp.sql-schema.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OtpSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+let OtpSqlModel = class OtpSqlModel {
+};
+exports.OtpSqlModel = OtpSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "code", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "code1", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'active' }),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 30 }),
+    __metadata("design:type", Number)
+], OtpSqlModel.prototype, "duration", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'enum', enum: enum_1.OtpType, default: enum_1.OtpType.EMAIL_VERIFICATION }),
+    __metadata("design:type", String)
+], OtpSqlModel.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], OtpSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], OtpSqlModel.prototype, "updatedAt", void 0);
+exports.OtpSqlModel = OtpSqlModel = __decorate([
+    (0, typeorm_1.Entity)()
+], OtpSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/product.sql-schema.ts":
+/*!***************************************************!*\
+  !*** ./libs/sql-schema/src/product.sql-schema.ts ***!
+  \***************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
+const user_sql_schema_1 = __webpack_require__(/*! ./user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+class ProductColor {
+}
+class ProductSize {
+}
+class Mockups {
+}
+class DesignRect {
+}
+class DesignArea {
+}
+let ProductSqlModel = class ProductSqlModel {
+    generateId() {
+        this.id = "PDT" + (0, crypto_1.randomInt)(100, 999) + (0, crypto_1.randomUUID)().replace(/\D/g, '').substring(0, 3);
+    }
+};
+exports.ProductSqlModel = ProductSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "isFeatured", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_sql_schema_1.UserSqlModel, user => user._id),
+    (0, typeorm_1.JoinColumn)({ name: 'userID' }),
+    __metadata("design:type", typeof (_a = typeof user_sql_schema_1.UserSqlModel !== "undefined" && user_sql_schema_1.UserSqlModel) === "function" ? _a : Object)
+], ProductSqlModel.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text' }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "image", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "price", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "basePrice", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "salePrice", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "backgroundIn", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, comment: 'legacy' }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "categoryID", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'int', default: 0, nullable: true }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "quantity", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ['custom', 'store'],
+        default: 'custom',
+    }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "sizeGuide", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "measurement", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'float', nullable: true }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "distance", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "enum", enum: enum_1.ProductStatusEnum, default: enum_1.ProductStatusEnum.ACTIVE }),
+    __metadata("design:type", String)
+], ProductSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'simple-array' }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "types", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'simple-array', }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "imageUrls", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Mockups)
+], ProductSqlModel.prototype, "mockups", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", DesignArea)
+], ProductSqlModel.prototype, "designArea", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "availableColors", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "availableSizes", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], ProductSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
+], ProductSqlModel.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ProductSqlModel.prototype, "generateId", null);
+exports.ProductSqlModel = ProductSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'products' })
+], ProductSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/user.sql-schema.ts":
+/*!************************************************!*\
+  !*** ./libs/sql-schema/src/user.sql-schema.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const bcrypt = __webpack_require__(/*! bcrypt */ "bcrypt");
+const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+class Referral {
+}
+let UserSqlModel = class UserSqlModel {
+    async setupDefaultsOnInsert() {
+        console.log('Running @BeforeInsert Hook');
+        this.id = (0, crypto_1.randomInt)(99999) + (0, crypto_1.randomUUID)().replace(/\D/g, "").substring(0, 5);
+        this.username = this.username || this.email;
+        const generatedRefCode = (this.username.substring(0, 2) +
+            (0, crypto_1.randomInt)(99) +
+            (0, crypto_1.randomUUID)().substring(0, 2)).toUpperCase();
+        if (!this.referral) {
+            this.referral = {};
+        }
+        this.referral.refCode = generatedRefCode;
+        this.referral.status = 'active';
+        this.refCode = generatedRefCode;
+        if (this.password) {
+            const salt = await bcrypt.genSalt();
+            this.password = await bcrypt.hash(this.password, salt);
+        }
+    }
+    async hashPasswordOnUpdate() {
+    }
+};
+exports.UserSqlModel = UserSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "title", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "playerId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'simple-array',
+        nullable: true
+    }),
+    __metadata("design:type", Array)
+], UserSqlModel.prototype, "roles", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: enum_1.UserType,
+        default: enum_1.UserType.USER,
+    }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "userType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: enum_1.UserStatus,
+        default: enum_1.UserStatus.ACTIVE,
+    }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "emailStatus", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "fullname", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "firstname", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "lastname", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "phone", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "profileImage", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserSqlModel.prototype, "isAdmin", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserSqlModel.prototype, "isSuperAdmin", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'date', nullable: true }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], UserSqlModel.prototype, "dob", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "state", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "country", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "gender", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "localGovernmentArea", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object)
+], UserSqlModel.prototype, "socialMediaProfile", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "residentialAddress", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json' }),
+    __metadata("design:type", Referral)
+], UserSqlModel.prototype, "referral", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "refBy", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "refCode", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
+], UserSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
+], UserSqlModel.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserSqlModel.prototype, "setupDefaultsOnInsert", null);
+__decorate([
+    (0, typeorm_1.BeforeUpdate)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserSqlModel.prototype, "hashPasswordOnUpdate", null);
+exports.UserSqlModel = UserSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'users' })
+], UserSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/wallet.sql-schema.ts":
+/*!**************************************************!*\
+  !*** ./libs/sql-schema/src/wallet.sql-schema.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WalletSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+let WalletSqlModel = class WalletSqlModel {
+};
+exports.WalletSqlModel = WalletSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "barter_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "accountName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "accountNumber", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "bankName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "bankCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "customerCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, default: 0 }),
+    __metadata("design:type", Number)
+], WalletSqlModel.prototype, "balance", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'NGN' }),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "currency", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'active', nullable: true }),
+    __metadata("design:type", String)
+], WalletSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], WalletSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], WalletSqlModel.prototype, "updatedAt", void 0);
+exports.WalletSqlModel = WalletSqlModel = __decorate([
+    (0, typeorm_1.Entity)()
+], WalletSqlModel);
+
+
+/***/ }),
+
 /***/ "./libs/strategy/src/facebook.strategy.ts":
 /*!************************************************!*\
   !*** ./libs/strategy/src/facebook.strategy.ts ***!
@@ -4187,29 +5023,29 @@ const passport_jwt_1 = __webpack_require__(/*! passport-jwt */ "passport-jwt");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    constructor(userModel, configService) {
+    constructor(userRepository, configService) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: configService.get("JWT_SECRET"),
         });
-        this.userModel = userModel;
+        this.userRepository = userRepository;
         this.configService = configService;
     }
     async validate(payload) {
-        const user = await this.userModel.findById(payload.sub);
+        const user = await this.userRepository.findOneBy({ _id: payload.sub });
         return user;
     }
 };
 exports.JwtStrategy = JwtStrategy;
 exports.JwtStrategy = JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _b : Object])
+    __param(0, (0, typeorm_1.InjectRepository)(sql_schema_1.UserSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _b : Object])
 ], JwtStrategy);
 
 
@@ -4352,7 +5188,7 @@ exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
         controllers: [admin_controller_1.AdminController],
-        providers: [admin_service_1.AdminService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService, service_1.FlutterwaveService],
+        providers: [admin_service_1.AdminService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService,],
     })
 ], AdminModule);
 
@@ -4375,72 +5211,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminService = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
 let AdminService = class AdminService {
-    constructor(cartModel, categoriesModel, notificationActivity, userModel, productModel, orderModel, designModel) {
-        this.cartModel = cartModel;
-        this.categoriesModel = categoriesModel;
-        this.notificationActivity = notificationActivity;
-        this.userModel = userModel;
-        this.productModel = productModel;
-        this.orderModel = orderModel;
-        this.designModel = designModel;
-    }
+    constructor() { }
     async getDashboardStats() {
-        const totalUsers = await this.userModel.countDocuments().exec();
-        const totalProducts = await this.productModel.countDocuments().exec();
-        const totalDesigns = await this.designModel.countDocuments().exec();
-        const totalOrders = await this.orderModel.countDocuments().exec();
-        const totalCarts = await this.cartModel.countDocuments().exec();
-        const totalCategories = await this.categoriesModel.countDocuments().exec();
-        const totalCompletedOrders = await this.orderModel
-            .countDocuments({ status: "completed" })
-            .exec();
-        const totalPendingOrders = await this.orderModel
-            .countDocuments({ status: "pending" })
-            .exec();
-        const totalCancelledOrders = await this.orderModel
-            .countDocuments({ status: "cancelled" })
-            .exec();
-        const totalUsersWithOrders = await this.orderModel
-            .distinct("userID")
-            .exec();
-        return (0, service_1.serviceResponse)({ message: "Dashboard stats retrieved", status: true,
-            data: {
-                totalUsers,
-                totalProducts,
-                totalDesigns,
-                totalOrders,
-                totalCarts,
-                totalCategories,
-                totalCompletedOrders,
-                totalPendingOrders,
-                totalCancelledOrders,
-                totalUsersWithOrders: totalUsersWithOrders.length,
-            }
-        });
+        return {};
     }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.CartModel.name)),
-    __param(1, (0, mongoose_1.InjectModel)(schema_1.CategoriesModel.name)),
-    __param(3, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __param(4, (0, mongoose_1.InjectModel)(schema_1.ProductModel.name)),
-    __param(5, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
-    __param(6, (0, mongoose_1.InjectModel)(schema_1.DesignModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof service_1.NotificationService !== "undefined" && service_1.NotificationService) === "function" ? _c : Object, typeof (_d = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _d : Object, typeof (_e = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _e : Object, typeof (_f = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _f : Object, typeof (_g = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _g : Object])
+    __metadata("design:paramtypes", [])
 ], AdminService);
 
 
@@ -4478,7 +5261,7 @@ let AppController = AppController_1 = class AppController {
         this.logger = new common_1.Logger(AppController_1.name);
     }
     async getLgaState(stateName) {
-        let data = JSON.parse((0, fs_1.readFileSync)("allnigeria_polling_units_with_coords.json", "utf-8"));
+        const data = JSON.parse((0, fs_1.readFileSync)("allnigeria_polling_units_with_coords.json", "utf-8"));
         let state;
         if (stateName) {
             state = data.find((state) => state.name.toLowerCase() === stateName.toLowerCase()).lgas.map((lga) => lga.name);
@@ -4545,13 +5328,25 @@ const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 const mailer_1 = __webpack_require__(/*! @nestjs-modules/mailer */ "@nestjs-modules/mailer");
 const schedule_1 = __webpack_require__(/*! @nestjs/schedule */ "@nestjs/schedule");
 const throttler_1 = __webpack_require__(/*! @nestjs/throttler */ "@nestjs/throttler");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const products_module_1 = __webpack_require__(/*! ./products/products.module */ "./src/products/products.module.ts");
 const cart_module_1 = __webpack_require__(/*! ./cart/cart.module */ "./src/cart/cart.module.ts");
-const global_mongoose_module_1 = __webpack_require__(/*! src/global-mongoose.module */ "./src/global-mongoose.module.ts");
 const categories_module_1 = __webpack_require__(/*! ./categories/categories.module */ "./src/categories/categories.module.ts");
 const orders_module_1 = __webpack_require__(/*! ./orders/orders.module */ "./src/orders/orders.module.ts");
 const designs_module_1 = __webpack_require__(/*! ./designs/designs.module */ "./src/designs/designs.module.ts");
 const admin_module_1 = __webpack_require__(/*! ./admin/admin.module */ "./src/admin/admin.module.ts");
+const otp_module_1 = __webpack_require__(/*! ./otp/otp.module */ "./src/otp/otp.module.ts");
+const wallet_module_1 = __webpack_require__(/*! ./wallet/wallet.module */ "./src/wallet/wallet.module.ts");
+const database_config_1 = __webpack_require__(/*! ./config/database.config */ "./src/config/database.config.ts");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const product_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
+const order_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/order.sql-schema */ "./libs/sql-schema/src/order.sql-schema.ts");
+const categories_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/categories.sql-schema */ "./libs/sql-schema/src/categories.sql-schema.ts");
+const cart_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/cart.sql-schema */ "./libs/sql-schema/src/cart.sql-schema.ts");
+const design_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/design.sql-schema */ "./libs/sql-schema/src/design.sql-schema.ts");
+const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
+const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -4574,18 +5369,41 @@ exports.AppModule = AppModule = __decorate([
                     dest: './uploads',
                 }),
             }),
-            global_mongoose_module_1.GlobalMongooseModule,
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                load: [database_config_1.default],
+            }),
+            jwt_1.JwtModule.registerAsync({
+                global: true,
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    secret: configService.get('JWT_SECRET'),
+                    signOptions: {
+                        expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
+                    },
+                }),
             }),
             throttler_1.ThrottlerModule.forRoot([{
                     ttl: 60000,
                     limit: 10,
                 }]),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    type: 'mysql',
+                    url: configService.get('SQL_URI'),
+                    entities: [user_sql_schema_1.UserSqlModel, product_sql_schema_1.ProductSqlModel, order_sql_schema_1.OrderSqlModel, categories_sql_schema_1.CategoriesSqlModel, cart_sql_schema_1.CartSqlModel, design_sql_schema_1.DesignSqlModel, otp_sql_schema_1.OtpSqlModel, wallet_sql_schema_1.WalletSqlModel],
+                    synchronize: true,
+                    logging: ['query', 'error'],
+                }),
+            }),
+            typeorm_1.TypeOrmModule.forFeature([product_sql_schema_1.ProductSqlModel, categories_sql_schema_1.CategoriesSqlModel]),
             auth_module_1.AuthModule,
             admin_module_1.AdminModule,
             uploads_module_1.UploadsModule,
-            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, admin_module_1.AdminModule,
+            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, otp_module_1.OtpModule, wallet_module_1.WalletModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -4624,6 +5442,212 @@ exports.AppService = AppService = __decorate([
 
 /***/ }),
 
+/***/ "./src/auth/auth-sql.service.ts":
+/*!**************************************!*\
+  !*** ./src/auth/auth-sql.service.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthSqlService = void 0;
+const bcrypt = __webpack_require__(/*! bcrypt */ "bcrypt");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
+let AuthSqlService = class AuthSqlService {
+    constructor(config, sendMailService, smsService, flutterwaveService, jwtService, userRepository, otpRepository) {
+        this.config = config;
+        this.sendMailService = sendMailService;
+        this.smsService = smsService;
+        this.flutterwaveService = flutterwaveService;
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
+        this.otpRepository = otpRepository;
+    }
+    async register(users) {
+        try {
+            let checkUserRefId;
+            if (users.useRefCode) {
+                const user = await this.userRepository.findOne({
+                    where: { refCode: users.useRefCode },
+                });
+                if (!user) {
+                    throw new common_1.NotFoundException("Referral code not found");
+                }
+                users.refBy = user.id.toString();
+            }
+            users.referral = {
+                refBy: users.refBy,
+                refCode: "",
+                status: "active",
+                max: 0,
+                amount: 0,
+            };
+            const user = this.userRepository.create(users);
+            const created = await this.userRepository.save(user);
+            const data1 = await this.otpRepository.create({
+                userID: created._id,
+                type: "EmailVerification",
+                code: Math.floor(100000 + Math.random() * 900000).toString(),
+                status: "pending",
+                createdAt: new Date(),
+            });
+            const data = await this.otpRepository.save(data1);
+            const message = await this.smsService.generateMessage(data);
+            this.sendMailService.sendMail({
+                to: created.email,
+                subject: "Email Code Verification",
+                text: message,
+            });
+            return {
+                message: "Registration successful, Please Proceed to Email Verification",
+                userID: created,
+            };
+        }
+        catch (error) {
+            throw new common_1.NotAcceptableException(error.message);
+        }
+    }
+    async login(email, password) {
+        const user = await this.userRepository.findOne({ where: { email } });
+        if (user) {
+            console.log(user);
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (isMatch) {
+                if (user.status === "disabled") {
+                    throw new common_1.UnauthorizedException("User is disabled");
+                }
+                return this.getLoginToken(user);
+            }
+            throw new common_1.UnauthorizedException("Invalid Credentials");
+        }
+        throw new common_1.NotFoundException("No User Found");
+    }
+    getLoginToken(user) {
+        const payload = {
+            sub: user._id,
+            username: user.username,
+            email: user.email,
+        };
+        const access_token = this.jwtService.sign(payload, { expiresIn: "30d" });
+        const refresh_token = this.jwtService.sign(payload, {
+            expiresIn: "30d",
+            secret: this.config.get("JWT_SECRET2"),
+        });
+        return {
+            message: "Login successful",
+            status: true,
+            data: user,
+            access_token,
+            refresh_token,
+        };
+    }
+    async sendTwoFactorAuthenticationMail(body) {
+        const user = await this.userRepository.findOne({
+            where: [{ id: body.userID }, { email: body.email || body.userID }],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException("No User Found");
+        }
+        const data = await this.otpRepository.save({
+            userID: user.id,
+            type: body.type,
+            code: Math.floor(100000 + Math.random() * 900000).toString(),
+            status: "pending",
+            createdAt: new Date(),
+            expiresAt: new Date(Date.now() + 3600000),
+        });
+        const message = await this.smsService.generateMessage(data);
+        this.sendMailService.sendMail({
+            to: user.email,
+            subject: body.type,
+            text: message,
+        });
+        const d = { ...data };
+        delete d.code;
+        return {
+            message: "Code sent",
+            data: d,
+        };
+    }
+    async editProfile(body, userID) {
+        delete body.email;
+        delete body.id;
+        delete body.isAdmin;
+        delete body.isSuperAdmin;
+        delete body.status;
+        delete body.password;
+        await this.userRepository.update(userID, body);
+        const user = await this.userRepository.findOne({ where: { id: userID } });
+        return {
+            message: "User profile updated",
+            data: user,
+        };
+    }
+    async getProfile(userID) {
+        const user = await this.userRepository.findOne({ where: { id: userID } });
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        return {
+            message: "User profile found",
+            data: user,
+        };
+    }
+    async forgotPassword(token, code, newPassword) {
+        const checkCode = await this.otpRepository.findOne({
+            where: { code, status: "pending", type: "PasswordReset" },
+        });
+        if (!checkCode) {
+            throw new common_1.NotFoundException("Code not found or expired");
+        }
+        const user = await this.userRepository.findOne({
+            where: { id: checkCode.userID },
+        });
+        await this.otpRepository.update(checkCode.id, { status: "used" });
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await this.userRepository.update(checkCode.userID, {
+            password: hashedPassword,
+        });
+        return {
+            message: "Password successfully updated",
+        };
+    }
+};
+exports.AuthSqlService = AuthSqlService;
+exports.AuthSqlService = AuthSqlService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(5, (0, typeorm_1.InjectRepository)(user_sql_schema_1.UserSqlModel)),
+    __param(6, (0, typeorm_1.InjectRepository)(otp_sql_schema_1.OtpSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object, typeof (_b = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _b : Object, typeof (_c = typeof service_1.SmsService !== "undefined" && service_1.SmsService) === "function" ? _c : Object, typeof (_d = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _d : Object, typeof (_e = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _e : Object, typeof (_f = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object])
+], AuthSqlService);
+
+
+/***/ }),
+
 /***/ "./src/auth/auth.controller.ts":
 /*!*************************************!*\
   !*** ./src/auth/auth.controller.ts ***!
@@ -4643,77 +5667,52 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const dto_2 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const auth_sql_service_1 = __webpack_require__(/*! ./auth-sql.service */ "./src/auth/auth-sql.service.ts");
 class RegisterDTO extends (0, swagger_1.PickType)(dto_2.UserDTO, ['title', 'isAdmin', 'isSuperAdmin', 'userType', 'useRefCode', 'firstname', 'fullname', 'lastname', 'email', 'password', 'gender', 'phone', "profileImage",]) {
 }
 let AuthController = class AuthController {
-    constructor(authService) {
-        this.authService = authService;
+    constructor(authSqlService) {
+        this.authSqlService = authSqlService;
     }
     register(data) {
-        return this.authService.register(data);
+        return this.authSqlService.register(data);
     }
     signIn(data) {
-        return this.authService.login(data.email, data.password);
+        return this.authSqlService.login(data.email, data.password);
     }
     sendTwoFactorAuthenticationMail(req) {
-        return this.authService.sendTwoFactorAuthenticationMail(req.body);
-    }
-    sendTwoFactorAuthenticationSms(req) {
-        return this.authService.sendTwoFactorAuthenticationSms(req.body);
-    }
-    twoFactorAuthenticationLogin(req) {
-        return this.authService.twoFactorAuthenticationLogin(req.body);
+        return this.authSqlService.sendTwoFactorAuthenticationMail(req.body);
     }
     async refresh(refreshToken) {
-        return this.authService.refreshToken(refreshToken);
+        return {};
     }
     getProfile(req) {
         return req.user;
     }
     editProfile(req) {
-        return this.authService.editProfile(req.body, req.user._id);
-    }
-    addBankAccount(req) {
-        return this.authService.addBankAccount(req.user._id, req.body);
-    }
-    removeBankAccount(req, accountNumber) {
-        return this.authService.removeBankAccount(req.user._id, accountNumber);
-    }
-    getUserBankAccount(req) {
-        return this.authService.getUserBanks(req.user._id);
-    }
-    editUserBankAccount(req) {
-        return this.authService.editUserBanks(req.user._id, req.body);
-    }
-    async googleAuth(req) { }
-    googleAuthRedirect(req) {
-        return this.authService.ssoGoogle(req);
+        return this.authSqlService.editProfile(req.body, req.user._id);
     }
     async facebookLogin() { }
-    async facebookLoginRedirect(req) {
-        return this.authService.ssoFacebook(req);
-    }
     changePassword(req) {
-        return this.authService.changePassword(req.user._id, req.body.currentPassword, req.body.newPassword);
+        return {};
     }
     deleteAccount(req) {
-        return this.authService.deleteAccount(req.user._id.toString(), req.body.email, req.body.reason);
+        return {};
     }
     forgotPassword(req) {
-        return this.authService.forgotPassword(req.body.token, req.body.code, req.body.newPassword);
+        return {};
     }
     verifyCode(req) {
-        return this.authService.verifyCode(req.body.type, req.body.code);
+        return {};
     }
 };
 exports.AuthController = AuthController;
@@ -4754,27 +5753,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "sendTwoFactorAuthenticationMail", null);
 __decorate([
-    (0, common_1.Post)('send-code-to-sms'),
-    (0, swagger_1.ApiBody)({ type: dto_2.UserIDDTO, description: 'User ID for sending the code', }),
-    (0, swagger_1.ApiOperation)({ summary: 'Send two-factor authentication code via email' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Code sent successfully.' }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof common_1.Request !== "undefined" && common_1.Request) === "function" ? _d : Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "sendTwoFactorAuthenticationSms", null);
-__decorate([
-    (0, common_1.Post)('verify-authentication'),
-    (0, swagger_1.ApiBody)({ type: dto_2.VerifyAuthenticationDto, description: 'Data for verification' }),
-    (0, swagger_1.ApiOperation)({ summary: 'Verify two-factor authentication' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Authentication successful.' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Code not found or expired.' }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_e = typeof common_1.Request !== "undefined" && common_1.Request) === "function" ? _e : Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "twoFactorAuthenticationLogin", null);
-__decorate([
     (0, common_1.Post)('refresh'),
     (0, swagger_1.ApiOperation)({ summary: 'Refresh access token' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'New access token generated.' }),
@@ -4807,71 +5785,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "editProfile", null);
 __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, common_1.Post)('add-bank-account'),
-    (0, swagger_1.ApiOperation)({ summary: 'Add bank account details' }),
-    (0, swagger_1.ApiBody)({ type: dto_1.BankAccountDTO, description: 'Bank account details' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account added successfully' }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "addBankAccount", null);
-__decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, common_1.Post)('remove-bank-account/:accountNumber'),
-    (0, swagger_1.ApiOperation)({ summary: 'Remove bank account details' }),
-    (0, swagger_1.ApiParam)({ name: 'accountNumber', required: true, type: String, description: 'Account number to remove' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account removed successfully' }),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("accountNumber")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "removeBankAccount", null);
-__decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, common_1.Get)('get-bank-account'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get user bank account details' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account details retrieved successfully' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "getUserBankAccount", null);
-__decorate([
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, common_1.Patch)('edit-bank-account'),
-    (0, swagger_1.ApiOperation)({ summary: 'Edit user bank account details' }),
-    (0, swagger_1.ApiBody)({ type: dto_1.BankAccountDTO, description: 'Bank account details' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Bank account updated successfully' }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Bank account not found' }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "editUserBankAccount", null);
-__decorate([
-    (0, common_1.Get)('google'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
-    (0, swagger_1.ApiOperation)({ summary: 'Login with Google' }),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "googleAuth", null);
-__decorate([
-    (0, common_1.Get)('google/callback'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
-    (0, swagger_1.ApiOperation)({ summary: 'Google authentication callback' }),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "googleAuthRedirect", null);
-__decorate([
     (0, common_1.Get)("facebook"),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)("facebook")),
     (0, swagger_1.ApiOperation)({ summary: 'Login with Facebook' }),
@@ -4879,15 +5792,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "facebookLogin", null);
-__decorate([
-    (0, common_1.Get)("/facebook/callback"),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)("facebook")),
-    (0, swagger_1.ApiOperation)({ summary: 'Facebook authentication callback' }),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
-], AuthController.prototype, "facebookLoginRedirect", null);
 __decorate([
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, common_1.Post)('change-password'),
@@ -4940,7 +5844,7 @@ exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_sql_service_1.AuthSqlService !== "undefined" && auth_sql_service_1.AuthSqlService) === "function" ? _a : Object])
 ], AuthController);
 
 
@@ -4963,7 +5867,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
-const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
+const auth_sql_service_1 = __webpack_require__(/*! ./auth-sql.service */ "./src/auth/auth-sql.service.ts");
 const auth_controller_1 = __webpack_require__(/*! ./auth.controller */ "./src/auth/auth.controller.ts");
 const strategy_1 = __webpack_require__(/*! @app/strategy */ "./libs/strategy/src/index.ts");
 const local_strategy_1 = __webpack_require__(/*! ./local.strategy */ "./src/auth/local.strategy.ts");
@@ -4971,486 +5875,30 @@ const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/in
 const service_2 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const service_3 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const users_module_1 = __webpack_require__(/*! src/users/users.module */ "./src/users/users.module.ts");
-const users_service_1 = __webpack_require__(/*! src/users/users.service */ "./src/users/users.service.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [passport_1.PassportModule, users_module_1.UsersModule],
+        imports: [passport_1.PassportModule, users_module_1.UsersModule, typeorm_1.TypeOrmModule.forFeature([user_sql_schema_1.UserSqlModel, otp_sql_schema_1.OtpSqlModel])],
         providers: [
-            auth_service_1.AuthService,
+            auth_sql_service_1.AuthSqlService,
             strategy_1.JwtStrategy,
             strategy_1.GoogleStrategy,
             strategy_1.FacebookStrategy,
             strategy_1.XStrategy,
-            users_service_1.UsersService,
             service_1.SendMailService,
             service_2.SmsService,
             local_strategy_1.LocalStrategy,
             service_1.NotificationService, service_1.NotificationGateway, service_3.FlutterwaveService
         ],
         controllers: [auth_controller_1.AuthController],
-        exports: [auth_service_1.AuthService]
+        exports: [auth_sql_service_1.AuthSqlService]
     })
 ], AuthModule);
-
-
-/***/ }),
-
-/***/ "./src/auth/auth.service.ts":
-/*!**********************************!*\
-  !*** ./src/auth/auth.service.ts ***!
-  \**********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c, _d, _e, _f, _g, _h;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AuthService = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const bcrypt = __webpack_require__(/*! bcrypt */ "bcrypt");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
-const otplib_1 = __webpack_require__(/*! otplib */ "otplib");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-const service_2 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-const service_3 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-let AuthService = class AuthService {
-    constructor(config, userModel, otpModel, authenticatorModel, jwtService, flutterwaveService, smsService, sendMailService) {
-        this.config = config;
-        this.userModel = userModel;
-        this.otpModel = otpModel;
-        this.authenticatorModel = authenticatorModel;
-        this.jwtService = jwtService;
-        this.flutterwaveService = flutterwaveService;
-        this.smsService = smsService;
-        this.sendMailService = sendMailService;
-    }
-    async register(users) {
-        try {
-            let checkUserRefId;
-            if (users.useRefCode) {
-                const user = await this.userModel.findOne({
-                    refCode: users.useRefCode,
-                });
-                if (!user) {
-                    throw new common_1.NotFoundException("Referral code not found");
-                }
-                checkUserRefId = user._id.toString();
-            }
-            const referral = {
-                refBy: checkUserRefId,
-            };
-            const created = await this.userModel.create({
-                ...users,
-                refBy: checkUserRefId,
-                referral,
-            });
-            const data = await this.otpModel.create({
-                userID: created._id,
-                type: "EmailVerification",
-            });
-            const message = await this.smsService.generateMessage(data.toJSON());
-            this.sendMailService.sendMail({
-                to: created.email,
-                subject: "Email Code Verification",
-                text: message,
-            });
-            this.flutterwaveService.createVirtualAccount({
-                account_name: created.fullname,
-                email: created.email,
-                mobilenumber: created.phone,
-            });
-            return {
-                message: "Registration successful, Please Proceed to Email Verification",
-                userID: created._id,
-            };
-        }
-        catch (error) {
-            throw new common_1.NotAcceptableException(error.message);
-        }
-    }
-    async login(email, password) {
-        const user = await this.userModel
-            .findOne({ email })
-            .select([
-            "email",
-            "_id",
-            "username",
-            "id",
-            "password",
-            "userType",
-            "status",
-            "isAdmin",
-            "isSuperAdmin",
-            "emailStatus",
-        ]);
-        if (user) {
-            const isMatch = await bcrypt.compare(password, user.password);
-            console.log(isMatch, password);
-            if (isMatch) {
-                if (user.status === "disabled") {
-                    throw new common_1.UnauthorizedException("User is disabled");
-                }
-                return this.getLoginToken(user);
-            }
-            throw new common_1.UnauthorizedException("Invalid Credentials");
-        }
-        throw new common_1.NotFoundException("No User Found");
-    }
-    async verifyEmail(userID, code) {
-        const otp = await this.otpModel.findOne({
-            userID,
-            code,
-            type: "EmailVerification",
-        });
-        if (!otp) {
-            throw new common_1.NotFoundException("Invalid or expired code");
-        }
-        const user = await this.userModel.findByIdAndUpdate(userID, { emailStatus: "verified" }, { new: true });
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        await this.otpModel.findByIdAndDelete(otp._id);
-        return {
-            message: "Email verified successfully",
-            data: user,
-        };
-    }
-    getLoginToken(user) {
-        const payload = {
-            sub: user._id,
-            username: user.username,
-            email: user.email,
-        };
-        console.log(payload);
-        const access_token = this.jwtService.sign(payload, { expiresIn: "30d" });
-        const refresh_token = this.jwtService.sign(payload, {
-            expiresIn: "30d",
-            secret: this.config.get("JWT_SECRET2"),
-        });
-        return {
-            message: "Login successful",
-            status: true,
-            data: user,
-            access_token,
-            refresh_token,
-        };
-    }
-    async editProfile(body, userID) {
-        delete body.email;
-        delete body.id;
-        delete body.isAdmin;
-        delete body.isSuperAdmin;
-        delete body.status;
-        delete body.password;
-        const user = await this.userModel.findByIdAndUpdate(userID, body, {
-            new: true,
-        });
-        return {
-            message: "User profile updated",
-            data: user,
-        };
-    }
-    async addBankAccount(userID, bankAccount) {
-        const user = await this.userModel.findById(userID);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        user.bankAccount.push(bankAccount);
-        await user.save();
-        return {
-            message: "Bank account added",
-            data: user.bankAccount,
-        };
-    }
-    async removeBankAccount(userID, accountNumber) {
-        const user = await this.userModel.findById(userID);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        if (!user.bankAccount) {
-            throw new common_1.NotFoundException("No bank account found");
-        }
-        const index = user.bankAccount.findIndex((account) => account.accountNumber === accountNumber);
-        if (index === -1) {
-            throw new common_1.NotFoundException("Bank account not found");
-        }
-        user.bankAccount.splice(index, 1);
-        await user.save();
-        return {
-            message: "Bank account removed",
-            data: user.bankAccount,
-        };
-    }
-    async getUserBanks(userID) {
-        const user = await this.userModel.findById(userID);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        if (!user.bankAccount) {
-            throw new common_1.NotFoundException("No bank account found");
-        }
-        return {
-            message: "Bank account found",
-            data: user.bankAccount,
-        };
-    }
-    async editUserBanks(userID, bankAccount) {
-        const user = await this.userModel.findById(userID);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        if (!user.bankAccount) {
-            throw new common_1.NotFoundException("No bank account found");
-        }
-        const index = user.bankAccount.findIndex((account) => account.accountNumber === bankAccount.accountNumber);
-        if (index === -1) {
-            throw new common_1.NotFoundException("Bank account not found");
-        }
-        user.bankAccount[index] = bankAccount;
-        await user.save();
-        return {
-            message: "Bank account updated",
-            data: user.bankAccount,
-        };
-    }
-    async refreshToken(token) {
-        console.log(token);
-        const payload = this.jwtService.verify(token);
-        if (!payload) {
-            throw new common_1.UnauthorizedException("Invalid refresh token");
-        }
-        const user = await this.userModel.findById(payload.sub);
-        if (!user) {
-            throw new common_1.UnauthorizedException("User not found");
-        }
-        const payload1 = {
-            sub: user._id,
-            username: user.username,
-            email: user.email,
-        };
-        const newAccessToken = this.jwtService.sign(payload1, { expiresIn: "1d" });
-        const refresh_token = this.jwtService.sign(payload1, {
-            expiresIn: "30d",
-        });
-        return {
-            access_token: newAccessToken,
-            refresh_token,
-        };
-    }
-    async ssoGoogle(req) {
-        const user = await this.userModel.findOne({ email: req.user.email });
-        if (user) {
-            return this.getLoginToken(user);
-        }
-        else {
-            const created = await this.userModel.create({
-                ...req.user,
-                username: req.user.email,
-                password: "",
-            });
-            return this.getLoginToken(created);
-        }
-    }
-    async ssoFacebook(req) {
-        const user = await this.userModel.findOne({ email: req.user.email });
-        if (user) {
-            return this.getLoginToken(user);
-        }
-        else {
-            const created = await this.userModel.create({
-                ...req.user,
-                username: req.user.email,
-                password: "",
-            });
-            return this.getLoginToken(created);
-        }
-    }
-    async twoFactorAuthenticationLogin(body) {
-        let isValid = false;
-        if (body.token) {
-            const secret = await this.authenticatorModel.findOne({
-                userID: body.userID,
-            });
-            if (!secret) {
-                throw new common_1.NotFoundException("User has not set authenticator");
-            }
-            isValid = otplib_1.authenticator.check(body.token, secret.secret);
-        }
-        const code = await this.otpModel.findOne({
-            code: body.code,
-            type: body.type,
-            userID: body.userID,
-        });
-        isValid = code ? true : isValid;
-        if (!isValid) {
-            throw new common_1.NotFoundException("Code not found or expired");
-        }
-        const user = await this.userModel.findByIdAndUpdate(body.userID, {
-            emailStatus: "verified",
-        }, { new: true });
-        if (code) {
-            await this.otpModel.findByIdAndDelete(code._id);
-        }
-        return this.getLoginToken(user);
-    }
-    async sendTwoFactorAuthenticationMail(body) {
-        const user = await this.userModel.findOne({
-            $or: [{ _id: body.userID }, { email: body.email || body.userID }],
-        });
-        if (!user) {
-            throw new common_1.NotFoundException("No User Found");
-        }
-        const data = await this.otpModel.create({
-            userID: user._id.toString(),
-            type: body.type,
-        });
-        const message = await this.smsService.generateMessage(data.toJSON());
-        this.sendMailService.sendMail({
-            to: user.email,
-            subject: body.type,
-            text: message,
-        });
-        let d = data.toJSON();
-        delete d.code;
-        return {
-            message: "Code sent",
-            data: d,
-        };
-    }
-    async sendTwoFactorAuthenticationSms(body) {
-        const user = await this.userModel.findOne({
-            $or: [{ _id: body.userID }, { email: body.email || body.userID }],
-        });
-        if (!user) {
-            throw new common_1.NotFoundException("No User Found");
-        }
-        const data = await this.otpModel.create({
-            userID: user._id.toString(),
-            type: body.type,
-        });
-        const message = await this.smsService.generateMessage(data.toJSON());
-        this.smsService.sendSingleSMS(user.phone, message);
-        return {
-            message: "Code sent",
-            data,
-        };
-    }
-    async setTwoFactorAuthenticator(body) {
-        const isValid = otplib_1.authenticator.check(body.code, body.secret);
-        if (!isValid) {
-            throw new common_1.UnauthorizedException("Invalid Token");
-        }
-        const data = await this.authenticatorModel.create({
-            userID: body.userID,
-            secret: body.secret,
-        });
-        const user = await this.userModel.findById(body.userID);
-        this.sendMailService.sendMail({
-            to: user.email,
-            subject: "Two Factor Authenticator",
-            text: `${body.secret}`,
-        });
-        return {
-            message: "authenticator set",
-            data,
-        };
-    }
-    async changePassword(userID, currentPassword, newPassword) {
-        const user = await this.userModel.findById(userID);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
-        if (!isMatch) {
-            throw new common_1.UnauthorizedException("Current password is incorrect");
-        }
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
-        await this.userModel.findByIdAndUpdate(userID, {
-            password: hashedPassword,
-        });
-        return {
-            message: "Password successfully updated",
-        };
-    }
-    async deleteAccount(userID, email, reason) {
-        const user = await this.userModel.findOne({ email });
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        if (user._id.toString() !== userID) {
-            throw new common_1.NotAcceptableException("You are not allowed to delete this account");
-        }
-        await this.userModel.findByIdAndDelete(userID);
-        return {
-            message: "Account successfully deleted",
-            status: true,
-        };
-    }
-    async verifyCode(type, code) {
-        let isValid = false;
-        const checkCode = await this.otpModel.findOneAndUpdate({
-            code: code,
-            type,
-        }, { status: "used" });
-        isValid = checkCode ? true : isValid;
-        if (!isValid) {
-            throw new common_1.NotFoundException("Code not found or expired");
-        }
-        return {
-            message: "Code verified successfully",
-        };
-    }
-    async forgotPassword(token, code, newPassword) {
-        const checkCode = await this.otpModel.findOne({
-            code: code,
-            status: "used",
-            type: "PasswordReset",
-        });
-        if (!checkCode) {
-            throw new common_1.NotFoundException("Code not found or expired");
-        }
-        const user = await this.userModel.findById(checkCode.userID);
-        await this.otpModel.findByIdAndDelete(checkCode._id);
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
-        await this.userModel.findByIdAndUpdate(checkCode.userID, {
-            password: hashedPassword,
-        });
-        return {
-            message: "Password successfully updated",
-        };
-    }
-};
-exports.AuthService = AuthService;
-exports.AuthService = AuthService = __decorate([
-    (0, common_1.Injectable)(),
-    __param(1, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __param(2, (0, mongoose_1.InjectModel)(schema_1.OTPModel.name)),
-    __param(3, (0, mongoose_1.InjectModel)(schema_1.AuthenticatorModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _c : Object, typeof (_d = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _d : Object, typeof (_e = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _e : Object, typeof (_f = typeof service_3.FlutterwaveService !== "undefined" && service_3.FlutterwaveService) === "function" ? _f : Object, typeof (_g = typeof service_2.SmsService !== "undefined" && service_2.SmsService) === "function" ? _g : Object, typeof (_h = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _h : Object])
-], AuthService);
 
 
 /***/ }),
@@ -5477,7 +5925,7 @@ exports.LocalStrategy = void 0;
 const passport_local_1 = __webpack_require__(/*! passport-local */ "passport-local");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./src/auth/auth.service.ts");
+const auth_sql_service_1 = __webpack_require__(/*! ./auth-sql.service */ "./src/auth/auth-sql.service.ts");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
     constructor(authService) {
         super();
@@ -5496,8 +5944,85 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
 exports.LocalStrategy = LocalStrategy;
 exports.LocalStrategy = LocalStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_sql_service_1.AuthSqlService !== "undefined" && auth_sql_service_1.AuthSqlService) === "function" ? _a : Object])
 ], LocalStrategy);
+
+
+/***/ }),
+
+/***/ "./src/cart/cart-sql.service.ts":
+/*!**************************************!*\
+  !*** ./src/cart/cart-sql.service.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CartSqlService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const cart_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/cart.sql-schema */ "./libs/sql-schema/src/cart.sql-schema.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let CartSqlService = class CartSqlService {
+    constructor(cartRepository) {
+        this.cartRepository = cartRepository;
+    }
+    async create(cart, userData) {
+        const newCart = this.cartRepository.create({ ...cart, userID: userData._id.toString() });
+        const data = await this.cartRepository.save(newCart);
+        return (0, service_1.serviceResponse)({ data, message: 'Cart created', status: true });
+    }
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const carts = await this.cartRepository.find({
+            take: limit,
+            skip,
+            relations: ['productID']
+        });
+        return (0, service_1.serviceResponse)({ data: carts, message: 'Carts retrieved', status: true, metadata: await (0, service_1.getSqlMetadata)({ model: this.cartRepository, query, querys: {} }) });
+    }
+    async findByUser(userID) {
+        const cart = await this.cartRepository.find({ where: { userID }, relations: ['productID'] });
+        return (0, service_1.serviceResponse)({ data: cart, message: 'Cart retrieved', status: true });
+    }
+    async update(id, updateCartDto) {
+        const updated = await this.cartRepository.update(id, updateCartDto);
+        if (!updated)
+            return (0, service_1.serviceResponse)({ message: 'Cart not found', status: false });
+        return (0, service_1.serviceResponse)({ data: updated, message: 'Cart updated', status: true });
+    }
+    async delete(id) {
+        const result = await this.cartRepository.delete(id);
+        if (!result)
+            return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
+        return (0, service_1.serviceResponse)({ message: `Cart deleted`, status: true });
+    }
+    async clearUserCart(userID) {
+        const result = await this.cartRepository.delete({ userID: userID });
+        return (0, service_1.serviceResponse)({ message: `${result.affected} cart(s) deleted`, status: true });
+    }
+};
+exports.CartSqlService = CartSqlService;
+exports.CartSqlService = CartSqlService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(cart_sql_schema_1.CartSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], CartSqlService);
 
 
 /***/ }),
@@ -5526,15 +6051,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CartController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const cart_service_1 = __webpack_require__(/*! ./cart.service */ "./src/cart/cart.service.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const cart_sql_service_1 = __webpack_require__(/*! ./cart-sql.service */ "./src/cart/cart-sql.service.ts");
 let CartController = class CartController {
     constructor(cartService) {
         this.cartService = cartService;
     }
     async create(cart, req) {
-        return this.cartService.upset(cart, req.user);
+        return this.cartService.create(cart, req.user);
     }
     async findByUser(userID) {
         return this.cartService.findByUser(userID);
@@ -5620,7 +6145,7 @@ exports.CartController = CartController = __decorate([
     (0, swagger_1.ApiTags)('cart'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('carts'),
-    __metadata("design:paramtypes", [typeof (_a = typeof cart_service_1.CartService !== "undefined" && cart_service_1.CartService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof cart_sql_service_1.CartSqlService !== "undefined" && cart_sql_service_1.CartSqlService) === "function" ? _a : Object])
 ], CartController);
 
 
@@ -5643,95 +6168,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CartModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const cart_controller_1 = __webpack_require__(/*! ./cart.controller */ "./src/cart/cart.controller.ts");
-const cart_service_1 = __webpack_require__(/*! ./cart.service */ "./src/cart/cart.service.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const cart_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/cart.sql-schema */ "./libs/sql-schema/src/cart.sql-schema.ts");
+const cart_sql_service_1 = __webpack_require__(/*! ./cart-sql.service */ "./src/cart/cart-sql.service.ts");
 let CartModule = class CartModule {
 };
 exports.CartModule = CartModule;
 exports.CartModule = CartModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([cart_sql_schema_1.CartSqlModel])],
         controllers: [cart_controller_1.CartController],
-        providers: [cart_service_1.CartService],
+        providers: [cart_sql_service_1.CartSqlService],
+        exports: [cart_sql_service_1.CartSqlService]
     })
 ], CartModule);
-
-
-/***/ }),
-
-/***/ "./src/cart/cart.service.ts":
-/*!**********************************!*\
-  !*** ./src/cart/cart.service.ts ***!
-  \**********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CartService = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-let CartService = class CartService {
-    constructor(cartModel) {
-        this.cartModel = cartModel;
-    }
-    async upset(createCartDto, userData) {
-        const created = await this.cartModel.create({ ...createCartDto, userID: userData._id.toString() });
-        return (0, service_1.serviceResponse)({ data: created, message: 'Cart created', status: true });
-    }
-    async findAll(query) {
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const carts = await this.cartModel
-            .find()
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({ data: carts, message: 'Carts retrieved', status: true, metadata: await (0, service_1.getMetadata)({ model: this.cartModel, query, querys: {} }) });
-    }
-    async findByUser(userID) {
-        const cart = await this.cartModel.find({ userID }).populate("productID").exec();
-        return (0, service_1.serviceResponse)({ data: cart, message: 'Cart retrieved', status: true });
-    }
-    async update(id, updateCartDto) {
-        const updated = await this.cartModel.findByIdAndUpdate(id, updateCartDto, { new: true }).exec();
-        if (!updated)
-            return (0, service_1.serviceResponse)({ message: 'Cart not found', status: false });
-        return (0, service_1.serviceResponse)({ data: updated, message: 'Cart updated', status: true });
-    }
-    async delete(ids) {
-        const result = await this.cartModel.findByIdAndDelete(ids);
-        if (!result)
-            return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
-        return (0, service_1.serviceResponse)({ message: `Cart deleted`, status: true });
-    }
-    async clearUserCart(userID) {
-        const result = await this.cartModel.deleteMany({ userID });
-        if (result.deletedCount === 0)
-            return (0, service_1.serviceResponse)({ message: 'No carts deleted', status: false });
-        return (0, service_1.serviceResponse)({ message: `${result.deletedCount} cart(s) deleted`, status: true });
-    }
-};
-exports.CartService = CartService;
-exports.CartService = CartService = __decorate([
-    (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.CartModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
-], CartService);
 
 
 /***/ }),
@@ -5804,6 +6254,64 @@ exports.CaslModule = CaslModule = __decorate([
 
 /***/ }),
 
+/***/ "./src/categories/categories-sql.service.ts":
+/*!**************************************************!*\
+  !*** ./src/categories/categories-sql.service.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CategoriesSqlService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const categories_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/categories.sql-schema */ "./libs/sql-schema/src/categories.sql-schema.ts");
+let CategoriesSqlService = class CategoriesSqlService {
+    constructor(categoriesRepository) {
+        this.categoriesRepository = categoriesRepository;
+    }
+    async create(category) {
+        const newCategory = this.categoriesRepository.create(category);
+        return this.categoriesRepository.save(newCategory);
+    }
+    async findAll() {
+        return this.categoriesRepository.find();
+    }
+    async findOne(id) {
+        return this.categoriesRepository.findOne({ where: { id } });
+    }
+    async update(id, category) {
+        await this.categoriesRepository.update(id, category);
+        return this.categoriesRepository.findOne({ where: { id } });
+    }
+    async remove(id) {
+        await this.categoriesRepository.delete(id);
+    }
+};
+exports.CategoriesSqlService = CategoriesSqlService;
+exports.CategoriesSqlService = CategoriesSqlService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(categories_sql_schema_1.CategoriesSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], CategoriesSqlService);
+
+
+/***/ }),
+
 /***/ "./src/categories/categories.controller.ts":
 /*!*************************************************!*\
   !*** ./src/categories/categories.controller.ts ***!
@@ -5820,140 +6328,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const categories_service_1 = __webpack_require__(/*! ./categories.service */ "./src/categories/categories.service.ts");
-const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const categories_sql_service_1 = __webpack_require__(/*! ./categories-sql.service */ "./src/categories/categories-sql.service.ts");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService) {
         this.categoriesService = categoriesService;
     }
-    async create(categories, req) {
-        return this.categoriesService.upset(categories, req.user);
-    }
-    async update(categories, categoriesID, req) {
-        return this.categoriesService.update(categoriesID, categories, req.user);
-    }
-    async findbyId(params, query) {
-        return this.categoriesService.findByAny(params, query);
-    }
-    async findAll(query) {
-        return this.categoriesService.findAll(query);
-    }
-    async delete(ids, req) {
-        return this.categoriesService.delete(ids, req.user);
-    }
 };
 exports.CategoriesController = CategoriesController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: "Create a new categories" }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.CategoriesDto,
-        description: "Creating a new categories Details",
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.CategoriesDto !== "undefined" && dto_1.CategoriesDto) === "function" ? _b : Object, Object]),
-    __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "create", null);
-__decorate([
-    (0, common_1.Patch)(":categoriesID"),
-    (0, swagger_1.ApiOperation)({ summary: "Update existing categoriess" }),
-    (0, swagger_1.ApiParam)({
-        name: "categoriesID",
-        description: "The categoriesID to search for",
-        type: String,
-    }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.CategoriesDto,
-        description: "Updating existing categoriess",
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)("categoriesID")),
-    __param(2, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.CategoriesDto !== "undefined" && dto_1.CategoriesDto) === "function" ? _c : Object, String, Object]),
-    __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "update", null);
-__decorate([
-    (0, common_1.Get)("by-any/:key/:value"),
-    (0, swagger_1.ApiOperation)({ summary: "Find a categories by any key-value pair" }),
-    (0, swagger_1.ApiParam)({ name: "key", description: "The key to search by", type: String }),
-    (0, swagger_1.ApiParam)({
-        name: "value",
-        description: "The value to search for",
-        type: String,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "page",
-        required: false,
-        description: "Page number for pagination",
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "limit",
-        required: false,
-        description: "Number of categoriess per page",
-        type: Number,
-    }),
-    __param(0, (0, common_1.Param)()),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "findbyId", null);
-__decorate([
-    (0, common_1.Get)(""),
-    (0, swagger_1.ApiOperation)({ summary: "Get all categoriess" }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiQuery)({
-        name: "page",
-        required: false,
-        description: "Page number for pagination",
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "limit",
-        required: false,
-        description: "Number of categoriess per page",
-        type: Number,
-    }),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Delete)(),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: "Delete categoriess by their IDs" }),
-    (0, swagger_1.ApiBody)({ type: [String], description: "Array of categories IDs to delete" }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
-    __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "delete", null);
 exports.CategoriesController = CategoriesController = __decorate([
     (0, swagger_1.ApiTags)("categories"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
     (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, common_1.Controller)('categories'),
-    __metadata("design:paramtypes", [typeof (_a = typeof categories_service_1.CategoriesService !== "undefined" && categories_service_1.CategoriesService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof categories_sql_service_1.CategoriesSqlService !== "undefined" && categories_sql_service_1.CategoriesSqlService) === "function" ? _a : Object])
 ], CategoriesController);
 
 
@@ -5975,25 +6371,58 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const categories_service_1 = __webpack_require__(/*! ./categories.service */ "./src/categories/categories.service.ts");
 const categories_controller_1 = __webpack_require__(/*! ./categories.controller */ "./src/categories/categories.controller.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const categories_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/categories.sql-schema */ "./libs/sql-schema/src/categories.sql-schema.ts");
+const categories_sql_service_1 = __webpack_require__(/*! ./categories-sql.service */ "./src/categories/categories-sql.service.ts");
 let CategoriesModule = class CategoriesModule {
 };
 exports.CategoriesModule = CategoriesModule;
 exports.CategoriesModule = CategoriesModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([categories_sql_schema_1.CategoriesSqlModel])],
         controllers: [categories_controller_1.CategoriesController],
-        providers: [categories_service_1.CategoriesService],
+        providers: [categories_sql_service_1.CategoriesSqlService],
+        exports: [categories_sql_service_1.CategoriesSqlService]
     })
 ], CategoriesModule);
 
 
 /***/ }),
 
-/***/ "./src/categories/categories.service.ts":
-/*!**********************************************!*\
-  !*** ./src/categories/categories.service.ts ***!
-  \**********************************************/
+/***/ "./src/config/database.config.ts":
+/*!***************************************!*\
+  !*** ./src/config/database.config.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DatabaseConfig = exports.DatabaseType = void 0;
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+var DatabaseType;
+(function (DatabaseType) {
+    DatabaseType["MONGO"] = "mongo";
+    DatabaseType["SQL"] = "sql";
+})(DatabaseType || (exports.DatabaseType = DatabaseType = {}));
+class DatabaseConfig {
+}
+exports.DatabaseConfig = DatabaseConfig;
+exports["default"] = (0, config_1.registerAs)('database', () => {
+    const config = new DatabaseConfig();
+    config.type = process.env.DATABASE_TYPE || DatabaseType.MONGO;
+    config.mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smartprints';
+    config.sqlUri = process.env.SQL_URI || 'postgresql://user:password@host:5432/database';
+    return config;
+});
+
+
+/***/ }),
+
+/***/ "./src/designs/design-sql.service.ts":
+/*!*******************************************!*\
+  !*** ./src/designs/design-sql.service.ts ***!
+  \*******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -6011,132 +6440,39 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CategoriesService = void 0;
+exports.DesignSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-let CategoriesService = class CategoriesService {
-    constructor(categoriesModel) {
-        this.categoriesModel = categoriesModel;
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const design_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/design.sql-schema */ "./libs/sql-schema/src/design.sql-schema.ts");
+let DesignSqlService = class DesignSqlService {
+    constructor(designRepository) {
+        this.designRepository = designRepository;
     }
-    async upset(createCategoriesDto, userData) {
-        const created = await this.categoriesModel.create({ ...createCategoriesDto, userID: userData._id.toString() });
-        return (0, service_1.serviceResponse)({
-            data: created,
-            message: "Categories plan created successfully",
-            status: true,
-        });
+    async create(design) {
+        const newDesign = this.designRepository.create(design);
+        return this.designRepository.save(newDesign);
     }
-    async findAll(query) {
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.categoriesModel
-            .find()
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Categories plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.categoriesModel,
-                query,
-                querys: {},
-            }),
-        });
+    async findAll() {
+        return this.designRepository.find();
     }
     async findOne(id) {
-        try {
-            const plan = await this.categoriesModel.findById(id).exec();
-            return (0, service_1.serviceResponse)({
-                data: plan,
-                message: "Categories plan retrieved successfully",
-                status: true,
-            });
-        }
-        catch (error) { }
+        return this.designRepository.findOne({ where: { id } });
     }
-    async findByAny(params, query) {
-        const { key, value } = params;
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.categoriesModel
-            .find({ [key]: value })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Categories plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.categoriesModel,
-                query,
-                querys: { [key]: value },
-            }),
-        });
+    async update(id, design) {
+        await this.designRepository.update(id, design);
+        return this.designRepository.findOne({ where: { id } });
     }
-    async update(id, updateCategoriesDto, userData) {
-        try {
-            const updated = await this.categoriesModel
-                .findByIdAndUpdate(id, updateCategoriesDto, {
-                new: true,
-            })
-                .exec();
-            if (!updated) {
-                return (0, service_1.serviceResponse)({
-                    message: "Categories plan not found",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                data: updated,
-                message: "Categories plan updated successfully",
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
-    }
-    async delete(ids, userData) {
-        try {
-            const result = await this.categoriesModel.deleteMany({
-                _id: { $in: ids },
-            });
-            if (result.deletedCount === 0) {
-                return (0, service_1.serviceResponse)({
-                    message: "No categories plans found to delete",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                message: `${result.deletedCount} categories plans deleted successfully`,
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
+    async remove(id) {
+        await this.designRepository.delete(id);
     }
 };
-exports.CategoriesService = CategoriesService;
-exports.CategoriesService = CategoriesService = __decorate([
+exports.DesignSqlService = DesignSqlService;
+exports.DesignSqlService = DesignSqlService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.CategoriesModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
-], CategoriesService);
+    __param(0, (0, typeorm_1.InjectRepository)(design_sql_schema_1.DesignSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], DesignSqlService);
 
 
 /***/ }),
@@ -6154,161 +6490,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DesignController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const designs_service_1 = __webpack_require__(/*! ./designs.service */ "./src/designs/designs.service.ts");
-const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
-const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 let DesignController = class DesignController {
-    constructor(designService) {
-        this.designService = designService;
-    }
-    async create(design, req) {
-        return this.designService.upset(design, req.user);
-    }
-    async update(design, designID, req) {
-        return this.designService.update(designID, design, req.user);
-    }
-    async findbyId(params, query) {
-        return this.designService.findByAny(params, query);
-    }
-    async findAll(query) {
-        return this.designService.findAll(query);
-    }
-    async delete(ids) {
-        return this.designService.delete(ids);
-    }
-    async searchByTags(tag, query) {
-        return this.designService.searchByTags(tag, query);
-    }
 };
 exports.DesignController = DesignController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: "Create a new design" }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.DesignDto,
-        description: "Creating a new design Details",
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.DesignDto !== "undefined" && dto_1.DesignDto) === "function" ? _b : Object, Object]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "create", null);
-__decorate([
-    (0, common_1.Patch)(":designID"),
-    (0, swagger_1.ApiOperation)({ summary: "Update existing designs" }),
-    (0, swagger_1.ApiParam)({
-        name: "designID",
-        description: "The designID to search for",
-        type: String,
-    }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.DesignDto,
-        description: "Updating existing designs",
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)("designID")),
-    __param(2, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.DesignDto !== "undefined" && dto_1.DesignDto) === "function" ? _c : Object, String, Object]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "update", null);
-__decorate([
-    (0, common_1.Get)("by-any/:key/:value"),
-    (0, swagger_1.ApiOperation)({ summary: "Find a design by any key-value pair" }),
-    (0, swagger_1.ApiParam)({ name: "key", description: "The key to search by", type: String }),
-    (0, swagger_1.ApiParam)({
-        name: "value",
-        description: "The value to search for",
-        type: String,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "page",
-        required: false,
-        description: "Page number for pagination",
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "limit",
-        required: false,
-        description: "Number of designs per page",
-        type: Number,
-    }),
-    __param(0, (0, common_1.Param)()),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "findbyId", null);
-__decorate([
-    (0, common_1.Get)(""),
-    (0, swagger_1.ApiOperation)({ summary: "Get all designs" }),
-    (0, swagger_1.ApiQuery)({
-        name: "page",
-        required: false,
-        description: "Page number for pagination",
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "limit",
-        required: false,
-        description: "Number of designs per page",
-        type: Number,
-    }),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Delete)(":id"),
-    (0, swagger_1.ApiOperation)({ summary: "Delete design by ID" }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "delete", null);
-__decorate([
-    (0, common_1.Get)("by-tags/:tag"),
-    (0, swagger_1.ApiOperation)({ summary: "Find designs by tag" }),
-    (0, swagger_1.ApiParam)({ name: "tag", description: "The tag to search by", type: String }),
-    (0, swagger_1.ApiQuery)({
-        name: "page",
-        required: false,
-        description: "Page number for pagination",
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: "limit",
-        required: false,
-        description: "Number of designs per page",
-        type: Number,
-    }),
-    __param(0, (0, common_1.Param)("tag")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], DesignController.prototype, "searchByTags", null);
 exports.DesignController = DesignController = __decorate([
     (0, swagger_1.ApiTags)("design"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
-    (0, common_1.Controller)('designs'),
-    __metadata("design:paramtypes", [typeof (_a = typeof designs_service_1.DesignService !== "undefined" && designs_service_1.DesignService) === "function" ? _a : Object])
+    (0, common_1.Controller)('designs')
 ], DesignController);
 
 
@@ -6331,24 +6523,28 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DesignsModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const designs_controller_1 = __webpack_require__(/*! ./designs.controller */ "./src/designs/designs.controller.ts");
-const designs_service_1 = __webpack_require__(/*! ./designs.service */ "./src/designs/designs.service.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const design_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/design.sql-schema */ "./libs/sql-schema/src/design.sql-schema.ts");
+const design_sql_service_1 = __webpack_require__(/*! ./design-sql.service */ "./src/designs/design-sql.service.ts");
 let DesignsModule = class DesignsModule {
 };
 exports.DesignsModule = DesignsModule;
 exports.DesignsModule = DesignsModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([design_sql_schema_1.DesignSqlModel])],
         controllers: [designs_controller_1.DesignController],
-        providers: [designs_service_1.DesignService],
+        providers: [design_sql_service_1.DesignSqlService],
+        exports: [design_sql_service_1.DesignSqlService]
     })
 ], DesignsModule);
 
 
 /***/ }),
 
-/***/ "./src/designs/designs.service.ts":
-/*!****************************************!*\
-  !*** ./src/designs/designs.service.ts ***!
-  \****************************************/
+/***/ "./src/orders/order-sql.service.ts":
+/*!*****************************************!*\
+  !*** ./src/orders/order-sql.service.ts ***!
+  \*****************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -6364,203 +6560,153 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DesignService = void 0;
+exports.OrderSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const order_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/order.sql-schema */ "./libs/sql-schema/src/order.sql-schema.ts");
+const paystack_1 = __webpack_require__(/*! @app/service/payment/paystack */ "./libs/service/src/payment/paystack.ts");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-let DesignService = class DesignService {
-    constructor(designModel) {
-        this.designModel = designModel;
+const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
+let OrderSqlService = class OrderSqlService {
+    constructor(orderRepository, paystack) {
+        this.orderRepository = orderRepository;
+        this.paystack = paystack;
     }
-    async upset(createDesignDto, userData) {
-        const created = await this.designModel.create({ ...createDesignDto, userID: userData._id.toString() });
+    async create(order, userData) {
+        const tx_ref = `smartprints-${userData.id}-${(0, crypto_1.randomUUID)()
+            .replace(/\D/g, "")
+            .substring(0, 10)}`;
+        const newOrder = this.orderRepository.create({
+            ...order,
+            tx_ref,
+            userID: userData._id.toString(),
+        });
+        const created = await this.orderRepository.save(newOrder);
+        const paymentrequest = {
+            amount: created.totalPrice,
+            currency: "NGN",
+            email: userData.email,
+            callback_url: "https://smart-prints-custom-apparel.onrender.com/order-success/" +
+                created._id.toString(),
+            metadata: {
+                tx_ref,
+                userId: userData._id.toString(),
+            },
+        };
+        const payment = await this.paystack.createPaymentLink(paymentrequest);
+        console.log(payment);
+        await this.orderRepository.update(created._id.toString(), {
+            paystackRef: created.paystackRef,
+            authorization_url: created.authorization_url,
+            accessCode: created.accessCode,
+        });
         return (0, service_1.serviceResponse)({
-            data: created,
-            message: "Design plan created successfully",
+            data: payment.data.authorization_url,
+            message: "Order plan created successfully",
             status: true,
         });
     }
     async findAll(query) {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const plans = await this.designModel
-            .find()
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
+        const data = await this.orderRepository.find({
+            take: limit,
+            skip: skip,
+            relations: ['user', 'products', 'products.product'],
+        });
         return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Design plans retrieved successfully",
+            data,
+            message: "Orders retrieved successfully",
             status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.designModel,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.orderRepository,
                 query,
-                querys: {},
             }),
         });
-    }
-    async findOne(id) {
-        try {
-            const plan = await this.designModel.findById(id).exec();
-            return (0, service_1.serviceResponse)({
-                data: plan,
-                message: "Design plan retrieved successfully",
-                status: true,
-            });
-        }
-        catch (error) { }
     }
     async findByAny(params, query) {
         const { key, value } = params;
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const plans = await this.designModel
-            .find({ [key]: value })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
+        const data = await this.orderRepository.find({ where: { [key]: value }, take: limit, skip: skip, relations: ['user', 'products', 'products.product'], });
         return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Design plans retrieved successfully",
+            data,
+            message: "Orders retrieved successfully",
             status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.designModel,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.orderRepository,
                 query,
                 querys: { [key]: value },
             }),
         });
     }
-    async update(id, updateDesignDto, userData) {
+    async update(id, order) {
+        await this.orderRepository.update(id, order);
+        return this.orderRepository.findOne({ where: { id } });
+    }
+    async remove(id) {
+        await this.orderRepository.delete(id);
+    }
+    async verifyOrderPayment(id) {
         try {
-            const updated = await this.designModel
-                .findByIdAndUpdate(id, updateDesignDto, {
-                new: true,
-            })
-                .exec();
-            if (!updated) {
+            const plan = await this.orderRepository.findOne({
+                where: { _id: id },
+                relations: ["user", "products", 'products.product'],
+            });
+            if (!plan) {
+                throw new common_1.NotFoundException("Order not found");
+            }
+            if (!plan.paystackRef) {
+                throw new common_1.NotFoundException("No payment reference found for this order");
+            }
+            if (plan.isPaid) {
                 return (0, service_1.serviceResponse)({
-                    message: "Design plan not found",
-                    status: false,
+                    data: plan,
+                    message: "Order already paid",
+                    status: true,
+                });
+            }
+            const v = await this.paystack.verifyPaymentLink(plan.paystackRef);
+            if (v.data.status === "success") {
+                await this.orderRepository.update(id, {
+                    isPaid: true,
+                    status: "success",
+                });
+            }
+            else if (["abandoned", "ongoing"].includes(v.data.status)) {
+                plan.isPaid = false;
+                plan.status = "abandoned";
+                await this.orderRepository.update(id, {
+                    isPaid: false,
+                    status: "abandoned",
+                });
+            }
+            else {
+                await this.orderRepository.update(id, {
+                    isPaid: false,
+                    status: "cancelled",
                 });
             }
             return (0, service_1.serviceResponse)({
-                data: updated,
-                message: "Design plan updated successfully",
+                data: plan,
+                message: "Order plan retrieved successfully",
                 status: true,
             });
         }
         catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
+            throw new common_1.NotFoundException(error.message);
         }
     }
-    async delete(ids) {
-        const result = await this.designModel.findByIdAndDelete(ids);
-        if (!result)
-            return (0, service_1.serviceResponse)({ message: 'No designs deleted', status: false });
-        return (0, service_1.serviceResponse)({ message: `Design deleted`, status: true });
-    }
-    async searchByTags(tag, query) {
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.designModel
-            .find({ tags: { $regex: new RegExp(tag, 'i') } })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Design plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.designModel,
-                query,
-                querys: { tags: tag },
-            }),
-        });
-    }
 };
-exports.DesignService = DesignService;
-exports.DesignService = DesignService = __decorate([
+exports.OrderSqlService = OrderSqlService;
+exports.OrderSqlService = OrderSqlService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.DesignModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
-], DesignService);
-
-
-/***/ }),
-
-/***/ "./src/global-mongoose.module.ts":
-/*!***************************************!*\
-  !*** ./src/global-mongoose.module.ts ***!
-  \***************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GlobalMongooseModule = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const schema_2 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const schema_3 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
-const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const dotenv = __webpack_require__(/*! dotenv */ "dotenv");
-dotenv.config();
-const { MONGODB_URL, environment } = process.env;
-const DBLINK = environment === 'production'
-    ? MONGODB_URL
-    : 'mongodb://localhost:27017/smartprints';
-let GlobalMongooseModule = class GlobalMongooseModule {
-};
-exports.GlobalMongooseModule = GlobalMongooseModule;
-exports.GlobalMongooseModule = GlobalMongooseModule = __decorate([
-    (0, common_1.Global)(),
-    (0, common_1.Module)({
-        imports: [
-            jwt_1.JwtModule.registerAsync({
-                global: true,
-                imports: [config_1.ConfigModule],
-                inject: [config_1.ConfigService],
-                useFactory: async (configService) => ({
-                    secret: configService.get('JWT_SECRET'),
-                    signOptions: {
-                        expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
-                    },
-                }),
-            }),
-            mongoose_1.MongooseModule.forRoot(DBLINK),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.UserModel.name, schema: schema_1.UserSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_2.WalletModel.name, schema: schema_2.WalletSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ActivityLogModel.name, schema: schema_1.ActivityLogSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.AuthenticatorModel.name, schema: schema_1.AuthenticatorSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.OTPModel.name, schema: schema_1.OTPSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.CartModel.name, schema: schema_1.CartSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.DesignModel.name, schema: schema_1.DesignSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_3.ProductModel.name, schema: schema_3.ProductSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.OrderModel.name, schema: schema_1.OrderSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.CategoriesModel.name, schema: schema_1.CategoriesSchema }]),
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.ProductTypeModel.name, schema: schema_1.ProductTypeSchema }]),
-        ],
-        exports: [mongoose_1.MongooseModule],
-    })
-], GlobalMongooseModule);
+    __param(0, (0, typeorm_1.InjectRepository)(order_sql_schema_1.OrderSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _b : Object])
+], OrderSqlService);
 
 
 /***/ }),
@@ -6588,21 +6734,21 @@ var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orders/orders.service.ts");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const order_sql_service_1 = __webpack_require__(/*! ./order-sql.service */ "./src/orders/order-sql.service.ts");
 let OrderController = class OrderController {
     constructor(orderService) {
         this.orderService = orderService;
     }
     async create(order, req) {
-        return this.orderService.upset(order, req.user);
+        return this.orderService.create(order, req.user);
     }
     async update(order, orderID, req) {
-        return this.orderService.update(orderID, order, req.user);
+        return this.orderService.update(orderID, order);
     }
     async findbyId(params, query) {
         return this.orderService.findByAny(params, query);
@@ -6611,7 +6757,7 @@ let OrderController = class OrderController {
         return this.orderService.findAll(query);
     }
     async delete(ids) {
-        return this.orderService.delete(ids);
+        return this.orderService.remove(ids);
     }
     async verifyOrderPayment(id) {
         return this.orderService.verifyOrderPayment(id);
@@ -6725,7 +6871,7 @@ exports.OrderController = OrderController = __decorate([
     (0, swagger_1.ApiTags)("order"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
     (0, common_1.Controller)('orders'),
-    __metadata("design:paramtypes", [typeof (_a = typeof orders_service_1.OrderService !== "undefined" && orders_service_1.OrderService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof order_sql_service_1.OrderSqlService !== "undefined" && order_sql_service_1.OrderSqlService) === "function" ? _a : Object])
 ], OrderController);
 
 
@@ -6747,28 +6893,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrdersModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const orders_service_1 = __webpack_require__(/*! ./orders.service */ "./src/orders/orders.service.ts");
 const orders_controller_1 = __webpack_require__(/*! ./orders.controller */ "./src/orders/orders.controller.ts");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const paystack_1 = __webpack_require__(/*! @app/service/payment/paystack */ "./libs/service/src/payment/paystack.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const order_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/order.sql-schema */ "./libs/sql-schema/src/order.sql-schema.ts");
+const order_sql_service_1 = __webpack_require__(/*! ./order-sql.service */ "./src/orders/order-sql.service.ts");
 let OrdersModule = class OrdersModule {
 };
 exports.OrdersModule = OrdersModule;
 exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
+        imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel])],
         controllers: [orders_controller_1.OrderController],
-        providers: [orders_service_1.OrderService, service_1.FlutterwaveService, paystack_1.PaystackService],
+        providers: [service_1.FlutterwaveService, paystack_1.PaystackService, order_sql_service_1.OrderSqlService],
+        exports: [order_sql_service_1.OrderSqlService]
     })
 ], OrdersModule);
 
 
 /***/ }),
 
-/***/ "./src/orders/orders.service.ts":
-/*!**************************************!*\
-  !*** ./src/orders/orders.service.ts ***!
-  \**************************************/
+/***/ "./src/otp/otp-sql.service.ts":
+/*!************************************!*\
+  !*** ./src/otp/otp-sql.service.ts ***!
+  \************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -6784,205 +6933,229 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OrderService = void 0;
+exports.OtpSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
-const paystack_1 = __webpack_require__(/*! @app/service/payment/paystack */ "./libs/service/src/payment/paystack.ts");
-let OrderService = class OrderService {
-    constructor(orderModel, flutterwave, paystack) {
-        this.orderModel = orderModel;
-        this.flutterwave = flutterwave;
-        this.paystack = paystack;
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
+let OtpSqlService = class OtpSqlService {
+    constructor(otpRepository) {
+        this.otpRepository = otpRepository;
     }
-    async upset(createOrderDto, userData) {
-        const tx_ref = `smartprints-${userData.id}-${(0, crypto_1.randomUUID)()
-            .replace(/\D/g, "")
-            .substring(0, 10)}`;
-        const created = new this.orderModel({
-            ...createOrderDto,
-            tx_ref,
-            userID: userData._id.toString(),
-        });
-        const paymentrequest = {
-            amount: createOrderDto.totalPrice,
-            currency: "NGN",
-            email: userData.email,
-            callback_url: "https://smart-prints-custom-apparel.onrender.com/order-success/" +
-                created._id.toString(),
-            metadata: {
-                tx_ref,
-                userId: userData._id.toString(),
-            },
-        };
-        const payment = await this.paystack.createPaymentLink(paymentrequest);
-        console.log(payment);
-        created.paystackRef = payment.data.reference;
-        created.authorization_url = payment.data.authorization_url;
-        created.accessCode = payment.data.access_code;
-        await created.save();
+    async create(otp) {
+        const newOtp = this.otpRepository.create(otp);
+        return this.otpRepository.save(newOtp);
+    }
+    async findAll() {
+        return this.otpRepository.find();
+    }
+    async findOne(id) {
+        return this.otpRepository.findOne({ where: { id } });
+    }
+    async update(id, otp) {
+        await this.otpRepository.update(id, otp);
+        return this.otpRepository.findOne({ where: { id } });
+    }
+    async remove(id) {
+        await this.otpRepository.delete(id);
+    }
+};
+exports.OtpSqlService = OtpSqlService;
+exports.OtpSqlService = OtpSqlService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(otp_sql_schema_1.OtpSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], OtpSqlService);
+
+
+/***/ }),
+
+/***/ "./src/otp/otp.controller.ts":
+/*!***********************************!*\
+  !*** ./src/otp/otp.controller.ts ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OtpController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+let OtpController = class OtpController {
+};
+exports.OtpController = OtpController;
+exports.OtpController = OtpController = __decorate([
+    (0, common_1.Controller)('otp')
+], OtpController);
+
+
+/***/ }),
+
+/***/ "./src/otp/otp.module.ts":
+/*!*******************************!*\
+  !*** ./src/otp/otp.module.ts ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OtpModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
+const otp_sql_service_1 = __webpack_require__(/*! ./otp-sql.service */ "./src/otp/otp-sql.service.ts");
+const otp_controller_1 = __webpack_require__(/*! ./otp.controller */ "./src/otp/otp.controller.ts");
+let OtpModule = class OtpModule {
+};
+exports.OtpModule = OtpModule;
+exports.OtpModule = OtpModule = __decorate([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([otp_sql_schema_1.OtpSqlModel])],
+        providers: [otp_sql_service_1.OtpSqlService],
+        controllers: [otp_controller_1.OtpController],
+        exports: [otp_sql_service_1.OtpSqlService]
+    })
+], OtpModule);
+
+
+/***/ }),
+
+/***/ "./src/products/product-sql.service.ts":
+/*!*********************************************!*\
+  !*** ./src/products/product-sql.service.ts ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductSqlService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const product_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+let ProductSqlService = class ProductSqlService {
+    constructor(productRepository) {
+        this.productRepository = productRepository;
+    }
+    async create(product, userData) {
+        const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString() });
+        const data = await this.productRepository.save(newProduct);
         return (0, service_1.serviceResponse)({
-            data: payment.data.authorization_url,
-            message: "Order plan created successfully",
+            data,
+            message: "Product plan created successfully",
             status: true,
+        });
+    }
+    async findByAny(param, query) {
+        const { key, value } = param;
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const findall = await this.productRepository.find({ where: { [key]: value, }, take: limit, skip: skip, relations: ['user'], });
+        return (0, service_1.serviceResponse)({
+            data: findall,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.productRepository,
+                query,
+                querys: { [key]: value },
+            }),
+        });
+    }
+    async findByMany(param, query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        console.log(param);
+        const findall = await this.productRepository.find({
+            where: param,
+            take: limit,
+            skip: skip,
+            relations: ['user'],
+        });
+        return (0, service_1.serviceResponse)({
+            data: findall,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.productRepository,
+                query,
+                querys: param,
+            }),
         });
     }
     async findAll(query) {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const plans = await this.orderModel
-            .find()
-            .skip(skip)
-            .populate("userID")
-            .populate("products.productID")
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
+        const findall = await this.productRepository.find({
+            take: limit,
+            skip: skip,
+            relations: ['user'],
+        });
         return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Order plans retrieved successfully",
+            data: findall,
+            message: "Product plans retrieved successfully",
             status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.orderModel,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.productRepository,
                 query,
                 querys: {},
             }),
         });
     }
     async findOne(id) {
-        try {
-            const plan = await this.orderModel
-                .findById(id)
-                .populate("userID")
-                .populate("products.productID")
-                .exec();
-            return (0, service_1.serviceResponse)({
-                data: plan,
-                message: "Order plan retrieved successfully",
-                status: true,
-            });
-        }
-        catch (error) { }
+        return this.productRepository.findOne({ where: { id }, relations: ['user'] });
     }
-    async verifyOrderPayment(id) {
-        try {
-            const plan = await this.orderModel
-                .findById(id)
-                .populate("userID")
-                .populate("products.productID")
-                .exec();
-            if (!plan) {
-                throw new common_1.NotFoundException("Order not found");
-            }
-            if (!plan.paystackRef) {
-                throw new common_1.NotFoundException("No payment reference found for this order");
-            }
-            if (plan.isPaid) {
-                return (0, service_1.serviceResponse)({
-                    data: plan,
-                    message: "Order already paid",
-                    status: true,
-                });
-            }
-            const v = await this.paystack.verifyPaymentLink(plan.paystackRef);
-            if (v.data.status === "success") {
-                plan.isPaid = true;
-                plan.status = "paid";
-                await plan.save();
-            }
-            else if (["abandoned", "ongoing"].includes(v.data.status)) {
-                plan.isPaid = false;
-                plan.status = "abandoned";
-                await plan.save();
-            }
-            else {
-                plan.isPaid = false;
-                plan.status = "cancelled";
-                await plan.save();
-            }
-            console.log(v);
-            return (0, service_1.serviceResponse)({
-                data: plan,
-                message: "Order plan retrieved successfully",
-                status: true,
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
+    async update(id, product, userData) {
+        delete product._id;
+        await this.productRepository.update(id, { ...product, userID: userData._id.toString() });
+        const products = await this.productRepository.findOne({ where: { _id: id } });
+        return (0, service_1.serviceResponse)({
+            data: products,
+            message: "Product updated successfully",
+            status: true,
+        });
     }
-    async findByAny(params, query) {
-        try {
-            const { key, value } = params;
-            const { limit = 10, page = 1 } = query;
-            const skip = (page - 1) * limit;
-            const orders = await this.orderModel
-                .find({ [key]: value })
-                .skip(skip)
-                .limit(limit)
-                .populate("userID")
-                .populate("products.productID")
-                .sort({ createdAt: -1 })
-                .exec();
-            return (0, service_1.serviceResponse)({
-                data: orders,
-                message: "Order plans retrieved successfully",
-                status: true,
-                metadata: await (0, service_1.getMetadata)({
-                    model: this.orderModel,
-                    query,
-                    querys: { [key]: value },
-                }),
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
-    }
-    async update(id, updateOrderDto, userData) {
-        try {
-            const updated = await this.orderModel
-                .findByIdAndUpdate(id, updateOrderDto, {
-                new: true,
-            })
-                .exec();
-            if (!updated) {
-                return (0, service_1.serviceResponse)({
-                    message: "Order plan not found",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                data: updated,
-                message: "Order plan updated successfully",
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
-    }
-    async delete(id) {
-        const result = await this.orderModel.findByIdAndDelete(id);
-        if (!result)
-            return (0, service_1.serviceResponse)({ message: "No orders deleted", status: false });
-        return (0, service_1.serviceResponse)({ message: `Order deleted`, status: true });
+    async remove(id) {
+        return (0, service_1.serviceResponse)({
+            data: await this.productRepository.delete({ _id: id }),
+            message: "Product plan deleted successfully",
+            status: true,
+        });
     }
 };
-exports.OrderService = OrderService;
-exports.OrderService = OrderService = __decorate([
+exports.ProductSqlService = ProductSqlService;
+exports.ProductSqlService = ProductSqlService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.OrderModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _b : Object, typeof (_c = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _c : Object])
-], OrderService);
+    __param(0, (0, typeorm_1.InjectRepository)(product_sql_schema_1.ProductSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], ProductSqlService);
 
 
 /***/ }),
@@ -7010,18 +7183,16 @@ var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const products_service_1 = __webpack_require__(/*! ./products.service */ "./src/products/products.service.ts");
 const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
-const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const product_sql_service_1 = __webpack_require__(/*! ./product-sql.service */ "./src/products/product-sql.service.ts");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
     async create(product, req) {
-        return this.productService.upset(product, req.user);
+        return this.productService.create(product, req.user);
     }
     async update(product, productID, req) {
         return this.productService.update(productID, product, req.user);
@@ -7036,14 +7207,13 @@ let ProductController = class ProductController {
         return this.productService.findAll(query);
     }
     async delete(ids, req) {
-        return this.productService.delete(ids, req.user);
+        return this.productService.remove(ids);
     }
 };
 exports.ProductController = ProductController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Create a new product" }),
     (0, swagger_1.ApiBody)({
         type: dto_1.ProductDto,
@@ -7057,8 +7227,7 @@ __decorate([
 ], ProductController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(":productID"),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Update existing products" }),
     (0, swagger_1.ApiParam)({
         name: "productID",
@@ -7150,7 +7319,7 @@ exports.ProductController = ProductController = __decorate([
     (0, swagger_1.ApiTags)("product"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
     (0, common_1.Controller)('products'),
-    __metadata("design:paramtypes", [typeof (_a = typeof products_service_1.ProductService !== "undefined" && products_service_1.ProductService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof product_sql_service_1.ProductSqlService !== "undefined" && product_sql_service_1.ProductSqlService) === "function" ? _a : Object])
 ], ProductController);
 
 
@@ -7172,180 +7341,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductsModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const products_service_1 = __webpack_require__(/*! ./products.service */ "./src/products/products.service.ts");
 const products_controller_1 = __webpack_require__(/*! ./products.controller */ "./src/products/products.controller.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const product_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
+const product_sql_service_1 = __webpack_require__(/*! ./product-sql.service */ "./src/products/product-sql.service.ts");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([product_sql_schema_1.ProductSqlModel])],
         controllers: [products_controller_1.ProductController],
-        providers: [products_service_1.ProductService],
+        providers: [product_sql_service_1.ProductSqlService],
+        exports: [product_sql_service_1.ProductSqlService]
     })
 ], ProductsModule);
-
-
-/***/ }),
-
-/***/ "./src/products/products.service.ts":
-/*!******************************************!*\
-  !*** ./src/products/products.service.ts ***!
-  \******************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductService = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
-let ProductService = class ProductService {
-    constructor(productModel) {
-        this.productModel = productModel;
-    }
-    async upset(createProductDto, userData) {
-        const created = await this.productModel.create(createProductDto);
-        return (0, service_1.serviceResponse)({
-            data: created,
-            message: "Product plan created successfully",
-            status: true,
-        });
-    }
-    async findAll(query) {
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.productModel
-            .find()
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Product plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.productModel,
-                query,
-                querys: {},
-            }),
-        });
-    }
-    async findOne(id) {
-        try {
-            const plan = await this.productModel.findById(id).exec();
-            return (0, service_1.serviceResponse)({
-                data: plan,
-                message: "Product plan retrieved successfully",
-                status: true,
-            });
-        }
-        catch (error) { }
-    }
-    async findByAny(params, query) {
-        const { key, value } = params;
-        const { limit = 10, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.productModel
-            .find({ [key]: value })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Product plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.productModel,
-                query,
-                querys: { [key]: value },
-            }),
-        });
-    }
-    async findByMany(body, query) {
-        const { limit = 20, page = 1 } = query;
-        const skip = (page - 1) * limit;
-        const plans = await this.productModel
-            .find(body)
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 })
-            .exec();
-        return (0, service_1.serviceResponse)({
-            data: plans,
-            message: "Product plans retrieved successfully",
-            status: true,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.productModel,
-                query,
-                querys: { body },
-            }),
-        });
-    }
-    async update(id, updateProductDto, userData) {
-        try {
-            const updated = await this.productModel
-                .findByIdAndUpdate(id, updateProductDto, {
-                new: true,
-            })
-                .exec();
-            if (!updated) {
-                return (0, service_1.serviceResponse)({
-                    message: "Product plan not found",
-                    status: false,
-                });
-            }
-            return (0, service_1.serviceResponse)({
-                data: updated,
-                message: "Product plan updated successfully",
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
-    }
-    async delete(ids, userData) {
-        try {
-            const result = await this.productModel.findByIdAndDelete(ids);
-            return (0, service_1.serviceResponse)({
-                message: `product deleted successfully`,
-                status: true,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
-    }
-};
-exports.ProductService = ProductService;
-exports.ProductService = ProductService = __decorate([
-    (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.ProductModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
-], ProductService);
 
 
 /***/ }),
@@ -7615,9 +7625,9 @@ exports.UploadsService = UploadsService = __decorate([
 
 /***/ }),
 
-/***/ "./src/users/users.controller.ts":
+/***/ "./src/users/user-sql.service.ts":
 /*!***************************************!*\
-  !*** ./src/users/users.controller.ts ***!
+  !*** ./src/users/user-sql.service.ts ***!
   \***************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -7634,288 +7644,74 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserSqlService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+let UserSqlService = class UserSqlService {
+    constructor(userRepository) {
+        this.userRepository = userRepository;
+    }
+    async create(user) {
+        const newUser = this.userRepository.create(user);
+        return this.userRepository.save(newUser);
+    }
+    async findAll() {
+        return this.userRepository.find();
+    }
+    async findOne(id) {
+        return this.userRepository.findOne({ where: { id } });
+    }
+    async update(id, user) {
+        await this.userRepository.update(id, user);
+        return this.userRepository.findOne({ where: { id } });
+    }
+    async remove(id) {
+        await this.userRepository.delete(id);
+    }
+};
+exports.UserSqlService = UserSqlService;
+exports.UserSqlService = UserSqlService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(user_sql_schema_1.UserSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], UserSqlService);
+
+
+/***/ }),
+
+/***/ "./src/users/users.controller.ts":
+/*!***************************************!*\
+  !*** ./src/users/users.controller.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
-const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
 let UsersController = class UsersController {
-    constructor(userService) {
-        this.userService = userService;
-    }
-    async create(user, req) {
-        return this.userService.upset(user, req.user);
-    }
-    async savePlayerId(body) {
-        return this.userService.savePlayerId(body);
-    }
-    async update(user, req) {
-        return this.userService.update(user, req.user);
-    }
-    async findbyId(params, query) {
-        return this.userService.findbyAny(params, query);
-    }
-    async findAll(query) {
-        return this.userService.findAll(query);
-    }
-    async delete(ids, req) {
-        return this.userService.delete(ids, req.user);
-    }
-    async deleteByEmails(ids, req) {
-        return this.userService.deleteByEmails(ids);
-    }
-    async findRecentUsers(period, query) {
-        return this.userService.findRecentUsers(period, query);
-    }
-    async countRecentUsers() {
-        return this.userService.countRecentUsers();
-    }
-    async getNotification(params, query) {
-        return this.userService.getNotification(params, query);
-    }
-    async getAllUserRefList(id) {
-        return this.userService.getAllUserRefList(id);
-    }
-    async markAllUserNotificationAsRead(req) {
-        return this.userService.markAllUserNotificationAsRead(req.user._id);
-    }
-    async getUnreadNotificationCount(req) {
-        return this.userService.getUnreadNotificationCount(req.user._id);
-    }
-    async changeUserStatus(userID, status, req) {
-        return this.userService.changeUserStatus(userID, status, req.user);
-    }
 };
 exports.UsersController = UsersController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.UserDTO,
-        description: 'Creating a new user Details',
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.UserDTO !== "undefined" && dto_1.UserDTO) === "function" ? _b : Object, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "create", null);
-__decorate([
-    (0, common_1.Post)('onesignal'),
-    (0, swagger_1.ApiOperation)({ summary: 'Save player ID' }),
-    (0, swagger_1.ApiBody)({
-        description: 'Saving player ID',
-        schema: {
-            type: 'object',
-            properties: {
-                playerId: { type: 'string', example: 'abcdef123456' },
-                userID: { type: 'string', example: 'user_001' },
-            },
-            required: ['playerId', 'userID'],
-        },
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "savePlayerId", null);
-__decorate([
-    (0, common_1.Patch)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Update existing users' }),
-    (0, swagger_1.ApiBody)({
-        type: dto_1.UserDTO,
-        description: 'Updating existing users',
-    }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.UserDTO !== "undefined" && dto_1.UserDTO) === "function" ? _c : Object, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "update", null);
-__decorate([
-    (0, common_1.Get)('by-any/:key/:value'),
-    (0, swagger_1.ApiOperation)({ summary: 'Find a user by any key-value pair' }),
-    (0, swagger_1.ApiParam)({ name: 'key', description: 'The key to search by', type: String }),
-    (0, swagger_1.ApiParam)({
-        name: 'value',
-        description: 'The value to search for',
-        type: String,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'page',
-        required: false,
-        description: 'Page number for pagination',
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'limit',
-        required: false,
-        description: 'Number of users per page',
-        type: Number,
-    }),
-    __param(0, (0, common_1.Param)()),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "findbyId", null);
-__decorate([
-    (0, common_1.Get)(''),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all users' }),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiQuery)({
-        name: 'page',
-        required: false,
-        description: 'Page number for pagination',
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'limit',
-        required: false,
-        description: 'Number of users per page',
-        type: Number,
-    }),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Delete)(''),
-    (0, swagger_1.ApiOperation)({ summary: 'Delete users by their IDs' }),
-    (0, swagger_1.ApiBody)({ type: [String], description: 'Array of user IDs to delete' }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "delete", null);
-__decorate([
-    (0, common_1.Delete)('email'),
-    (0, swagger_1.ApiOperation)({ summary: 'Delete users by their Emails' }),
-    (0, swagger_1.ApiBody)({ type: [String], description: 'Array of user IDs to delete' }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "deleteByEmails", null);
-__decorate([
-    (0, common_1.Get)('period'),
-    (0, swagger_1.ApiQuery)({
-        name: 'page',
-        required: false,
-        description: 'Page number for pagination',
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'limit',
-        required: false,
-        description: 'Number of users per page',
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'period',
-        required: true,
-        description: `'day' | 'week' | 'month'`,
-        type: String,
-    }),
-    (0, swagger_1.ApiOperation)({ summary: '' }),
-    __param(0, (0, common_1.Query)('period')),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "findRecentUsers", null);
-__decorate([
-    (0, common_1.Get)('count'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "countRecentUsers", null);
-__decorate([
-    (0, common_1.Get)('notification/by-any/:key/:value'),
-    (0, swagger_1.ApiOperation)({ summary: 'Find a user notification by any key-value pair' }),
-    (0, swagger_1.ApiParam)({ name: 'key', description: 'The key to search by', type: String }),
-    (0, swagger_1.ApiParam)({
-        name: 'value',
-        description: 'The value to search for',
-        type: String,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'limit',
-        required: false,
-        description: 'Number of users to return',
-        type: Number,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'skip',
-        required: false,
-        description: 'Number of users to skip for pagination',
-        type: Number,
-    }),
-    __param(0, (0, common_1.Param)()),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getNotification", null);
-__decorate([
-    (0, common_1.Get)('user-ref-list/:id'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiParam)({ name: '_id', description: 'The _id of the user', type: String }),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all user ref list' }),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getAllUserRefList", null);
-__decorate([
-    (0, common_1.Patch)('notification/mark-all-as-read'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Mark all user notifications as read' }),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "markAllUserNotificationAsRead", null);
-__decorate([
-    (0, common_1.Get)('notification/unread-count'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Get unread notification count for user' }),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getUnreadNotificationCount", null);
-__decorate([
-    (0, common_1.Patch)('change-status/:userID/:status'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Change user status' }),
-    (0, swagger_1.ApiParam)({ name: 'userID', description: 'The ID of the user to update', type: String }),
-    (0, swagger_1.ApiParam)({ enum: enum_1.UserStatus, example: enum_1.UserStatus.ACTIVE, name: 'status', description: 'The new status for the user', type: String }),
-    __param(0, (0, common_1.Param)('userID')),
-    __param(1, (0, common_1.Param)('status')),
-    __param(2, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "changeUserStatus", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)('users'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
-    __metadata("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object])
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN)
 ], UsersController);
 
 
@@ -7937,16 +7733,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const users_service_1 = __webpack_require__(/*! ./users.service */ "./src/users/users.service.ts");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 const users_controller_1 = __webpack_require__(/*! ./users.controller */ "./src/users/users.controller.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const user_sql_service_1 = __webpack_require__(/*! ./user-sql.service */ "./src/users/user-sql.service.ts");
 let UsersModule = class UsersModule {
 };
 exports.UsersModule = UsersModule;
 exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
-        providers: [users_service_1.UsersService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService],
-        exports: [users_service_1.UsersService],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_sql_schema_1.UserSqlModel])],
+        providers: [service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService, user_sql_service_1.UserSqlService],
+        exports: [user_sql_service_1.UserSqlService],
         controllers: [users_controller_1.UsersController]
     })
 ], UsersModule);
@@ -7954,10 +7753,10 @@ exports.UsersModule = UsersModule = __decorate([
 
 /***/ }),
 
-/***/ "./src/users/users.service.ts":
-/*!************************************!*\
-  !*** ./src/users/users.service.ts ***!
-  \************************************/
+/***/ "./src/wallet/wallet-sql.service.ts":
+/*!******************************************!*\
+  !*** ./src/wallet/wallet-sql.service.ts ***!
+  \******************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -7973,320 +7772,129 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UsersService = void 0;
-const schema_1 = __webpack_require__(/*! @app/schema */ "./libs/schema/src/index.ts");
-const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+exports.WalletSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
-const mongoose_2 = __webpack_require__(/*! mongoose */ "mongoose");
-const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
-const moment = __webpack_require__(/*! moment */ "moment");
-let UsersService = class UsersService {
-    constructor(userModel, activityLogModel, notificationActivity) {
-        this.userModel = userModel;
-        this.activityLogModel = activityLogModel;
-        this.notificationActivity = notificationActivity;
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
+let WalletSqlService = class WalletSqlService {
+    constructor(walletRepository) {
+        this.walletRepository = walletRepository;
     }
-    async upset(user, userData) {
-        try {
-            const created = await this.userModel.create(user);
-            this.notificationActivity.notificationActivity({
-                action: "create",
-                entityType: "User",
-                entityID: created._id.toString(),
-                userID: userData?._id,
-                details: `${userData?.fullname} created an user`,
-                playerIds: [userData?.playerId ?? ""],
-            });
-            return (0, service_1.serviceResponse)({
-                message: "created successfully",
-                data: created,
-            });
-        }
-        catch (error) {
-            throw new common_1.NotAcceptableException(error.message);
-        }
+    async create(wallet) {
+        const newWallet = this.walletRepository.create(wallet);
+        return this.walletRepository.save(newWallet);
     }
-    async update(user, userData) {
-        const updatedRole = await this.userModel.findByIdAndUpdate(user._id, user, {
-            new: true,
-        });
-        this.notificationActivity.notificationActivity({
-            action: "updated",
-            entityType: "User",
-            entityID: updatedRole._id.toString(),
-            userID: userData?._id,
-            playerIds: [userData?.playerId ?? ""],
-            details: `${userData?.fullname} updated an user`,
-        });
-        return (0, service_1.serviceResponse)({
-            message: "updated successfully",
-            data: updatedRole,
-        });
+    async findAll() {
+        return this.walletRepository.find();
     }
-    async savePlayerId(body) {
-        const user = await this.userModel.findByIdAndUpdate(body.userID, { playerId: body.playerId }, { new: true });
-        if (!user) {
-            throw new common_1.NotFoundException("User not found");
-        }
-        return (0, service_1.serviceResponse)({
-            message: "Player ID saved successfully",
-            data: user,
-        });
+    async findOne(id) {
+        return this.walletRepository.findOne({ where: { id } });
     }
-    async findbyId(id) {
-        try {
-            const data = await this.userModel.findById(id);
-            if (!data) {
-                throw new common_1.NotFoundException();
-            }
-            return (0, service_1.serviceResponse)({
-                message: "Success",
-                data,
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
+    async update(id, wallet) {
+        await this.walletRepository.update(id, wallet);
+        return this.walletRepository.findOne({ where: { id } });
     }
-    async findbyAny(params, query) {
-        const { key, value } = params;
-        const { page = 1, limit = 10 } = query;
-        const skip = (page - 1) * limit;
-        const result = await this.userModel
-            .find({ [key]: value })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-        if (!result.length) {
-            throw new common_1.NotFoundException(value + " not found in field " + key);
-        }
-        return (0, service_1.serviceResponse)({
-            message: "Success",
-            data: result,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.userModel,
-                query,
-                querys: { [key]: value },
-            }),
-        });
-    }
-    async findAll(query) {
-        const { page = 1, limit = 10 } = query;
-        const skip = (page - 1) * limit;
-        try {
-            const data = await this.userModel
-                .find()
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit);
-            return (0, service_1.serviceResponse)({
-                message: "Success",
-                data,
-                metadata: await (0, service_1.getMetadata)({ model: this.userModel, query, querys: {} }),
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
-    }
-    async delete(_id, userData) {
-        const user = await this.userModel.find({ _id });
-        for (let i = 0; i < user.length; i++) {
-        }
-        const data = await this.userModel.deleteMany({ _id });
-        try {
-            return (0, service_1.serviceResponse)({
-                message: "Success",
-                data,
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
-    }
-    async deleteByEmails(_id) {
-        const data = await this.userModel.deleteMany({ email: _id });
-        try {
-            return (0, service_1.serviceResponse)({
-                message: "Success",
-                data,
-            });
-        }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
-        }
-    }
-    async findRecentUsers(period, query) {
-        const { page = 1, limit = 10 } = query;
-        const skip = (page - 1) * limit;
-        let startDate = moment().startOf("day");
-        let endDate = moment().endOf("day");
-        switch (period) {
-            case "day":
-                startDate = moment().subtract(1, "day").startOf("day");
-                endDate = moment().endOf("day");
-                break;
-            case "week":
-                startDate = moment().subtract(7, "days").startOf("day");
-                break;
-            case "month":
-                startDate = moment().subtract(1, "month").startOf("day");
-                break;
-        }
-        const result = await this.userModel
-            .find({ createdAt: { $gte: startDate.toDate(), $lte: endDate.toDate() } })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-        return (0, service_1.serviceResponse)({
-            message: `Users registered in the last ${period}`,
-            data: result,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.userModel,
-                query,
-                querys: {
-                    createdAt: { $gte: startDate.toDate(), $lte: endDate.toDate() },
-                },
-            }),
-        });
-    }
-    async countRecentUsers() {
-        const today = moment().endOf("day");
-        const lastDayStart = moment().subtract(1, "day").startOf("day");
-        const lastWeekStart = moment().subtract(7, "days").startOf("day");
-        const lastMonthStart = moment().subtract(1, "month").startOf("day");
-        const userTypes = Object.values(enum_1.UserType);
-        const results = await Promise.all(userTypes.map(async (type) => {
-            const [dayCount, weekCount, monthCount, totalCount] = await Promise.all([
-                this.userModel.countDocuments({
-                    userType: type,
-                    createdAt: { $gte: lastDayStart.toDate(), $lte: today.toDate() },
-                }),
-                this.userModel.countDocuments({
-                    userType: type,
-                    createdAt: { $gte: lastWeekStart.toDate(), $lte: today.toDate() },
-                }),
-                this.userModel.countDocuments({
-                    userType: type,
-                    createdAt: {
-                        $gte: lastMonthStart.toDate(),
-                        $lte: today.toDate(),
-                    },
-                }),
-                this.userModel.countDocuments({ userType: type }),
-            ]);
-            return {
-                userType: type,
-                lastDay: dayCount,
-                lastWeek: weekCount,
-                lastMonth: monthCount,
-                total: totalCount,
-            };
-        }));
-        const data = results.reduce((acc, curr) => {
-            acc[curr.userType] = {
-                lastDay: curr.lastDay,
-                lastWeek: curr.lastWeek,
-                lastMonth: curr.lastMonth,
-                total: curr.total,
-            };
-            return acc;
-        }, {});
-        return (0, service_1.serviceResponse)({
-            message: "User count by type fetched successfully",
-            data,
-        });
-    }
-    async getNotification(params, query) {
-        const { key, value } = params;
-        const { page = 1, limit = 10 } = query;
-        const skip = (page - 1) * limit;
-        const result = await this.activityLogModel
-            .find({ [key]: value })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-        return (0, service_1.serviceResponse)({
-            message: "Success",
-            data: result,
-            metadata: await (0, service_1.getMetadata)({
-                model: this.activityLogModel,
-                query,
-                querys: { [key]: value },
-            }),
-        });
-    }
-    async getAllUserRefList(_id) {
-        const data = await this.userModel
-            .find({ refBy: _id })
-            .select("fullname email phone profileImage state refCode refBy userType type ")
-            .populate("refBy", "fullname email phone profileImage state refCode refBy referral userType type createdAt ");
-        return (0, service_1.serviceResponse)({
-            message: "Success",
-            status: true,
-            data,
-        });
-    }
-    async markAllUserNotificationAsRead(userID) {
-        const result = await this.activityLogModel.updateMany({ userID, isRead: false }, { $set: { isRead: true } });
-        return (0, service_1.serviceResponse)({
-            message: "All notifications marked as read",
-            status: true,
-            data: result,
-        });
-    }
-    async getUnreadNotificationCount(userID) {
-        const count = await this.activityLogModel.countDocuments({
-            userID,
-            isRead: false,
-        });
-        return (0, service_1.serviceResponse)({
-            message: "Unread notification count fetched successfully",
-            status: true,
-            data: { count },
-        });
-    }
-    async changeUserStatus(userID, status, userData) {
-        try {
-            const updatedUser = await this.userModel.findByIdAndUpdate(userID, { status }, { new: true });
-            if (!updatedUser) {
-                return (0, service_1.serviceResponse)({
-                    message: "User not found",
-                    status: false,
-                });
-            }
-            this.notificationActivity.notificationActivity({
-                action: "update",
-                entityType: "User",
-                entityID: updatedUser._id.toString(),
-                userID: updatedUser?._id.toString(),
-                details: `${updatedUser?.fullname} changed user status to ${status}`,
-                playerIds: [updatedUser?.playerId ?? ""],
-            });
-            return (0, service_1.serviceResponse)({
-                message: "User status updated successfully",
-                status: true,
-                data: updatedUser,
-            });
-        }
-        catch (error) {
-            return (0, service_1.serviceResponse)({
-                message: error.message,
-                status: false,
-            });
-        }
+    async remove(id) {
+        await this.walletRepository.delete(id);
     }
 };
-exports.UsersService = UsersService;
-exports.UsersService = UsersService = __decorate([
+exports.WalletSqlService = WalletSqlService;
+exports.WalletSqlService = WalletSqlService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(schema_1.UserModel.name)),
-    __param(1, (0, mongoose_1.InjectModel)(schema_1.ActivityLogModel.name)),
-    __metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object, typeof (_c = typeof service_1.NotificationService !== "undefined" && service_1.NotificationService) === "function" ? _c : Object])
-], UsersService);
+    __param(0, (0, typeorm_1.InjectRepository)(wallet_sql_schema_1.WalletSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], WalletSqlService);
+
+
+/***/ }),
+
+/***/ "./src/wallet/wallet.controller.ts":
+/*!*****************************************!*\
+  !*** ./src/wallet/wallet.controller.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WalletController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+let WalletController = class WalletController {
+};
+exports.WalletController = WalletController;
+exports.WalletController = WalletController = __decorate([
+    (0, common_1.Controller)('wallet')
+], WalletController);
+
+
+/***/ }),
+
+/***/ "./src/wallet/wallet.module.ts":
+/*!*************************************!*\
+  !*** ./src/wallet/wallet.module.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WalletModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const wallet_service_1 = __webpack_require__(/*! ./wallet.service */ "./src/wallet/wallet.service.ts");
+const wallet_controller_1 = __webpack_require__(/*! ./wallet.controller */ "./src/wallet/wallet.controller.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
+const wallet_sql_service_1 = __webpack_require__(/*! ./wallet-sql.service */ "./src/wallet/wallet-sql.service.ts");
+let WalletModule = class WalletModule {
+};
+exports.WalletModule = WalletModule;
+exports.WalletModule = WalletModule = __decorate([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([wallet_sql_schema_1.WalletSqlModel])],
+        providers: [wallet_service_1.WalletService, wallet_sql_service_1.WalletSqlService],
+        controllers: [wallet_controller_1.WalletController],
+        exports: [wallet_sql_service_1.WalletSqlService]
+    })
+], WalletModule);
+
+
+/***/ }),
+
+/***/ "./src/wallet/wallet.service.ts":
+/*!**************************************!*\
+  !*** ./src/wallet/wallet.service.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WalletService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+let WalletService = class WalletService {
+};
+exports.WalletService = WalletService;
+exports.WalletService = WalletService = __decorate([
+    (0, common_1.Injectable)()
+], WalletService);
 
 
 /***/ }),
@@ -8411,6 +8019,16 @@ module.exports = require("@nestjs/throttler");
 
 /***/ }),
 
+/***/ "@nestjs/typeorm":
+/*!**********************************!*\
+  !*** external "@nestjs/typeorm" ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/typeorm");
+
+/***/ }),
+
 /***/ "@nestjs/websockets":
 /*!*************************************!*\
   !*** external "@nestjs/websockets" ***!
@@ -8481,16 +8099,6 @@ module.exports = require("helmet");
 
 /***/ }),
 
-/***/ "moment":
-/*!*************************!*\
-  !*** external "moment" ***!
-  \*************************/
-/***/ ((module) => {
-
-module.exports = require("moment");
-
-/***/ }),
-
 /***/ "mongoose":
 /*!***************************!*\
   !*** external "mongoose" ***!
@@ -8518,16 +8126,6 @@ module.exports = require("mongoose-unique-validator");
 /***/ ((module) => {
 
 module.exports = require("multer");
-
-/***/ }),
-
-/***/ "otplib":
-/*!*************************!*\
-  !*** external "otplib" ***!
-  \*************************/
-/***/ ((module) => {
-
-module.exports = require("otplib");
 
 /***/ }),
 
@@ -8588,6 +8186,16 @@ module.exports = require("socket.io");
 /***/ ((module) => {
 
 module.exports = require("streamifier");
+
+/***/ }),
+
+/***/ "typeorm":
+/*!**************************!*\
+  !*** external "typeorm" ***!
+  \**************************/
+/***/ ((module) => {
+
+module.exports = require("typeorm");
 
 /***/ }),
 

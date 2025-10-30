@@ -5,6 +5,6 @@ import { FlutterwaveService, NotificationGateway, NotificationService, SendMailS
 
 @Module({
   controllers: [AdminController],
-  providers: [AdminService,NotificationService,NotificationGateway,SendMailService,FlutterwaveService ],
+  providers: [AdminService,NotificationService,NotificationGateway,SendMailService, ],
 })
 export class AdminModule {}

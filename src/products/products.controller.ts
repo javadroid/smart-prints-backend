@@ -5,17 +5,20 @@ import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { ApiOperation, ApiBody, ApiParam, ApiQuery, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@app/decorator';
 import { UserType } from '@app/enum';
+import { ProductSqlService } from './product-sql.service';
 
 @ApiTags("product")
 @ApiBearerAuth("access-token")
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductSqlService) {}
 
    @Post()
-   @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+   @UseGuards(JwtAuthGuard, 
+    // RolesGuard
+)
+// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new product" })
   @ApiBody({
     type: ProductDto,
@@ -29,12 +32,12 @@ export class ProductController {
     //   Action.Create,
     //   ProductModel,
     // );
-    return this.productService.upset(product, req.user);
+    return this.productService.create(product, req.user);
   }
 
   @Patch(":productID")
-  @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard, )
+// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing products" })
   @ApiParam({
     name: "productID",
@@ -120,7 +123,7 @@ export class ProductController {
   @ApiOperation({ summary: "Delete products by their IDs" })
  
   async delete(@Param("id") ids: string,  @Req() req: any) {
-    return this.productService.delete(ids, req.user);
+    return this.productService.remove(ids, );
   }
   
 }

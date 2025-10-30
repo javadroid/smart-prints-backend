@@ -30,44 +30,48 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const { MONGODB_URL, environment } = process.env;
-const DBLINK =
-  environment === 'production'
-    ? MONGODB_URL
-    : 'mongodb://localhost:27017/smartprints'; 
 
 @Global()
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      global: true,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
-        },
-      }),
-    }),
-    MongooseModule.forRoot(DBLINK),
-
-    MongooseModule.forFeature([{ name: UserModel.name, schema: UserSchema }]),
     
-    MongooseModule.forFeature([{ name:WalletModel.name, schema:WalletSchema }]),
-    MongooseModule.forFeature([{ name:ActivityLogModel.name, schema:ActivityLogSchema }]),
-    MongooseModule.forFeature([{ name: AuthenticatorModel.name, schema: AuthenticatorSchema }]),
-    MongooseModule.forFeature([{ name: OTPModel.name, schema: OTPSchema }]),
-        MongooseModule.forFeature([{ name: CartModel.name, schema: CartSchema }]),
+  //    MongooseModule.forRootAsync({
+  //     imports: [ConfigModule],
+  //     useFactory: async (configService: ConfigService) => ({
+  //       uri: configService.get<string>('MONGODB_URL'),
+  //       connectionFactory: (connection) => {
+  //         connection.on('connected', () => {
+  //           console.log('Database connected');
+  //         });
+  //         connection.on('disconnected', () => {
+  //           console.log('Database disconnected');
+  //         });
+  //         connection.on('error', (error) => {
+  //           console.log('Database connection error:', error);
+  //         });
+  //         return connection;
+  //       },
+  //     }),
+  //     inject: [ConfigService],
+  //   }),
 
-   MongooseModule.forFeature([{ name: DesignModel.name, schema: DesignSchema }]),
+  //   MongooseModule.forFeature([{ name: UserModel.name, schema: UserSchema }]),
+    
+  //   MongooseModule.forFeature([{ name:WalletModel.name, schema:WalletSchema }]),
+  //   MongooseModule.forFeature([{ name:ActivityLogModel.name, schema:ActivityLogSchema }]),
+  //   MongooseModule.forFeature([{ name: AuthenticatorModel.name, schema: AuthenticatorSchema }]),
+  //   MongooseModule.forFeature([{ name: OTPModel.name, schema: OTPSchema }]),
+  //       MongooseModule.forFeature([{ name: CartModel.name, schema: CartSchema }]),
+
+  //  MongooseModule.forFeature([{ name: DesignModel.name, schema: DesignSchema }]),
 
 
 
 
-    MongooseModule.forFeature([{ name: ProductModel.name, schema: ProductSchema }]),
-      MongooseModule.forFeature([{ name: OrderModel.name, schema: OrderSchema }]),
-     MongooseModule.forFeature([{ name: CategoriesModel.name, schema: CategoriesSchema }]),
-      MongooseModule.forFeature([{ name: ProductTypeModel.name, schema: ProductTypeSchema }]),
+  //   MongooseModule.forFeature([{ name: ProductModel.name, schema: ProductSchema }]),
+  //     MongooseModule.forFeature([{ name: OrderModel.name, schema: OrderSchema }]),
+  //    MongooseModule.forFeature([{ name: CategoriesModel.name, schema: CategoriesSchema }]),
+  //     MongooseModule.forFeature([{ name: ProductTypeModel.name, schema: ProductTypeSchema }]),
     
   ],
 

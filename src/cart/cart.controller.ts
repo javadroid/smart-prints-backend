@@ -3,19 +3,21 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } fro
 import { CartService } from './cart.service';
 import { JwtAuthGuard } from '@app/guard';
 import { CartDto } from '@app/dto';
+import { CategoriesSqlService } from 'src/categories/categories-sql.service';
+import { CartSqlService } from './cart-sql.service';
 
 @ApiTags('cart')
 @ApiBearerAuth('access-token')
 @Controller('carts')
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartSqlService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create or replace user cart' })
   @ApiBody({ type: CartDto })
   @UseGuards(JwtAuthGuard)
   async create(@Body() cart: CartDto, @Req() req: any) {
-    return this.cartService.upset(cart, req.user);
+    return this.cartService.create(cart, req.user);
   }
 
   @Get('user/:userID')
