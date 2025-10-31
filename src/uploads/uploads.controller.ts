@@ -48,7 +48,7 @@ export class UploadsController {
   uploadFile(
     @Request() req,
     @UploadedFiles() files: Array<Express.Multer.File>,
-  ): ObjectReturnType {
+  ): any {
     // Get the base URL of the current request (protocol + host)
     const host = req.protocol + '://' + req.get('host');
 
@@ -58,11 +58,7 @@ export class UploadsController {
       url: `${host}/v1/upload/file/${file.filename}`, // Full URL for the file
     }));
 
-    return serviceResponse({
-      message: fileUrls.length > 0 ? 'Files uploaded successfully' : 'No files were uploaded.',
-      data: fileUrls,
-      status: fileUrls.length > 0,
-    });
+    return fileUrls;
   }
 
   @Get('file/:filename')

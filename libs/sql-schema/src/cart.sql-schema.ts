@@ -27,14 +27,14 @@ export class CartSqlModel {
 
   @Column()
   userID: string;
-
+  @Column()
+  productID: string; // The actual foreign key column
   // --- Relationship with Product ---
-  @ManyToOne(() => ProductSqlModel, { eager: true }) // eager: true automatically loads the product
+  @ManyToOne(() => ProductSqlModel, { onDelete: 'CASCADE' }) // eager: true automatically loads the product
   @JoinColumn({ name: 'productID' }) // Specifies the foreign key column name
   product: ProductSqlModel;
 
-  @Column()
-  productID: string; // The actual foreign key column
+
 
   @Column({
     type: 'enum',

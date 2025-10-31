@@ -16,9 +16,9 @@ export class ProductController {
 
    @Post()
    @UseGuards(JwtAuthGuard, 
-    // RolesGuard
+    RolesGuard
 )
-// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new product" })
   @ApiBody({
     type: ProductDto,
@@ -36,8 +36,8 @@ export class ProductController {
   }
 
   @Patch(":productID")
-  @UseGuards(JwtAuthGuard, )
-// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard,RolesGuard )
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing products" })
   @ApiParam({
     name: "productID",
@@ -118,7 +118,8 @@ export class ProductController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+ @UseGuards(JwtAuthGuard,RolesGuard )
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   
   @ApiOperation({ summary: "Delete products by their IDs" })
  

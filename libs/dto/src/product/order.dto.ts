@@ -15,7 +15,8 @@ export class OrderDto {
      
     @ApiProperty({ description: 'products',  type:[CartDto] })
      products: CartDto[];
-
+  @ApiProperty({ description: 'products',  })
+     productIDs: string[];
  
     @ApiProperty({ description: 'Total price of the order', example: 120.50 })
      totalPrice: number;

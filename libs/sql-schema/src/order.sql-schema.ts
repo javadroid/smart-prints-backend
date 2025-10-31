@@ -7,28 +7,30 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-} from 'typeorm';
-import { UserSqlModel } from './user.sql-schema';
-import { CartSqlModel } from '.';
+} from "typeorm";
+import { UserSqlModel } from "./user.sql-schema";
+import { CartSqlModel } from ".";
 
-@Entity({ name: 'orders' })
+@Entity({ name: "orders" })
 export class OrderSqlModel {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   _id: string;
-@Column()
+  @Column()
   id: string;
   // --- Relationship to UserSqlModel ---
   @Column()
   userID: string; // Foreign key column
 
   @ManyToOne(() => UserSqlModel, (user) => user._id)
-  @JoinColumn({ name: 'userID' })
+  @JoinColumn({ name: "userID" })
   user: UserSqlModel;
 
   // --- Relationship to OrderItemSqlModel ---
   // An order has many products (order items)
-  @OneToMany(() => CartSqlModel, (cart) => cart._id)
-  products: CartSqlModel[];
+  // @OneToMany(() => CartSqlModel, (cart) => cart, { cascade: true })
+  // products: CartSqlModel[];
+    @Column({ type: "json", nullable: true })
+  products: Record<string, any>;
 
   @Column({ nullable: true })
   flutterwaveRef: string;
@@ -49,25 +51,25 @@ export class OrderSqlModel {
   isPaid: boolean;
 
   @Column({
-    type: 'decimal',
+    type: "decimal",
     precision: 10,
     scale: 2,
   })
   totalPrice: number;
 
-  @Column({ type: 'simple-array', nullable: true })
+  @Column({ type: "simple-array", nullable: true })
   imageUrls: string[];
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: "json", nullable: true })
   orderDetails: Record<string, any>;
 
-  @Column({ default: 'pending' })
+  @Column({ default: "pending" })
   status: string;
 
   @Column()
   address: string;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: "json", nullable: true })
   shippingAddress: Record<string, any>;
 
   @CreateDateColumn()

@@ -39,15 +39,15 @@ export class ProductSqlModel {
   // --- Relationships ---
   @Column()
   userID: string;
-  
+
   @ManyToOne(() => UserSqlModel, user => user._id)
   @JoinColumn({ name: 'userID' })
   user: UserSqlModel;
   // --- Simple Columns ---
-  @Column({ type: 'text' })
+  @Column({ nullable:true, type: 'text' })
   description: string;
   
-  @Column()
+  @Column({nullable:true,})
   image: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' })
@@ -91,10 +91,10 @@ export class ProductSqlModel {
   status: string;
 
   // --- Array & JSON Columns ---
-  @Column({ type: 'simple-array' })
+  @Column({ nullable:true, type: 'simple-array' })
   types: string[];
 
-  @Column({ type:'simple-array',  })
+  @Column({nullable:true, type:'simple-array',  })
   imageUrls: string[];
 
   @Column({ type: 'json', nullable: true })

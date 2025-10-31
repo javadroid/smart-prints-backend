@@ -13,6 +13,8 @@ export class CartSqlService {
   ) {}
 
   async create(cart: CartDto,userData:UserDTO): Promise<ObjectReturnType> {
+
+     
     const newCart = this.cartRepository.create({...cart, userID: userData._id.toString() });
     const data=await this.cartRepository.save(newCart);
     return serviceResponse({ data, message: 'Cart created', status: true });
@@ -26,14 +28,14 @@ export class CartSqlService {
     const carts = await this.cartRepository.find({
         take:limit,
         skip,
-        relations:['productID']
+        relations:['product']
     })
 
     return serviceResponse({ data: carts, message: 'Carts retrieved', status: true, metadata: await getSqlMetadata({ model: this.cartRepository, query, querys: {} }) });
   }
 
   async findByUser(userID: string): Promise<ObjectReturnType> {
-    const cart = await this.cartRepository.find({ where:{userID}, relations:['productID'] })
+    const cart = await this.cartRepository.find({ where:{userID}, relations:['product'] })
     return serviceResponse({ data: cart, message: 'Cart retrieved', status: true });
   }
 
