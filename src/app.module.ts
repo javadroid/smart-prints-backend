@@ -77,12 +77,13 @@ import { JwtModule } from '@nestjs/jwt';
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
           inject: [ConfigService],
+         
           useFactory: async (configService: ConfigService) => ({
             type: 'mysql', // Assuming PostgreSQL for SQL_URI
             url: configService.get<string>('SQL_URI'),
             entities: [UserSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel], // Register your SQL entities here
-            synchronize: true, // Set to false in production
-            // autoLoadEntities: true,
+            synchronize: false, // Set to false in production
+            autoLoadEntities: true,
             logging: ['query', 'error'],
           }),
         }),

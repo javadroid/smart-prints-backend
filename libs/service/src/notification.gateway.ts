@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-@WebSocketGateway(3002, {})
+@WebSocketGateway( {})
 export class NotificationGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {

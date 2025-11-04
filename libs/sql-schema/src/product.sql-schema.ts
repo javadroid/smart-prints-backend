@@ -53,19 +53,19 @@ export class ProductSqlModel {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' })
   price?: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
   basePrice: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   salePrice?: number;
 
-  @Column({ default: true })
+  @Column({ default: true ,})
   backgroundIn: boolean;
 
   @Column({ nullable: true, comment: 'legacy' })
   categoryID?: string;
 
-  @Column()
+  @Column({ nullable: true })
   category: string;
 
   @Column({ type: 'int', default:0, nullable: true })

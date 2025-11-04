@@ -64,13 +64,13 @@ export class UserSqlModel {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({nullable: true})
   fullname: string;
 
-  @Column()
+  @Column({nullable: true})
   firstname: string;
 
-  @Column()
+  @Column({nullable: true})
   lastname: string;
 
   @Column({ nullable: true })
@@ -109,7 +109,7 @@ export class UserSqlModel {
   @Column({ nullable: true })
   residentialAddress?: string;
   
-  @Column({ type: 'json' }) // Stores the Referral object as JSON
+  @Column({ type: 'json' ,nullable: true}) // Stores the Referral object as JSON
   referral: Referral;
 
   @Column({ nullable: true })

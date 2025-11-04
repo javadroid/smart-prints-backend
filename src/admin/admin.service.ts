@@ -13,61 +13,66 @@ import {
   UserModel,
 } from "@app/schema";
 import { NotificationService, serviceResponse } from "@app/service";
+import { CartSqlModel, CategoriesSqlModel, DesignSqlModel, OrderSqlModel, ProductSqlModel, UserSqlModel } from "@app/sql-schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Model } from "mongoose";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class AdminService {
   constructor(
-    // @InjectModel(CartModel.name)
-    // private cartModel: Model<CartDoc>,
-    // @InjectModel(CategoriesModel.name)
-    // private categoriesModel: Model<CategoriesDoc>,
-    // private notificationActivity: NotificationService,
-    // @InjectModel(UserModel.name) private userModel: Model<UserDoc>,
 
-    // @InjectModel(ProductModel.name)
-    // private productModel: Model<ProductDoc>,
-    // @InjectModel(OrderModel.name)
-    // private orderModel: Model<OrderDoc>,
-    // @InjectModel(DesignModel.name)
-    // private designModel: Model<DesignDoc>
+   
+    @InjectRepository(CartSqlModel)
+    private cartModel: Repository<CartSqlModel>,
+    @InjectRepository(CategoriesSqlModel)
+    private categoriesModel: Repository<CategoriesSqlModel>,
+
+    @InjectRepository(UserSqlModel) private userModel: Repository<UserSqlModel>,
+
+    @InjectRepository(ProductSqlModel)
+    private productModel: Repository<ProductSqlModel>,
+    @InjectRepository(OrderSqlModel)
+    private orderModel: Repository<OrderSqlModel>,
+    @InjectRepository(DesignSqlModel)
+    private designModel: Repository<DesignSqlModel>
   ) {}
 
   // admin dashboard stats, e.g. total users , total users that have succesfully placed an order , total orders by diffent status,  products, designs.
   async getDashboardStats() {
-  //   const totalUsers = await this.userModel.countDocuments().exec();
-  //   const totalProducts = await this.productModel.countDocuments().exec();
-  //   const totalDesigns = await this.designModel.countDocuments().exec();
-  //   const totalOrders = await this.orderModel.countDocuments().exec();
-  //   const totalCarts = await this.cartModel.countDocuments().exec();
-  //   const totalCategories = await this.categoriesModel.countDocuments().exec();
-  //   const totalCompletedOrders = await this.orderModel
-  //     .countDocuments({ status: "completed" })
-  //     .exec();
-  //   const totalPendingOrders = await this.orderModel
-  //     .countDocuments({ status: "pending" })
-  //     .exec();
-  //   const totalCancelledOrders = await this.orderModel
-  //     .countDocuments({ status: "cancelled" })
-  //     .exec();
-  //   const totalUsersWithOrders = await this.orderModel
-  //     .distinct("userID")
-  //     .exec();
-  //   return  serviceResponse({  message: "Dashboard stats retrieved", status: true,
-  //     data: {
-  //     totalUsers,
-  //     totalProducts,
-  //     totalDesigns,
-  //     totalOrders,
-  //     totalCarts,
-  //     totalCategories,
-  //     totalCompletedOrders,
-  //     totalPendingOrders,
-  //     totalCancelledOrders,
-  //     totalUsersWithOrders: totalUsersWithOrders.length,}
-  //  });
+    const totalUsers = await this.userModel.count();
+    const totalProducts = await this.productModel.count();
+    const totalDesigns = await this.designModel.count();
+    const totalOrders = await this.orderModel.count();
+    const totalCarts = await this.cartModel.count();
+    const totalCategories = await this.categoriesModel.count();
+    const totalCompletedOrders = await this.orderModel
+      .countBy( {   status: "completed" })
+      ;
+    const totalPendingOrders = await this.orderModel
+      .countBy({ status: "pending" })
+      ;
+    const totalCancelledOrders = await this.orderModel
+      .countBy({ status: "cancelled" })
+      ;
+    const totalUsersWithOrders = await this.orderModel
+      .countBy({ status: "completed" })
+      ;
+    return  serviceResponse({  message: "Dashboard stats retrieved", status: true,
+      data: {
+      totalUsers,
+      totalProducts,
+      totalDesigns,
+      totalOrders,
+      totalCarts,
+      totalCategories,
+      totalCompletedOrders,
+      totalPendingOrders,
+      totalCancelledOrders,
+      totalUsersWithOrders: totalUsersWithOrders,}
+   });
 
   return {}
   }
