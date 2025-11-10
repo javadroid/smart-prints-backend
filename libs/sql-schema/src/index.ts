@@ -7,3 +7,4 @@ export * from './cart.sql-schema';
 export * from './design.sql-schema';
 export * from './otp.sql-schema';
 export * from './wallet.sql-schema';
+export * from './delivery-price.sql-schema';

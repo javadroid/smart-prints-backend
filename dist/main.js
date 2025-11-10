@@ -46,6 +46,52 @@ exports.Roles = Roles;
 
 /***/ }),
 
+/***/ "./libs/dto/src/delivery-price.dto.ts":
+/*!********************************************!*\
+  !*** ./libs/dto/src/delivery-price.dto.ts ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DeliveryPriceDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class DeliveryPriceDTO {
+}
+exports.DeliveryPriceDTO = DeliveryPriceDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country for delivery price' }),
+    __metadata("design:type", String)
+], DeliveryPriceDTO.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State for delivery price' }),
+    __metadata("design:type", String)
+], DeliveryPriceDTO.prototype, "state", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Local Government Area for delivery price' }),
+    __metadata("design:type", String)
+], DeliveryPriceDTO.prototype, "lga", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Delivery fee' }),
+    __metadata("design:type", Number)
+], DeliveryPriceDTO.prototype, "deliveryFee", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Additional fee for delivery' }),
+    __metadata("design:type", Number)
+], DeliveryPriceDTO.prototype, "additionalFee", void 0);
+
+
+/***/ }),
+
 /***/ "./libs/dto/src/index.ts":
 /*!*******************************!*\
   !*** ./libs/dto/src/index.ts ***!
@@ -87,6 +133,7 @@ __exportStar(__webpack_require__(/*! ./product/notifications.dto */ "./libs/dto/
 __exportStar(__webpack_require__(/*! ./product/product.dto */ "./libs/dto/src/product/product.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./reference/select.dto */ "./libs/dto/src/reference/select.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./product/order.dto */ "./libs/dto/src/product/order.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./delivery-price.dto */ "./libs/dto/src/delivery-price.dto.ts"), exports);
 
 
 /***/ }),
@@ -4120,6 +4167,69 @@ exports.CategoriesSqlModel = CategoriesSqlModel = __decorate([
 
 /***/ }),
 
+/***/ "./libs/sql-schema/src/delivery-price.sql-schema.ts":
+/*!**********************************************************!*\
+  !*** ./libs/sql-schema/src/delivery-price.sql-schema.ts ***!
+  \**********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DeliveryPriceSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+let DeliveryPriceSqlModel = class DeliveryPriceSqlModel {
+};
+exports.DeliveryPriceSqlModel = DeliveryPriceSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], DeliveryPriceSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DeliveryPriceSqlModel.prototype, "country", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DeliveryPriceSqlModel.prototype, "state", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], DeliveryPriceSqlModel.prototype, "lga", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, default: 3000.00 }),
+    __metadata("design:type", Number)
+], DeliveryPriceSqlModel.prototype, "deliveryFee", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, default: 1000.00 }),
+    __metadata("design:type", Number)
+], DeliveryPriceSqlModel.prototype, "additionalFee", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], DeliveryPriceSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], DeliveryPriceSqlModel.prototype, "updatedAt", void 0);
+exports.DeliveryPriceSqlModel = DeliveryPriceSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'delivery_prices' }),
+    (0, typeorm_1.Unique)(["country", "state", "lga"])
+], DeliveryPriceSqlModel);
+
+
+/***/ }),
+
 /***/ "./libs/sql-schema/src/design.sql-schema.ts":
 /*!**************************************************!*\
   !*** ./libs/sql-schema/src/design.sql-schema.ts ***!
@@ -4222,6 +4332,7 @@ __exportStar(__webpack_require__(/*! ./cart.sql-schema */ "./libs/sql-schema/src
 __exportStar(__webpack_require__(/*! ./design.sql-schema */ "./libs/sql-schema/src/design.sql-schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./delivery-price.sql-schema */ "./libs/sql-schema/src/delivery-price.sql-schema.ts"), exports);
 
 
 /***/ }),
@@ -5129,7 +5240,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -5138,12 +5252,22 @@ const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts
 const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
 let AdminController = class AdminController {
     constructor(adminService) {
         this.adminService = adminService;
     }
     async getDashboardStats() {
         return this.adminService.getDashboardStats();
+    }
+    async createDeliveryPrice(deliveryPriceDto) {
+        return this.adminService.createDeliveryPrice(deliveryPriceDto);
+    }
+    async getDeliveryPrices(country, state, lga) {
+        return this.adminService.getDeliveryPrices(country, state, lga);
+    }
+    async deleteDeliveryPrice(id) {
+        return this.adminService.deleteDeliveryPrice(id);
     }
 };
 exports.AdminController = AdminController;
@@ -5155,6 +5279,33 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "getDashboardStats", null);
+__decorate([
+    (0, common_1.Post)('delivery-price'),
+    (0, swagger_1.ApiBody)({ type: dto_1.DeliveryPriceDTO }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.DeliveryPriceDTO !== "undefined" && dto_1.DeliveryPriceDTO) === "function" ? _b : Object]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "createDeliveryPrice", null);
+__decorate([
+    (0, common_1.Get)('delivery-price'),
+    (0, swagger_1.ApiQuery)({ name: 'country', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'state', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'lga', required: false }),
+    __param(0, (0, common_1.Query)('country')),
+    __param(1, (0, common_1.Query)('state')),
+    __param(2, (0, common_1.Query)('lga')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getDeliveryPrices", null);
+__decorate([
+    (0, common_1.Delete)('delivery-price/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "deleteDeliveryPrice", null);
 exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
@@ -5192,7 +5343,7 @@ let AdminModule = class AdminModule {
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.UserSqlModel, sql_schema_1.ProductSqlModel, sql_schema_1.OrderSqlModel, sql_schema_1.CategoriesSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DesignSqlModel, sql_schema_1.OtpSqlModel, sql_schema_1.WalletSqlModel])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.UserSqlModel, sql_schema_1.ProductSqlModel, sql_schema_1.OrderSqlModel, sql_schema_1.CategoriesSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DesignSqlModel, sql_schema_1.OtpSqlModel, sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel])],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService,],
     })
@@ -5220,7 +5371,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminService = void 0;
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
@@ -5229,13 +5380,14 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
 let AdminService = class AdminService {
-    constructor(cartModel, categoriesModel, userModel, productModel, orderModel, designModel) {
+    constructor(cartModel, categoriesModel, userModel, productModel, orderModel, designModel, deliveryPriceModel) {
         this.cartModel = cartModel;
         this.categoriesModel = categoriesModel;
         this.userModel = userModel;
         this.productModel = productModel;
         this.orderModel = orderModel;
         this.designModel = designModel;
+        this.deliveryPriceModel = deliveryPriceModel;
     }
     async getDashboardStats() {
         const totalUsers = await this.userModel.count();
@@ -5244,15 +5396,21 @@ let AdminService = class AdminService {
         const totalOrders = await this.orderModel.count();
         const totalCarts = await this.cartModel.count();
         const totalCategories = await this.categoriesModel.count();
-        const totalCompletedOrders = await this.orderModel
-            .countBy({ status: "completed" });
-        const totalPendingOrders = await this.orderModel
-            .countBy({ status: "pending" });
-        const totalCancelledOrders = await this.orderModel
-            .countBy({ status: "cancelled" });
-        const totalUsersWithOrders = await this.orderModel
-            .countBy({ status: "completed" });
-        return (0, service_1.serviceResponse)({ message: "Dashboard stats retrieved", status: true,
+        const totalCompletedOrders = await this.orderModel.countBy({
+            status: "completed",
+        });
+        const totalPendingOrders = await this.orderModel.countBy({
+            status: "pending",
+        });
+        const totalCancelledOrders = await this.orderModel.countBy({
+            status: "cancelled",
+        });
+        const totalUsersWithOrders = await this.orderModel.countBy({
+            status: "completed",
+        });
+        return (0, service_1.serviceResponse)({
+            message: "Dashboard stats retrieved",
+            status: true,
             data: {
                 totalUsers,
                 totalProducts,
@@ -5264,9 +5422,63 @@ let AdminService = class AdminService {
                 totalPendingOrders,
                 totalCancelledOrders,
                 totalUsersWithOrders: totalUsersWithOrders,
-            }
+            },
         });
         return {};
+    }
+    async createDeliveryPrice(deliveryPriceDto) {
+        try {
+            const deliveryPrice = this.deliveryPriceModel.create({
+                country: deliveryPriceDto.country,
+                state: deliveryPriceDto.state,
+                lga: deliveryPriceDto.lga,
+                deliveryFee: deliveryPriceDto.deliveryFee,
+                additionalFee: deliveryPriceDto.additionalFee,
+            });
+            const result = await this.deliveryPriceModel.upsert(deliveryPrice, ["country", "state", "lga"]);
+            const updatedDeliveryPrice = result.generatedMaps[0];
+            return (0, service_1.serviceResponse)({
+                message: 'successfully',
+                status: true,
+                data: updatedDeliveryPrice,
+            });
+        }
+        catch (error) {
+            console.error('Error creating or updating delivery price:', error);
+            return (0, service_1.serviceResponse)({
+                message: 'Error occurred while processing delivery price',
+                status: false,
+                data: null,
+            });
+        }
+    }
+    async getDeliveryPrices(country, state, lga) {
+        const where = {};
+        if (country)
+            where.country = country;
+        if (state)
+            where.state = state;
+        if (lga)
+            where.lga = lga;
+        const deliveryPrices = await this.deliveryPriceModel.find({ where });
+        return (0, service_1.serviceResponse)({
+            message: "Delivery prices retrieved successfully",
+            status: true,
+            data: deliveryPrices,
+        });
+    }
+    async deleteDeliveryPrice(id) {
+        const result = await this.deliveryPriceModel.delete(id);
+        if (result.affected === 0) {
+            return (0, service_1.serviceResponse)({
+                message: "Delivery price not found",
+                status: false,
+            });
+        }
+        return (0, service_1.serviceResponse)({
+            message: "Delivery price deleted successfully",
+            status: true,
+        });
     }
 };
 exports.AdminService = AdminService;
@@ -5278,7 +5490,8 @@ exports.AdminService = AdminService = __decorate([
     __param(3, (0, typeorm_1.InjectRepository)(sql_schema_1.ProductSqlModel)),
     __param(4, (0, typeorm_1.InjectRepository)(sql_schema_1.OrderSqlModel)),
     __param(5, (0, typeorm_1.InjectRepository)(sql_schema_1.DesignSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _e : Object, typeof (_f = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _f : Object])
+    __param(6, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _e : Object, typeof (_f = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object])
 ], AdminService);
 
 
@@ -5402,6 +5615,7 @@ const design_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/design.sql-s
 const otp_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/otp.sql-schema */ "./libs/sql-schema/src/otp.sql-schema.ts");
 const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
 const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -5449,7 +5663,7 @@ exports.AppModule = AppModule = __decorate([
                 useFactory: async (configService) => ({
                     type: 'mysql',
                     url: configService.get('SQL_URI'),
-                    entities: [user_sql_schema_1.UserSqlModel, product_sql_schema_1.ProductSqlModel, order_sql_schema_1.OrderSqlModel, categories_sql_schema_1.CategoriesSqlModel, cart_sql_schema_1.CartSqlModel, design_sql_schema_1.DesignSqlModel, otp_sql_schema_1.OtpSqlModel, wallet_sql_schema_1.WalletSqlModel],
+                    entities: [user_sql_schema_1.UserSqlModel, product_sql_schema_1.ProductSqlModel, order_sql_schema_1.OrderSqlModel, categories_sql_schema_1.CategoriesSqlModel, cart_sql_schema_1.CartSqlModel, design_sql_schema_1.DesignSqlModel, otp_sql_schema_1.OtpSqlModel, wallet_sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel],
                     synchronize: false,
                     autoLoadEntities: true,
                     logging: ['query', 'error'],

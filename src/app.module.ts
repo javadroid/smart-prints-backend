@@ -33,6 +33,7 @@ import { DesignSqlModel } from '@app/sql-schema/design.sql-schema';
 import { OtpSqlModel } from '@app/sql-schema/otp.sql-schema';
 import { WalletSqlModel } from '@app/sql-schema/wallet.sql-schema';
 import { JwtModule } from '@nestjs/jwt';
+import { DeliveryPriceSqlModel } from '@app/sql-schema';
 
 
 @Module({
@@ -81,7 +82,7 @@ import { JwtModule } from '@nestjs/jwt';
           useFactory: async (configService: ConfigService) => ({
             type: 'mysql', // Assuming PostgreSQL for SQL_URI
             url: configService.get<string>('SQL_URI'),
-            entities: [UserSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel], // Register your SQL entities here
+            entities: [UserSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel], // Register your SQL entities here
             synchronize: false, // Set to false in production
             autoLoadEntities: true,
             logging: ['query', 'error'],
