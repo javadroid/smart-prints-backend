@@ -40,15 +40,25 @@ import { DeliveryPriceSqlModel } from '@app/sql-schema';
   imports: [
      CaslModule,
         ScheduleModule.forRoot(),
-        MailerModule.forRoot({
-          transport: {
-            host: process.env.EMAIL_HOST||"jamfortetech.com",
-            auth: {
-              user: process.env.EMAIL_USERNAME||"emmanuel@jamfortetech.com",
-              pass: process.env.EMAIL_PASSWORD||"Simple@1010*",
-            },
+        MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get<string>("EMAIL_HOST") || "jamfortetech.com",
+
+          auth: {
+            user:
+              configService.get<string>("EMAIL_USERNAME") ||
+              "emmanuel@jamfortetech.com",
+            pass: configService.get<string>("EMAIL_PASSWORD") || "Simple@1010*",
           },
-        }),
+           connectionTimeout: 5000,
+          port: 465, // SSL
+          secure: true,
+        },
+      }),
+    }),
         MulterModule.registerAsync({
           useFactory: () => ({
             dest: './uploads',

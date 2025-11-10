@@ -3195,19 +3195,43 @@ let SendMailService = class SendMailService {
         this.mailService = mailService;
     }
     async sendMail({ from, to, subject, html, text }) {
+        console.log({ from, to, subject, html, text });
         const data = {
-            from: from || 'emmanuel@jamfortetech.com',
+            from: from || 'smarts@smartprints.ng',
             to,
             subject,
             text,
             html,
         };
         try {
-            this.mailService.sendMail(data).catch((e) => {
-                console.log('SmS failed');
+            this.mailService.sendMail(data).then(() => {
+                console.log('Email sent');
+            }).catch((e) => {
+                console.log('Email failed');
             });
         }
         catch (error) { }
+    }
+    getEmailSubject(eventType) {
+        const subjects = {
+            login: "Login Alert - Your Account Was Accessed",
+            register: "Welcome! Your Account Has Been Created",
+            password_change: "Password Changed Successfully",
+            otp: "Your OTP Code",
+        };
+        return subjects[eventType] || "Account Activity Alert";
+    }
+    generateEmailContent(data) {
+        const { eventType, fullname, eventDetails } = data;
+        const subject = this.getEmailSubject(eventType);
+        let content = `
+      <p>Hello ${fullname || "User"},</p>
+      <p>Your ${subject}.</p>
+    `;
+        if (eventDetails && subject) {
+            content += `<p>Details: ${JSON.stringify(eventDetails)}</p>`;
+        }
+        return content;
     }
 };
 exports.SendMailService = SendMailService;
@@ -5624,14 +5648,22 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             casl_module_1.CaslModule,
             schedule_1.ScheduleModule.forRoot(),
-            mailer_1.MailerModule.forRoot({
-                transport: {
-                    host: process.env.EMAIL_HOST || "jamfortetech.com",
-                    auth: {
-                        user: process.env.EMAIL_USERNAME || "emmanuel@jamfortetech.com",
-                        pass: process.env.EMAIL_PASSWORD || "Simple@1010*",
+            mailer_1.MailerModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => ({
+                    transport: {
+                        host: configService.get("EMAIL_HOST") || "jamfortetech.com",
+                        auth: {
+                            user: configService.get("EMAIL_USERNAME") ||
+                                "emmanuel@jamfortetech.com",
+                            pass: configService.get("EMAIL_PASSWORD") || "Simple@1010*",
+                        },
+                        connectionTimeout: 5000,
+                        port: 465,
+                        secure: true,
                     },
-                },
+                }),
             }),
             platform_express_1.MulterModule.registerAsync({
                 useFactory: () => ({
@@ -5785,6 +5817,7 @@ let AuthSqlService = class AuthSqlService {
             const message = await this.smsService.generateMessage(data);
             this.sendMailService.sendMail({
                 to: created.email,
+                from: "Smart Prints <smarts@smartprints.ng>",
                 subject: "Email Code Verification",
                 text: message,
             });
@@ -5849,6 +5882,7 @@ let AuthSqlService = class AuthSqlService {
         const message = await this.smsService.generateMessage(data);
         this.sendMailService.sendMail({
             to: user.email,
+            from: "Smart Prints <smarts@smartprints.ng>",
             subject: body.type,
             text: message,
         });
