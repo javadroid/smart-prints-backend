@@ -10,7 +10,7 @@ import {
   serviceResponse,
 } from "@app/service";
 import { randomUUID } from "crypto";
-import { CartSqlModel, ProductSqlModel } from "@app/sql-schema";
+import { CartSqlModel, DeliveryPriceSqlModel, ProductSqlModel } from "@app/sql-schema";
 
 @Injectable()
 export class OrderSqlService {
@@ -19,6 +19,8 @@ export class OrderSqlService {
     private readonly orderRepository: Repository<OrderSqlModel>,
     @InjectRepository(CartSqlModel)
     private readonly cartRepository: Repository<CartSqlModel>,
+        @InjectRepository(DeliveryPriceSqlModel)
+    private readonly deliveryPriceSqlModelRepository: Repository<DeliveryPriceSqlModel>,
     private paystack: PaystackService
   ) {}
 
@@ -29,22 +31,34 @@ export class OrderSqlService {
     console.log(order);
     const cartItems = await this.cartRepository.find({ where: { userID: userData._id } });
     const totalPrice = cartItems.reduce((sum, item) => sum + (Number(item?.price) || 0), 0) ;
+    const delivery = await this.deliveryPriceSqlModelRepository.findOne({where:{
+      state:order.orderDetails?.state,
+      lga:order.orderDetails?.lga
+    }})
+    let deliveryFee=0
+    if(cartItems.length>1){
+      deliveryFee= (delivery?.deliveryFee??3000) + ((cartItems.length -1) *1000)
+    }else{
+      deliveryFee= delivery?.deliveryFee??3000
+    }
+    // Fixed delivery fee
     const newOrder = this.orderRepository.create({
       ...order,
       tx_ref,
       products:cartItems,
-      totalPrice,
+      totalPrice: totalPrice ,
+      deliveryFee,
       userID: userData._id.toString(),
     });
     const created = await this.orderRepository.save(newOrder);
     console.log(order);
     console.log(created);
     const paymentrequest = {
-      amount: created.totalPrice,
+      amount: created.totalPrice+created.deliveryFee,
       currency: "NGN",
       email: userData.email,
       callback_url:
-        "https://smart-prints-custom-apparel.onrender.com/order-success/" +
+        "https://smartprints.ng/?payment=" +
         created._id.toString(),
       metadata: {
         tx_ref,

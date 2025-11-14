@@ -64,7 +64,7 @@ export class AuthSqlService {
 
       this.sendMailService.sendMail({
         to: created.email,
-        from: "Smart Prints <smarts@smartprints.ng>",
+        from: "Smart Prints<smarts@smartprints.ng>",
         subject: "Email Code Verification",
         text: message,
       });
@@ -135,7 +135,7 @@ export class AuthSqlService {
     }
 
     const data = await this.otpRepository.save({
-      userID: user.id,
+      userID: user._id,
       type: body.type,
       code: Math.floor(100000 + Math.random() * 900000).toString(), // Generate a 6-digit code
       status: "pending",
@@ -147,7 +147,7 @@ export class AuthSqlService {
 
     this.sendMailService.sendMail({
       to: user.email,
-            from: "Smart Prints <smarts@smartprints.ng>",
+            from: "Smart Prints<smarts@smartprints.ng>",
       subject: body.type,
       text: message,
     });
@@ -186,22 +186,23 @@ export class AuthSqlService {
   }
 
   async forgotPassword(
-    token: string,
+    
     code: string,
     newPassword: string
   ): Promise<any> {
     const checkCode = await this.otpRepository.findOne({
-      where: { code, status: "pending", type: "PasswordReset" },
+      where: { code, type: "PasswordReset" },
     });
 
+    
     if (!checkCode) {
       throw new NotFoundException("Code not found or expired");
     }
 
     const user = await this.userRepository.findOne({
-      where: { id: checkCode.userID },
+      where: { _id: checkCode.userID },
     });
-    await this.otpRepository.update(checkCode.id, { status: "used" });
+    await this.otpRepository.delete(checkCode.id);
 
     if (!user) {
       throw new NotFoundException("User not found");
@@ -212,8 +213,28 @@ export class AuthSqlService {
     await this.userRepository.update(checkCode.userID, {
       password: hashedPassword,
     });
-    return {
-      message: "Password successfully updated",
-    };
+
+   return this.getLoginToken(user);
+  }
+  async verifyCode(body: any) {
+    const checkCode = await this.otpRepository.findOne({
+      where: { code: body.code, status: "pending", type: "EmailVerification" },
+    });
+    if (!checkCode) {
+      throw new NotFoundException("Code not found or expired");
+    }
+    await this.otpRepository.delete(checkCode.id);
+    await this.userRepository.update(checkCode.userID, {
+      emailStatus: "verified",
+    });
+    const user = await this.userRepository.findOne({
+      where: { _id: checkCode.userID },
+    });
+    console.log({user,ss:checkCode.userID});
+    return this.getLoginToken(user);
+  }
+
+  deleteAccount(userID: string): Promise<any> {
+    return this.userRepository.delete(userID);
   }
 }

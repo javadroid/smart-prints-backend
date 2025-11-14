@@ -147,12 +147,10 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('delete-account')
-  @ApiBody({ type: DeleteAccountDTO , })
-  @ApiOperation({ summary: 'User deletes account' })
-  @ApiResponse({ status: 200, description: 'Account successfully deleted' })
-  deleteAccount(@Request() req) {
-    return {}
+
+  @Post('delete-account/:id')
+  deleteAccount(@Param("id") body: string) {
+    return this.authSqlService.deleteAccount(body);
   }
 
   // @UseGuards(JwtAuthGuard)
@@ -160,8 +158,8 @@ export class AuthController {
   @ApiBody({ type: ForgotPasswordDTO , })
   @ApiOperation({ summary: 'forgot Password' })
   @ApiResponse({ status: 200, description: 'Password successfully updated' })
-  forgotPassword(@Request() req) {
-    return {}
+  forgotPassword(@Body() body: ForgotPasswordDTO) {
+    return this.authSqlService.forgotPassword(body.code,body.newPassword);
   }
 
   //verify code
@@ -175,11 +173,14 @@ export class AuthController {
   } })
   @ApiOperation({ summary: 'verify code' })
   @ApiResponse({ status: 200, description: 'code successfully verified' })
-  verifyCode(@Request() req) {
-    return {}
+  verifyCode(
+    @Body("type") type: string,
+    @Body("code") code: string,
+  ) {
+    return this.authSqlService.verifyCode({type,code}); 
   }
   
-
+  
 
 
 }

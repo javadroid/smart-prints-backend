@@ -22,7 +22,7 @@ export class SendMailService {
   async sendMail({ from, to, subject, html, text }: SendMailInterface) {
     console.log({from, to, subject, html, text})
     const data = {
-      from: from || 'smarts@smartprints.ng',
+      from: from || 'Smart Prints<smarts@smartprints.ng>',
       to,
       subject,
       text,

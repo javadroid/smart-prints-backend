@@ -56,7 +56,12 @@ export class OrderSqlModel {
     scale: 2,
   })
   totalPrice: number;
-
+@Column({
+    type: "decimal",
+    precision: 10,
+    scale: 2,
+  })
+  deliveryFee: number;
   @Column({ type: "simple-array", nullable: true })
   imageUrls: string[];
 

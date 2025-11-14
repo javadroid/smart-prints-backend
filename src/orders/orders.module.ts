@@ -6,10 +6,10 @@ import { PaystackService } from '@app/service/payment/paystack';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderSqlModel } from '@app/sql-schema/order.sql-schema';
 import { OrderSqlService } from './order-sql.service';
-import { CartSqlModel } from '@app/sql-schema';
+import { CartSqlModel, DeliveryPriceSqlModel } from '@app/sql-schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderSqlModel,CartSqlModel]),],
+  imports: [TypeOrmModule.forFeature([OrderSqlModel,CartSqlModel,DeliveryPriceSqlModel]),],
   
   controllers: [OrderController],
   providers: [FlutterwaveService,PaystackService, OrderSqlService],

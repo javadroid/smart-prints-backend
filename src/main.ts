@@ -14,9 +14,13 @@ import helmet from "helmet";
 
 import { EncryptionInterceptor } from "middleware/encrypt.middleware";
 import { DecryptInterceptor } from "middleware/decrypt.middleware";
+import { FileLogger } from "./logger/file-logger.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // use file logger so errors are written to logs/error.log
+  app.useLogger(new FileLogger());
 
   // app.useGlobalInterceptors(new DecryptInterceptor());
   // app.useGlobalInterceptors(new EncryptionInterceptor());
@@ -27,7 +31,7 @@ async function bootstrap() {
     credentials: true,
     origin: [
       'http://localhost:5173',
-
+'https://www.smartprints.ng',
       'https://smartprints.ng',
       'https://api.smartprints.ng'
     ],
@@ -44,10 +48,6 @@ async function bootstrap() {
     exposedHeaders: ['Content-Disposition'],
     maxAge: 3600
   });
-//   app.use((req, res, next) => {
-//   console.log('CORS Headers:', res.getHeaders());
-//   next();
-// });
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
