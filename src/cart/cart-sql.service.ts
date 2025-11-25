@@ -23,9 +23,12 @@ export class CartSqlService {
     const isFront=(cart.metadata?.front?.elements??[]).length>0
     const isBack=(cart.metadata?.back?.elements??[]).length>0
 
-     let price = (product.salePrice && product.salePrice>0) ? product.salePrice : product.price;
+     let price = product?.salePrice || product?.basePrice || 0
      if(isFront&&isBack){
-      price += (product.additionalPrice??0)
+       const additionalPrice = (product?.additionalPrice??0)<1? 1500:Number(product?.additionalPrice);
+      
+      const totalPrice = Number(price) + additionalPrice;
+      price += totalPrice
      }
     const newCart = this.cartRepository.create({...cart,price, userID: userData._id.toString() });
     const data=await this.cartRepository.save(newCart);
