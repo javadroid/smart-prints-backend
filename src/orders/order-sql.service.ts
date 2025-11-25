@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotAcceptableException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { OrderSqlModel } from "@app/sql-schema/order.sql-schema";
@@ -25,10 +25,11 @@ export class OrderSqlService {
   ) {}
 
   async create(order: OrderDto, userData: UserDTO): Promise<ObjectReturnType> {
-    const tx_ref = `smartprints-${userData.id}-${randomUUID()
+   try {
+     const tx_ref = `smartprints-${userData.id}-${randomUUID()
       .replace(/\D/g, "")
       .substring(0, 10)}`;
-    console.log(order);
+
     const cartItems = await this.cartRepository.find({ where: { userID: userData._id } });
     const totalPrice = cartItems.reduce((sum, item) => sum + (Number(item?.price) || 0), 0) ;
     const delivery = await this.deliveryPriceSqlModelRepository.findOne({where:{
@@ -36,11 +37,19 @@ export class OrderSqlService {
       lga:order.orderDetails?.lga
     }})
     let deliveryFee=0
-    if(cartItems.length>1){
-      deliveryFee= (delivery?.deliveryFee??3000) + ((cartItems.length -1) *1000)
-    }else{
-      deliveryFee= delivery?.deliveryFee??3000
+    for(let i=0;i<cartItems.length;i++){
+      deliveryFee+= (delivery?.deliveryFee??3000)
+      if((cartItems[i].quantity)&&cartItems[i].quantity>1){
+        deliveryFee+= ((cartItems[i].quantity-1) *((delivery?.additionalFee)?? 1000))
+      }
     }
+    console.log({delivery2:delivery})
+    console.log({...order,
+      tx_ref,
+      products:cartItems,
+      totalPrice: totalPrice ,
+      deliveryFee,
+      userID: userData._id.toString(),})
     // Fixed delivery fee
     const newOrder = this.orderRepository.create({
       ...order,
@@ -51,10 +60,10 @@ export class OrderSqlService {
       userID: userData._id.toString(),
     });
     const created = await this.orderRepository.save(newOrder);
-    console.log(order);
+
     console.log(created);
     const paymentrequest = {
-      amount: created.totalPrice+created.deliveryFee,
+      amount: (Number(created.totalPrice)+Number(created.deliveryFee)),
       currency: "NGN",
       email: userData.email,
       callback_url:
@@ -83,6 +92,10 @@ export class OrderSqlService {
 
       status: true,
     });
+   } catch (error) {
+    
+    throw new NotAcceptableException(error.message);
+   }
   }
 
   async findAll(query): Promise<ObjectReturnType> {

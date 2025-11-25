@@ -118,6 +118,9 @@ export class ProductModel {
     backgroundIn:boolean;
   @Prop({ required: false })
   salePrice?: number;
+@Prop({ required: false })
+  additionalPrice?: number;
+
 
   @Prop({  })
   categoryID?: string; // legacy

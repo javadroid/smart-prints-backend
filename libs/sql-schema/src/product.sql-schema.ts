@@ -59,6 +59,9 @@ export class ProductSqlModel {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   salePrice?: number;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  additionalPrice?: number;
+
   @Column({ default: true ,})
   backgroundIn: boolean;
 

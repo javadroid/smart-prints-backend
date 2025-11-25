@@ -62,4 +62,26 @@ export class CartController {
   async clearUserCart(@Param('userID') userID: string) {
     return this.cartService.clearUserCart(userID);
   }
+
+  // Update carts quantity by cart IDs
+  @Post('update-quantities')
+  @ApiOperation({ summary: 'Update quantities of multiple carts' })
+  @ApiBody({  description: 'Array of cart IDs and their new quantities',
+    schema: {
+      type: 'array',
+      items: { 
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: 'Cart ID' },
+          quantity: { type: 'number', description: 'New quantity' },
+        },
+        required: ['id', 'quantity'],
+      },
+    },
+  })
+  
+  @UseGuards(JwtAuthGuard)
+  async updateCartsQuantity(@Body() cartUpdates: { id: string; quantity: number }[]) {
+    return this.cartService.updateCartsQuantity(cartUpdates);
+  }
 }

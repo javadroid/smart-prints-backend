@@ -9,7 +9,13 @@ export class CategoriesSqlModel {
   id: string;
   @Column({ unique: true })
   name: string;
-
+  
+@Column({
+    type: 'enum',
+    enum: ['custom', 'store'],
+    default: 'custom',
+  })
+  type: string;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

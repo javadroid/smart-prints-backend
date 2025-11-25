@@ -27,6 +27,12 @@ export class CartSqlModel {
 
   @Column()
   userID: string;
+
+  @Column({default:""})
+  size: string;
+
+
+
   @Column()
   productID: string; // The actual foreign key column
   // --- Relationship with Product ---
@@ -57,7 +63,8 @@ export class CartSqlModel {
 
   @Column()
   designImage: string;
-
+  @Column({ type: 'int', default:1, nullable: true })
+  quantity?: number;
   @Column({
     type: 'simple-json', // Use 'jsonb' for flexible object storage in PostgreSQL
     nullable: true,
