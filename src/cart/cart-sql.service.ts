@@ -24,11 +24,25 @@ export class CartSqlService {
     const isBack=(cart.metadata?.back?.elements??[]).length>0
 
      let price = product?.salePrice || product?.basePrice || 0
+const isMug = product?.category === "mug";
+   
+    if (isMug) {
+      const sizeName = cart.size;
+      if (sizeName === "Standard") {
+        price = (product as any)?.standardPrice ?? product?.salePrice ?? product?.basePrice ?? 0;
+      } else if (sizeName === "Large") {
+        price = (product as any)?.largePrice ?? product?.salePrice ?? product?.basePrice ?? 0;
+      } else {
+        price = product?.salePrice ?? product?.basePrice ?? 0;
+      }
+    }
+
+
      if(isFront&&isBack){
        const additionalPrice = (product?.additionalPrice??0)<1? 1500:Number(product?.additionalPrice);
       
       const totalPrice = Number(price) + additionalPrice;
-      price += totalPrice
+      price = totalPrice
      }
     const newCart = this.cartRepository.create({...cart,price, userID: userData._id.toString() });
     const data=await this.cartRepository.save(newCart);

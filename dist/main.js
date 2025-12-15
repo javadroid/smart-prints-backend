@@ -4211,6 +4211,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CartDto.prototype, "price", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Price of the product', example: 29.99 }),
+    __metadata("design:type", String)
+], CartDto.prototype, "size", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'URL to the design/mockup image', example: 'https://example.com/image.png' }),
     __metadata("design:type", String)
 ], CartDto.prototype, "designImage", void 0);
@@ -4849,6 +4853,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], ProductSqlModel.prototype, "isFeatured", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "isActive", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], ProductSqlModel.prototype, "name", void 0);
@@ -4873,6 +4881,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' }),
     __metadata("design:type", Number)
 ], ProductSqlModel.prototype, "price", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "standardPrice", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "largePrice", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true, }),
     __metadata("design:type", Number)
@@ -5110,17 +5126,15 @@ __decorate([
     __metadata("design:type", String)
 ], CategoriesSqlModel.prototype, "_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], CategoriesSqlModel.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({}),
     __metadata("design:type", String)
 ], CategoriesSqlModel.prototype, "name", void 0);
 __decorate([
+    (0, typeorm_1.Column)({}),
+    __metadata("design:type", String)
+], CategoriesSqlModel.prototype, "id", void 0);
+__decorate([
     (0, typeorm_1.Column)({
-        type: 'enum',
-        enum: ['custom', 'store'],
         default: 'custom',
     }),
     __metadata("design:type", String)
@@ -6350,6 +6364,9 @@ let ProductController = class ProductController {
     async update(product, productID, req) {
         return this.productService.update(productID, product, req.user);
     }
+    async toggleActive(productID, isActive, req) {
+        return this.productService.toggleActive(productID, isActive);
+    }
     async findbyId(params, query) {
         return this.productService.findByAny(params, query);
     }
@@ -6401,6 +6418,31 @@ __decorate([
     __metadata("design:paramtypes", [typeof (_c = typeof dto_1.ProductDto !== "undefined" && dto_1.ProductDto) === "function" ? _c : Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "update", null);
+__decorate([
+    (0, common_1.Patch)("toggle-active/:productID"),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: "Toggle product active status" }),
+    (0, swagger_1.ApiParam)({
+        name: "productID",
+        description: "The ID of the product to toggle",
+        type: String
+    }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                isActive: { type: 'boolean', description: 'New active status' },
+            },
+        },
+        description: "Toggle the active status of a product",
+    }),
+    __param(0, (0, common_1.Param)("productID")),
+    __param(1, (0, common_1.Body)("isActive")),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Boolean, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "toggleActive", null);
 __decorate([
     (0, common_1.Get)("by-any/:key/:value"),
     (0, swagger_1.ApiOperation)({ summary: "Find a product by any key-value pair" }),
@@ -6537,6 +6579,7 @@ let ProductSqlService = class ProductSqlService {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
         console.log(param);
+        param.isActive = true;
         const findall = await this.productRepository.find({
             where: param,
             take: limit,
@@ -6552,6 +6595,15 @@ let ProductSqlService = class ProductSqlService {
                 query,
                 querys: param,
             }),
+        });
+    }
+    async toggleActive(id, isActive) {
+        await this.productRepository.update(id, { isActive });
+        const product = await this.productRepository.findOne({ where: { _id: id } });
+        return (0, service_1.serviceResponse)({
+            data: product,
+            message: `Product plan ${isActive ? "activated" : "deactivated"} successfully`,
+            status: true,
         });
     }
     async findAll(query) {
@@ -6817,9 +6869,24 @@ let CartSqlService = class CartSqlService {
         }
         const isFront = (cart.metadata?.front?.elements ?? []).length > 0;
         const isBack = (cart.metadata?.back?.elements ?? []).length > 0;
-        let price = (product.salePrice && product.salePrice > 0) ? product.salePrice : product.price;
+        let price = product?.salePrice || product?.basePrice || 0;
+        const isMug = product?.category === "mug";
+        if (isMug) {
+            const sizeName = cart.size;
+            if (sizeName === "Standard") {
+                price = product?.standardPrice ?? product?.salePrice ?? product?.basePrice ?? 0;
+            }
+            else if (sizeName === "Large") {
+                price = product?.largePrice ?? product?.salePrice ?? product?.basePrice ?? 0;
+            }
+            else {
+                price = product?.salePrice ?? product?.basePrice ?? 0;
+            }
+        }
         if (isFront && isBack) {
-            price += (product.additionalPrice ?? 0);
+            const additionalPrice = (product?.additionalPrice ?? 0) < 1 ? 1500 : Number(product?.additionalPrice);
+            const totalPrice = Number(price) + additionalPrice;
+            price = totalPrice;
         }
         const newCart = this.cartRepository.create({ ...cart, price, userID: userData._id.toString() });
         const data = await this.cartRepository.save(newCart);

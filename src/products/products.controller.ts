@@ -58,6 +58,37 @@ export class ProductController {
     // );
     return this.productService.update( productID, product, req.user);
   }
+//toggle isActive field
+  @Patch("toggle-active/:productID")
+  @UseGuards(JwtAuthGuard,
+    // RolesGuard 
+  )
+// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @ApiOperation({ summary: "Toggle product active status" })
+  @ApiParam({ 
+    name: "productID", 
+    description: "The ID of the product to toggle", 
+    type: String
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        isActive: { type: 'boolean', description: 'New active status' },
+
+      },
+      // required: ['isActive'],
+    },
+    description: "Toggle the active status of a product",
+  })
+  async toggleActive(
+    @Param("productID") productID: string,
+    @Body("isActive") isActive: boolean,
+    @Req() req: any
+  ) {
+    return this.productService.toggleActive(productID, isActive);
+  }
+
 
   @Get("by-any/:key/:value")
   // @UseGuards(JwtAuthGuard)

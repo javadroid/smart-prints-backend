@@ -33,6 +33,9 @@ export class ProductSqlModel {
   @Column({ default: false })
   isFeatured: boolean;
 
+    @Column({ default: true })
+  isActive: boolean;
+
   @Column()
   name: string;
 
@@ -53,6 +56,10 @@ export class ProductSqlModel {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' })
   price?: number;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
+  standardPrice: number;
+    @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
+  largePrice: number;
   @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
   basePrice: number;
 

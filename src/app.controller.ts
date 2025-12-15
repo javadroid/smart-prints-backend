@@ -23,40 +23,26 @@ import {
   PickType,
 } from "@nestjs/swagger";
 import { readFileSync } from "fs";
+import { AppService } from "./app.service";
 
 @Controller("")
 @ApiBearerAuth("access-token")
 export class AppController {
-  constructor() {}
+constructor(private readonly appService: AppService) {}
+
   private readonly logger = new Logger(AppController.name);
 
-  @Get("states")
-  @ApiOperation({ summary: "Get all states" })
-  @ApiQuery({ name: "stateName", required: false, type: String })
- 
-  async getLgaState(@Query("stateName") stateName?: string
-  ): Promise<any> {
-   
-    const data = JSON.parse(
-      readFileSync("allnigeria_polling_units_with_coords.json", "utf-8")
-    );
-let state
-     if (stateName ) {
-       state = data.find((state:any) => state.name.toLowerCase() === stateName.toLowerCase()).lgas.map((lga:any) => lga.name);
-  if (!state) return [];
-  
-    }else{
-       state = data.map((state:any) => state.name)
-    }
-    
-   
-    try {
-      return serviceResponse({
+
+
+  @Get('states')
+  @ApiQuery({ name: 'stateName', required: false })
+  @ApiQuery({ name: 'lga', required: false })
+  async getStates(@Query() query: any) {
+const state = await this.appService.getStates(query);
+   return serviceResponse({
         message: "Success",
         data: state,
       });
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+ 
   }
 }

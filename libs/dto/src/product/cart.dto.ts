@@ -25,7 +25,8 @@ export class CartDto {
 
   @ApiProperty({ description: 'Price of the product', example: 29.99 })
   price: number;
-
+ @ApiProperty({ description: 'Price of the product', example: 29.99 })
+  size: string;
   @ApiProperty({ description: 'URL to the design/mockup image', example: 'https://example.com/image.png' })
   designImage: string;
 

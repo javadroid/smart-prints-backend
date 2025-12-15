@@ -5,14 +5,13 @@ export class CategoriesSqlModel {
  
   @PrimaryGeneratedColumn('uuid')
   _id: string;
- @Column()
-  id: string;
-  @Column({ unique: true })
+ 
+  @Column({  })
   name: string;
-  
+    @Column({  })
+  id: string;
 @Column({
-    type: 'enum',
-    enum: ['custom', 'store'],
+   
     default: 'custom',
   })
   type: string;

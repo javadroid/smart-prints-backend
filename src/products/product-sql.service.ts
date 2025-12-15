@@ -44,9 +44,12 @@ async findByAny(param:any,query: any): Promise<any> {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
     console.log(param)
+    param.isActive=true
+    
     const findall = await this.productRepository.find({
       where: param,
       take: limit,
+
       skip: skip,
       relations: ['user'],
     });
@@ -61,6 +64,18 @@ async findByAny(param:any,query: any): Promise<any> {
       }),
     });
   }
+
+//toggle isActive field
+  async toggleActive(id: string, isActive: boolean): Promise<any> {
+    await this.productRepository.update(id, { isActive });
+    const product = await this.productRepository.findOne({ where: { _id:id } });
+    return serviceResponse({
+      data: product,
+      message: `Product plan ${isActive ? "activated" : "deactivated"} successfully`,
+      status: true,
+    });
+  }
+
   async findAll(query: any): Promise<any> {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
