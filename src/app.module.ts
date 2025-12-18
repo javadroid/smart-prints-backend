@@ -34,6 +34,8 @@ import { OtpSqlModel } from '@app/sql-schema/otp.sql-schema';
 import { WalletSqlModel } from '@app/sql-schema/wallet.sql-schema';
 import { JwtModule } from '@nestjs/jwt';
 import { DeliveryPriceSqlModel } from '@app/sql-schema';
+import { ProductColorsModule } from './product-colors/product-colors.module';
+import { PickupLocationsModule } from './pickup-locations/pickup-locations.module';
 
 
 @Module({
@@ -102,7 +104,7 @@ import { DeliveryPriceSqlModel } from '@app/sql-schema';
   AuthModule,
   AdminModule,
   UploadsModule,
-  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule ],
+  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule, ProductColorsModule, PickupLocationsModule ],
   controllers: [AppController],
   providers: [AppService],
 })

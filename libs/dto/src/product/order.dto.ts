@@ -6,6 +6,9 @@ import { CartDto } from "./cart.dto";
 export class OrderDto {
     @ApiProperty({ description: 'Order ID', example: 'ord123' })
      id: string;
+     
+    @ApiProperty({ description: 'Pickup location ID', example: 'loc123' })
+     pickupLocationID?: string;
 
     @ApiProperty({ description: 'User ID', example: 'user456' })
      userID: string;

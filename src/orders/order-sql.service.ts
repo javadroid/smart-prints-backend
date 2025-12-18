@@ -1,4 +1,8 @@
-import { Injectable, NotAcceptableException, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { OrderSqlModel } from "@app/sql-schema/order.sql-schema";
@@ -10,92 +14,121 @@ import {
   serviceResponse,
 } from "@app/service";
 import { randomUUID } from "crypto";
-import { CartSqlModel, DeliveryPriceSqlModel, ProductSqlModel } from "@app/sql-schema";
+import {
+  CartSqlModel,
+  DeliveryPriceSqlModel,
+  PickupLocationSqlModel,
+  ProductSqlModel,
+} from "@app/sql-schema";
 
 @Injectable()
 export class OrderSqlService {
   constructor(
     @InjectRepository(OrderSqlModel)
     private readonly orderRepository: Repository<OrderSqlModel>,
+    @InjectRepository(PickupLocationSqlModel)
+    private readonly pickupLocationRepository: Repository<
+      PickupLocationSqlModel
+    >,
     @InjectRepository(CartSqlModel)
     private readonly cartRepository: Repository<CartSqlModel>,
-        @InjectRepository(DeliveryPriceSqlModel)
-    private readonly deliveryPriceSqlModelRepository: Repository<DeliveryPriceSqlModel>,
+    @InjectRepository(DeliveryPriceSqlModel)
+    private readonly deliveryPriceSqlModelRepository: Repository<
+      DeliveryPriceSqlModel
+    >,
     private paystack: PaystackService
   ) {}
 
   async create(order: OrderDto, userData: UserDTO): Promise<ObjectReturnType> {
-   try {
-     const tx_ref = `smartprints-${userData.id}-${randomUUID()
-      .replace(/\D/g, "")
-      .substring(0, 10)}`;
+    try {
+      const tx_ref = `smartprints-${userData.id}-${randomUUID()
+        .replace(/\D/g, "")
+        .substring(0, 10)}`;
 
-    const cartItems = await this.cartRepository.find({ where: { userID: userData._id } });
-    const totalPrice = cartItems.reduce((sum, item) => sum + (Number(item?.price) || 0), 0) ;
-    const delivery = await this.deliveryPriceSqlModelRepository.findOne({where:{
-      state:order.orderDetails?.state,
-      lga:order.orderDetails?.lga
-    }})
-    let deliveryFee=0
-    for(let i=0;i<cartItems.length;i++){
-      deliveryFee+= (delivery?.deliveryFee??3000)
-      if((cartItems[i].quantity)&&cartItems[i].quantity>1){
-        deliveryFee+= ((cartItems[i].quantity-1) *((delivery?.additionalFee)?? 1000))
+      const cartItems = await this.cartRepository.find({
+        where: { userID: userData._id },
+      });
+      const totalPrice = cartItems.reduce(
+        (sum, item) => sum + (Number(item?.price) || 0),
+        0
+      );
+      const delivery = await this.deliveryPriceSqlModelRepository.findOne({
+        where: {
+          state: order.orderDetails?.state,
+          lga: order.orderDetails?.lga,
+        },
+      });
+      let deliveryFee = 0;
+      if (order?.pickupLocationID) {
+        const location = await this.pickupLocationRepository.findOne({
+          where: { _id: order?.pickupLocationID },
+        });
+        if (!location) {
+          throw new NotFoundException("Pickup location not found");
+        }
+        deliveryFee = Number(location?.price);
+      } else {
+        for (let i = 0; i < cartItems.length; i++) {
+          deliveryFee += delivery?.deliveryFee ?? 3000;
+          if (cartItems[i].quantity && cartItems[i].quantity > 1) {
+            deliveryFee +=
+              (cartItems[i].quantity - 1) * (delivery?.additionalFee ?? 1000);
+          }
+        }
       }
-    }
-    console.log({delivery2:delivery})
-    console.log({...order,
-      tx_ref,
-      products:cartItems,
-      totalPrice: totalPrice ,
-      deliveryFee,
-      userID: userData._id.toString(),})
-    // Fixed delivery fee
-    const newOrder = this.orderRepository.create({
-      ...order,
-      tx_ref,
-      products:cartItems,
-      totalPrice: totalPrice ,
-      deliveryFee,
-      userID: userData._id.toString(),
-    });
-    const created = await this.orderRepository.save(newOrder);
 
-    console.log(created);
-    const paymentrequest = {
-      amount: (Number(created.totalPrice)+Number(created.deliveryFee)),
-      currency: "NGN",
-      email: userData.email,
-      callback_url:
-        "https://smartprints.ng/?payment=" +
-        created._id.toString(),
-      metadata: {
+      console.log({ delivery2: delivery });
+      console.log({
+        ...order,
         tx_ref,
-        userId: userData._id.toString(),
-      },
-    };
+        products: cartItems,
+        totalPrice: totalPrice,
+        deliveryFee,
+        userID: userData._id.toString(),
+      });
+      // Fixed delivery fee
+      const newOrder = this.orderRepository.create({
+        ...order,
+        tx_ref,
+        products: cartItems,
+        totalPrice: totalPrice,
+        deliveryFee,
+        userID: userData._id.toString(),
+      });
+      const created = await this.orderRepository.save(newOrder);
 
-    const payment = await this.paystack.createPaymentLink(paymentrequest);
-    console.log(payment);
+      console.log(created);
+      const paymentrequest = {
+        amount: Number(created.totalPrice) + Number(created.deliveryFee),
+        currency: "NGN",
+        email: userData.email,
+        callback_url:
+          "https://smartprints.ng/?payment=" + created._id.toString(),
+        metadata: {
+          tx_ref,
+          userId: userData._id.toString(),
+        },
+      };
 
-    const check = await this.orderRepository.update(created._id.toString(), {
-      paystackRef: payment.data.reference,
-      authorization_url: payment.data.authorization_url,
-      accessCode: payment.data.access_code,
-      
-    });
-    // await this.orderRepository.deleteAll()
-    console.log(check);
-    return serviceResponse({
-      data: payment.data.authorization_url,
-      message: "Order plan created successfully",
+      const payment = await this.paystack.createPaymentLink(paymentrequest);
+      console.log(payment);
 
-      status: true,
-    });
-   } catch (error) {
-    
-    throw new NotAcceptableException(error.message);
-   }
+      const check = await this.orderRepository.update(created._id.toString(), {
+        paystackRef: payment.data.reference,
+        authorization_url: payment.data.authorization_url,
+        accessCode: payment.data.access_code,
+      });
+      // await this.orderRepository.deleteAll()
+      console.log(check);
+      return serviceResponse({
+        data: payment.data.authorization_url,
+        message: "Order plan created successfully",
+
+        status: true,
+      });
+    } catch (error) {
+      throw new NotAcceptableException(error.message);
+    }
   }
 
   async findAll(query): Promise<ObjectReturnType> {
@@ -109,10 +142,10 @@ export class OrderSqlService {
         // 'products',
       ],
     });
-//  const carts = await this.cartRepository.find({
-//         where:{$in:{_id:pr}},
-//         relations:['product']
-//     })
+    //  const carts = await this.cartRepository.find({
+    //         where:{$in:{_id:pr}},
+    //         relations:['product']
+    //     })
     return serviceResponse({
       data,
       message: "Orders retrieved successfully",
@@ -132,7 +165,7 @@ export class OrderSqlService {
       where: { [key]: value },
       take: limit,
       skip: skip,
-      relations: ["user",],
+      relations: ["user"],
     });
 
     return serviceResponse({
@@ -160,7 +193,7 @@ export class OrderSqlService {
     try {
       const plan = await this.orderRepository.findOne({
         where: { _id: id },
-        relations: ["user", ],
+        relations: ["user"],
       });
 
       if (!plan) {

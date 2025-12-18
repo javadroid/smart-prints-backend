@@ -8,3 +8,6 @@ export * from './design.sql-schema';
 export * from './otp.sql-schema';
 export * from './wallet.sql-schema';
 export * from './delivery-price.sql-schema';
+export * from './product-color.sql-schema';
+export * from './pickup-location.sql-schema';
+
