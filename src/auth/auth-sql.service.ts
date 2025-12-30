@@ -112,7 +112,9 @@ export class AuthSqlService {
       username: user.username,
       email: user.email,
     };
-    const access_token = this.jwtService.sign(payload, { expiresIn: "30d" });
+    const access_token = this.jwtService.sign(payload, {
+      // expiresIn: "1y",
+    });
     const refresh_token = this.jwtService.sign(payload, {
       expiresIn: "30d",
       secret: this.config.get("JWT_SECRET2"),

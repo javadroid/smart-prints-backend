@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { OrderService } from './orders.service';
 import { OrderController } from './orders.controller';
-import { FlutterwaveService } from '@app/service';
+import { FlutterwaveService, SendMailService } from '@app/service';
 import { PaystackService } from '@app/service/payment/paystack';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderSqlModel } from '@app/sql-schema/order.sql-schema';
@@ -12,7 +12,7 @@ import { CartSqlModel, DeliveryPriceSqlModel, PickupLocationSqlModel } from '@ap
   imports: [TypeOrmModule.forFeature([OrderSqlModel,CartSqlModel,DeliveryPriceSqlModel,PickupLocationSqlModel]),],
   
   controllers: [OrderController],
-  providers: [FlutterwaveService,PaystackService, OrderSqlService],
+  providers: [FlutterwaveService,PaystackService, OrderSqlService, SendMailService],
   exports: [OrderSqlService]
 })
 export class OrdersModule {}

@@ -12,6 +12,7 @@ import {
   getSqlMetadata,
   ObjectReturnType,
   serviceResponse,
+  SendMailService,
 } from "@app/service";
 import { randomUUID } from "crypto";
 import {
@@ -36,7 +37,8 @@ export class OrderSqlService {
     private readonly deliveryPriceSqlModelRepository: Repository<
       DeliveryPriceSqlModel
     >,
-    private paystack: PaystackService
+    private paystack: PaystackService,
+    private sendMailService: SendMailService
   ) {}
 
   async create(order: OrderDto, userData: UserDTO): Promise<ObjectReturnType> {
@@ -181,8 +183,40 @@ export class OrderSqlService {
   }
 
   async update(id: string, order: OrderDto): Promise<OrderSqlModel> {
+    const existingOrder = await this.orderRepository.findOne({
+      where: { _id: id },
+      relations: ["user"],
+    });
+
+    if (!existingOrder) {
+      throw new NotFoundException("Order not found");
+    }
+
     await this.orderRepository.update(id, order as any);
-    return this.orderRepository.findOne({ where: { id } });
+
+    if (order.status && order.status !== existingOrder.status) {
+      const user = existingOrder.user;
+      if (user && user.email) {
+        let subject = `Order Status Update - ${existingOrder.tx_ref}`;
+        let text = `Your order status has been updated to ${order.status}.`;
+        let html = `<p>Hello ${user.fullname || "User"},</p><p>Your order status has been updated to <strong>${order.status}</strong>.</p>`;
+
+        if (order.status === "cancelled") {
+          subject = `Order Cancelled - ${existingOrder.tx_ref}`;
+          text = `Your order with reference ${existingOrder.tx_ref} has been cancelled.`;
+          html = `<p>Hello ${user.fullname || "User"},</p><p>Your order with reference ${existingOrder.tx_ref} has been cancelled.</p>`;
+        }
+
+        await this.sendMailService.sendMail({
+          to: user.email,
+          subject,
+          text,
+          html,
+        });
+      }
+    }
+
+    return this.orderRepository.findOne({ where: { _id: id } });
   }
 
   async remove(id: string): Promise<void> {
@@ -224,11 +258,27 @@ export class OrderSqlService {
           isPaid: false,
           status: "abandoned",
         });
+        if (plan.user && plan.user.email) {
+            await this.sendMailService.sendMail({
+                to: plan.user.email,
+                subject: `Order Payment Abandoned - ${plan.tx_ref}`,
+                text: `Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.`,
+                html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.</p>`,
+            });
+        }
       } else {
         await this.orderRepository.update(id, {
           isPaid: false,
           status: "cancelled",
         });
+        if (plan.user && plan.user.email) {
+            await this.sendMailService.sendMail({
+                to: plan.user.email,
+                subject: `Order Cancelled - ${plan.tx_ref}`,
+                text: `Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.`,
+                html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.</p>`,
+            });
+        }
       }
 
       return serviceResponse({

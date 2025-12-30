@@ -6129,7 +6129,7 @@ let AuthSqlService = class AuthSqlService {
             username: user.username,
             email: user.email,
         };
-        const access_token = this.jwtService.sign(payload, { expiresIn: "30d" });
+        const access_token = this.jwtService.sign(payload, {});
         const refresh_token = this.jwtService.sign(payload, {
             expiresIn: "30d",
             secret: this.config.get("JWT_SECRET2"),
@@ -7617,7 +7617,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -7629,12 +7629,13 @@ const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/in
 const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
 const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let OrderSqlService = class OrderSqlService {
-    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack) {
+    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService) {
         this.orderRepository = orderRepository;
         this.pickupLocationRepository = pickupLocationRepository;
         this.cartRepository = cartRepository;
         this.deliveryPriceSqlModelRepository = deliveryPriceSqlModelRepository;
         this.paystack = paystack;
+        this.sendMailService = sendMailService;
     }
     async create(order, userData) {
         try {
@@ -7759,8 +7760,34 @@ let OrderSqlService = class OrderSqlService {
         });
     }
     async update(id, order) {
+        const existingOrder = await this.orderRepository.findOne({
+            where: { _id: id },
+            relations: ["user"],
+        });
+        if (!existingOrder) {
+            throw new common_1.NotFoundException("Order not found");
+        }
         await this.orderRepository.update(id, order);
-        return this.orderRepository.findOne({ where: { id } });
+        if (order.status && order.status !== existingOrder.status) {
+            const user = existingOrder.user;
+            if (user && user.email) {
+                let subject = `Order Status Update - ${existingOrder.tx_ref}`;
+                let text = `Your order status has been updated to ${order.status}.`;
+                let html = `<p>Hello ${user.fullname || "User"},</p><p>Your order status has been updated to <strong>${order.status}</strong>.</p>`;
+                if (order.status === "cancelled") {
+                    subject = `Order Cancelled - ${existingOrder.tx_ref}`;
+                    text = `Your order with reference ${existingOrder.tx_ref} has been cancelled.`;
+                    html = `<p>Hello ${user.fullname || "User"},</p><p>Your order with reference ${existingOrder.tx_ref} has been cancelled.</p>`;
+                }
+                await this.sendMailService.sendMail({
+                    to: user.email,
+                    subject,
+                    text,
+                    html,
+                });
+            }
+        }
+        return this.orderRepository.findOne({ where: { _id: id } });
     }
     async remove(id) {
         await this.orderRepository.delete(id);
@@ -7798,12 +7825,28 @@ let OrderSqlService = class OrderSqlService {
                     isPaid: false,
                     status: "abandoned",
                 });
+                if (plan.user && plan.user.email) {
+                    await this.sendMailService.sendMail({
+                        to: plan.user.email,
+                        subject: `Order Payment Abandoned - ${plan.tx_ref}`,
+                        text: `Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.`,
+                        html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.</p>`,
+                    });
+                }
             }
             else {
                 await this.orderRepository.update(id, {
                     isPaid: false,
                     status: "cancelled",
                 });
+                if (plan.user && plan.user.email) {
+                    await this.sendMailService.sendMail({
+                        to: plan.user.email,
+                        subject: `Order Cancelled - ${plan.tx_ref}`,
+                        text: `Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.`,
+                        html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.</p>`,
+                    });
+                }
             }
             return (0, service_1.serviceResponse)({
                 data: plan,
@@ -7823,7 +7866,7 @@ exports.OrderSqlService = OrderSqlService = __decorate([
     __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.PickupLocationSqlModel)),
     __param(2, (0, typeorm_1.InjectRepository)(sql_schema_1.CartSqlModel)),
     __param(3, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object])
 ], OrderSqlService);
 
 
@@ -8025,7 +8068,7 @@ exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.PickupLocationSqlModel]),],
         controllers: [orders_controller_1.OrderController],
-        providers: [service_1.FlutterwaveService, paystack_1.PaystackService, order_sql_service_1.OrderSqlService],
+        providers: [service_1.FlutterwaveService, paystack_1.PaystackService, order_sql_service_1.OrderSqlService, service_1.SendMailService],
         exports: [order_sql_service_1.OrderSqlService]
     })
 ], OrdersModule);
