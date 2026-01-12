@@ -95,6 +95,7 @@ async createDeliveryPrice(deliveryPriceDto: DeliveryPriceDTO) {
       country: deliveryPriceDto.country,
       state: deliveryPriceDto.state,
       lga: deliveryPriceDto.lga,
+      zone: deliveryPriceDto.zone,
       deliveryFee: deliveryPriceDto.deliveryFee,
       additionalFee: deliveryPriceDto.additionalFee,
     });

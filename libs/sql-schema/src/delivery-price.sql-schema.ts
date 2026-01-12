@@ -24,6 +24,9 @@ export class DeliveryPriceSqlModel {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  zone: string;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }

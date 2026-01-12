@@ -25,6 +25,7 @@ export * from './product/order.dto';
 export * from './delivery-price.dto';
 export * from './product-color.dto';
 export * from './pickup-location.dto';
+export * from './zone.dto';
 
 
 

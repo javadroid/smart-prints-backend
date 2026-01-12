@@ -15,4 +15,6 @@ export class DeliveryPriceDTO {
 
   @ApiProperty({ description: 'Additional fee for delivery' })
   additionalFee: number;
+  @ApiProperty({ description: 'Zone for delivery price' })
+  zone: string;
 }

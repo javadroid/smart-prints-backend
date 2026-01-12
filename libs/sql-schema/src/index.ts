@@ -10,4 +10,5 @@ export * from './wallet.sql-schema';
 export * from './delivery-price.sql-schema';
 export * from './product-color.sql-schema';
 export * from './pickup-location.sql-schema';
+export * from './zone.sql-schema';
 

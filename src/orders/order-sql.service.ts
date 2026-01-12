@@ -58,6 +58,7 @@ export class OrderSqlService {
         where: {
           state: order.orderDetails?.state,
           lga: order.orderDetails?.lga,
+          zone: order.orderDetails?.zone,
         },
       });
       let deliveryFee = 0;
@@ -120,8 +121,16 @@ export class OrderSqlService {
         authorization_url: payment.data.authorization_url,
         accessCode: payment.data.access_code,
       });
-      // await this.orderRepository.deleteAll()
-      console.log(check);
+      const subject = "Order Confirmation";
+      //  const text = `Hello ${userData.firstname},\n\nYour order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.\n\nThank you for your purchase!`;
+       const html = `<p>Hello ${userData.firstname},</p><p>Your order has been placed successfully. Once payment is confirmed, we will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
+
+       await this.sendMailService.sendMail({
+          to: userData.email,
+          subject,
+          // text,
+          html,
+        });
       return serviceResponse({
         data: payment.data.authorization_url,
         message: "Order plan created successfully",
@@ -139,6 +148,9 @@ export class OrderSqlService {
     const data = await this.orderRepository.find({
       take: limit,
       skip: skip,
+      order: {
+        createdAt: "DESC",
+      },
       relations: [
         "user",
         // 'products',
@@ -167,6 +179,9 @@ export class OrderSqlService {
       where: { [key]: value },
       take: limit,
       skip: skip,
+      order: {
+        createdAt: "DESC",
+      },
       relations: ["user"],
     });
 
@@ -210,7 +225,7 @@ export class OrderSqlService {
         await this.sendMailService.sendMail({
           to: user.email,
           subject,
-          text,
+          // text,
           html,
         });
       }
