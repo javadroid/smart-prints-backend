@@ -22,17 +22,32 @@ export class AppService {
   getStates(query: any) {
     const data = this.loadData();
     const { stateName, lga } = query;
-    let found;
-    if (stateName) {
-      found = data.find(
+    let found = [];
+
+    if (stateName && lga) {
+      const state = data.find((s) => s.state.toLowerCase() === stateName.toLowerCase());
+      if (state) {
+        const selectedLga = state.lgas.find((l) => l.name.toLowerCase() === lga.toLowerCase());
+        found = selectedLga ? selectedLga.cities : [];
+      }
+    } else if (stateName) {
+      const state = data.find(
         (s) => s.state.toLowerCase() === stateName.toLowerCase()
-      )?.lgas??[]
+      );
+      found = state ? state.lgas.map((l) => l.name).sort() : [];
     } else if (lga) {
-      found = data.flatMap((s) => s.lgas).sort();
+       // If lga is provided, try to find it across all states
+       const allLgas = data.flatMap((s) => s.lgas);
+       if (typeof lga === 'string' && lga.length > 0) {
+           const selectedLga = allLgas.find((l) => l.name.toLowerCase() === lga.toLowerCase());
+           found = selectedLga ? selectedLga.cities : [];
+       } else {
+           // Fallback if lga is present but empty/true? Return all LGA names
+           found = allLgas.map((l) => l.name).sort((a, b) => a.localeCompare(b));
+       }
     } else {
       found = data.map((s) => s.state).sort();
     }
-return found;
-
+    return found;
   }
 }
