@@ -410,7 +410,7 @@ let SendMailService = class SendMailService {
     async sendMail({ from, to, subject, html, text }) {
         console.log({ from, to, subject, html, text });
         const data = {
-            from: from || 'Smart Prints<smarts@smartprints.ng>',
+            from: from || 'Smart Prints<info@smartprints.ng>',
             to,
             subject,
             text,
@@ -2618,7 +2618,7 @@ let AuthSqlService = class AuthSqlService {
             const message = await this.smsService.generateMessage(data);
             this.sendMailService.sendMail({
                 to: created.email,
-                from: "Smart Prints<smarts@smartprints.ng>",
+                from: "Smart Prints<info@smartprints.ng>",
                 subject: "Email Code Verification",
                 text: message,
             });
@@ -2683,7 +2683,7 @@ let AuthSqlService = class AuthSqlService {
         const message = await this.smsService.generateMessage(data);
         this.sendMailService.sendMail({
             to: user.email,
-            from: "Smart Prints<smarts@smartprints.ng>",
+            from: "Smart Prints<info@smartprints.ng>",
             subject: body.type,
             text: message,
         });
@@ -7552,8 +7552,8 @@ let OrderController = class OrderController {
     async delete(ids) {
         return this.orderService.remove(ids);
     }
-    async handleFlutterwaveWebhook(req) {
-        return this.orderService.handleFlutterwaveWebhook(req);
+    async handlePaystackWebhook(req) {
+        return this.orderService.handlePaystackWebhook(req);
     }
     async verifyOrderPayment(id, req) {
         return this.orderService.verifyOrderPayment(id, req.user);
@@ -7654,13 +7654,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "delete", null);
 __decorate([
-    (0, common_1.Post)("webhook/flutterwave"),
-    (0, swagger_1.ApiOperation)({ summary: "Flutterwave Webhook" }),
+    (0, common_1.Post)("webhook/paystack"),
+    (0, swagger_1.ApiOperation)({ summary: "Paystack Webhook" }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], OrderController.prototype, "handleFlutterwaveWebhook", null);
+], OrderController.prototype, "handlePaystackWebhook", null);
 __decorate([
     (0, common_1.Get)("verify-payment/:id"),
     (0, swagger_1.ApiOperation)({ summary: "Verify order payment by ID" }),
@@ -7697,7 +7697,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSqlService = void 0;
 const common_1 = __webpack_require__(3);
@@ -7709,14 +7709,13 @@ const service_1 = __webpack_require__(5);
 const crypto_1 = __webpack_require__(18);
 const sql_schema_1 = __webpack_require__(81);
 let OrderSqlService = class OrderSqlService {
-    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService, flutterwaveService) {
+    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService) {
         this.orderRepository = orderRepository;
         this.pickupLocationRepository = pickupLocationRepository;
         this.cartRepository = cartRepository;
         this.deliveryPriceSqlModelRepository = deliveryPriceSqlModelRepository;
         this.paystack = paystack;
         this.sendMailService = sendMailService;
-        this.flutterwaveService = flutterwaveService;
     }
     async create(order, userData) {
         try {
@@ -7955,27 +7954,27 @@ let OrderSqlService = class OrderSqlService {
             throw new common_1.NotFoundException(error.message);
         }
     }
-    async handleFlutterwaveWebhook(req) {
+    async handlePaystackWebhook(req) {
         try {
-            const payload = await this.flutterwaveService.handleWebhook(req);
-            const { data } = payload;
-            if (!data || !data.tx_ref) {
-                console.error("Flutterwave Webhook: Invalid payload or missing tx_ref");
-                return { status: "failed", message: "Invalid payload" };
+            const payload = await this.paystack.handleWebhook(req);
+            const { event, data } = payload;
+            console.log("payload", payload);
+            if (event !== "charge.success") {
+                return { status: "success", message: "Event ignored" };
             }
-            const tx_ref = data.tx_ref;
+            const reference = data.reference;
             const plan = await this.orderRepository.findOne({
-                where: { tx_ref },
+                where: { paystackRef: reference },
                 relations: ["user"],
             });
             if (!plan) {
-                console.error(`Flutterwave Webhook: Order not found for tx_ref ${tx_ref}`);
+                console.error(`Paystack Webhook: Order not found for reference ${reference}`);
                 return { status: "success", message: "Order not found" };
             }
             if (plan.isPaid) {
                 return { status: "success", message: "Order already paid" };
             }
-            if (data.status === "successful") {
+            if (data.status === "success") {
                 const subject = "Order Confirmation";
                 const html = `<p>Hello ${plan.user?.firstname || plan.user?.fullname || "User"},</p><p>Your order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
                 if (plan.user && plan.user.email) {
@@ -7988,44 +7987,15 @@ let OrderSqlService = class OrderSqlService {
                 await this.orderRepository.update(plan._id, {
                     isPaid: true,
                     status: "success",
-                    flutterwaveRef: data.flw_ref || data.id,
                 });
                 await this.cartRepository.delete({
                     userID: plan.user._id
                 });
             }
-            else if (["abandoned", "ongoing"].includes(data.status)) {
-                await this.orderRepository.update(plan._id, {
-                    isPaid: false,
-                    status: "abandoned",
-                });
-                if (plan.user && plan.user.email) {
-                    await this.sendMailService.sendMail({
-                        to: plan.user.email,
-                        subject: `Order Payment Abandoned - ${plan.tx_ref}`,
-                        text: `Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.`,
-                        html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.</p>`,
-                    });
-                }
-            }
-            else {
-                await this.orderRepository.update(plan._id, {
-                    isPaid: false,
-                    status: "cancelled",
-                });
-                if (plan.user && plan.user.email) {
-                    await this.sendMailService.sendMail({
-                        to: plan.user.email,
-                        subject: `Order Cancelled - ${plan.tx_ref}`,
-                        text: `Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.`,
-                        html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.</p>`,
-                    });
-                }
-            }
             return { status: "success", message: "Webhook processed" };
         }
         catch (error) {
-            console.error("Flutterwave Webhook Error:", error);
+            console.error("Paystack Webhook Error:", error);
             throw new common_1.NotAcceptableException(error.message);
         }
     }
@@ -8037,7 +8007,7 @@ exports.OrderSqlService = OrderSqlService = __decorate([
     __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.PickupLocationSqlModel)),
     __param(2, (0, typeorm_1.InjectRepository)(sql_schema_1.CartSqlModel)),
     __param(3, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object, typeof (_g = typeof service_1.FlutterwaveService !== "undefined" && service_1.FlutterwaveService) === "function" ? _g : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object])
 ], OrderSqlService);
 
 
@@ -8061,6 +8031,7 @@ exports.PaystackService = void 0;
 const common_1 = __webpack_require__(3);
 const config_1 = __webpack_require__(40);
 const axios_1 = __webpack_require__(7);
+const crypto = __webpack_require__(18);
 let PaystackService = class PaystackService {
     constructor(configService) {
         this.configService = configService;
@@ -8095,6 +8066,22 @@ let PaystackService = class PaystackService {
         }
         catch (error) {
             throw new common_1.HttpException(error?.response?.data || "Failed to verify payment", error?.response?.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async handleWebhook(req) {
+        try {
+            const hash = crypto
+                .createHmac("sha512", this.secretKey)
+                .update(JSON.stringify(req.body))
+                .digest("hex");
+            if (hash !== req.headers["x-paystack-signature"]) {
+                throw new Error("Invalid signature");
+            }
+            return req.body;
+        }
+        catch (error) {
+            console.error("Paystack webhook error", error);
+            throw new common_1.HttpException("Invalid webhook signature", common_1.HttpStatus.BAD_REQUEST);
         }
     }
 };
@@ -8593,7 +8580,7 @@ let AdminService = class AdminService {
             });
         }
     }
-    async getDeliveryPrices(country, state, lga) {
+    async getDeliveryPrices(country, state, lga, zone) {
         const where = {};
         if (country)
             where.country = country;
@@ -8601,6 +8588,8 @@ let AdminService = class AdminService {
             where.state = state;
         if (lga)
             where.lga = lga;
+        if (zone)
+            where.zone = zone;
         const deliveryPrices = await this.deliveryPriceModel.find({ where });
         return (0, service_1.serviceResponse)({
             message: "Delivery prices retrieved successfully",
@@ -8673,8 +8662,8 @@ let AdminController = class AdminController {
     async createDeliveryPrice(deliveryPriceDto) {
         return this.adminService.createDeliveryPrice(deliveryPriceDto);
     }
-    async getDeliveryPrices(country, state, lga) {
-        return this.adminService.getDeliveryPrices(country, state, lga);
+    async getDeliveryPrices(country, state, lga, zone) {
+        return this.adminService.getDeliveryPrices(country, state, lga, zone);
     }
     async deleteDeliveryPrice(id) {
         return this.adminService.deleteDeliveryPrice(id);
@@ -8702,11 +8691,13 @@ __decorate([
     (0, swagger_1.ApiQuery)({ name: 'country', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'state', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'lga', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'zone', required: false }),
     __param(0, (0, common_1.Query)('country')),
     __param(1, (0, common_1.Query)('state')),
     __param(2, (0, common_1.Query)('lga')),
+    __param(3, (0, common_1.Query)('zone')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "getDeliveryPrices", null);
 __decorate([

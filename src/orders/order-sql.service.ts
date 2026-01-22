@@ -418,6 +418,7 @@ export class OrderSqlService {
       const payload = await this.paystack.handleWebhook(req);
       const { event, data } = payload;
 
+      console.log("payload", payload)
       if (event !== "charge.success") {
         return { status: "success", message: "Event ignored" };
       }

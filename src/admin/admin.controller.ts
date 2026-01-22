@@ -31,12 +31,14 @@ export class AdminController {
   @ApiQuery({ name: 'country', required: false })
   @ApiQuery({ name: 'state', required: false })
   @ApiQuery({ name: 'lga', required: false })
+  @ApiQuery({ name: 'zone', required: false })
   async getDeliveryPrices(
     @Query('country') country?: string,
     @Query('state') state?: string,
     @Query('lga') lga?: string,
+    @Query('zone') zone?: string,
   ) {
-    return this.adminService.getDeliveryPrices(country, state, lga);
+    return this.adminService.getDeliveryPrices(country, state, lga,zone);
   }
 
   @Delete('delivery-price/:id')

@@ -64,7 +64,7 @@ export class AuthSqlService {
 
       this.sendMailService.sendMail({
         to: created.email,
-        from: "Smart Prints<smarts@smartprints.ng>",
+        from: "Smart Prints<info@smartprints.ng>",
         subject: "Email Code Verification",
         text: message,
       });
@@ -149,7 +149,7 @@ export class AuthSqlService {
 
     this.sendMailService.sendMail({
       to: user.email,
-            from: "Smart Prints<smarts@smartprints.ng>",
+            from: "Smart Prints<info@smartprints.ng>",
       subject: body.type,
       text: message,
     });

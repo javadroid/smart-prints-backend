@@ -124,11 +124,12 @@ async createDeliveryPrice(deliveryPriceDto: DeliveryPriceDTO) {
 
 
 
-  async getDeliveryPrices(country?: string, state?: string, lga?: string) {
+  async getDeliveryPrices(country?: string, state?: string, lga?: string,zone?:string) {
     const where: any = {};
     if (country) where.country = country;
     if (state) where.state = state;
     if (lga) where.lga = lga;
+    if (zone) where.zone = zone;
 
     const deliveryPrices = await this.deliveryPriceModel.find({ where });
     return serviceResponse({
