@@ -13,6 +13,7 @@ import {
   ObjectReturnType,
   serviceResponse,
   SendMailService,
+  FlutterwaveService,
 } from "@app/service";
 import { randomUUID } from "crypto";
 import {
@@ -38,7 +39,8 @@ export class OrderSqlService {
       DeliveryPriceSqlModel
     >,
     private paystack: PaystackService,
-    private sendMailService: SendMailService
+    private sendMailService: SendMailService,
+    
   ) {}
 
   async create(order: OrderDto, userData: UserDTO): Promise<ObjectReturnType> {
@@ -109,6 +111,7 @@ export class OrderSqlService {
           "https://smartprints.ng/?payment=" + created._id.toString(),
         metadata: {
           tx_ref,
+          orderID: created._id.toString(),
           userId: userData._id.toString(),
         },
       };
@@ -121,16 +124,7 @@ export class OrderSqlService {
         authorization_url: payment.data.authorization_url,
         accessCode: payment.data.access_code,
       });
-      const subject = "Order Confirmation";
-      //  const text = `Hello ${userData.firstname},\n\nYour order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.\n\nThank you for your purchase!`;
-       const html = `<p>Hello ${userData.firstname},</p><p>Your order has been placed successfully. Once payment is confirmed, we will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
-
-       await this.sendMailService.sendMail({
-          to: userData.email,
-          subject,
-          // text,
-          html,
-        });
+      
       return serviceResponse({
         data: payment.data.authorization_url,
         message: "Order plan created successfully",
@@ -238,7 +232,7 @@ export class OrderSqlService {
     await this.orderRepository.delete(id);
   }
 
-  async verifyOrderPayment(id: string): Promise<ObjectReturnType> {
+  async verifyOrderPayment(id: string,userData:UserDTO): Promise<ObjectReturnType> {
     try {
       const plan = await this.orderRepository.findOne({
         where: { _id: id },
@@ -262,10 +256,25 @@ export class OrderSqlService {
       }
       const v = await this.paystack.verifyPaymentLink(plan.paystackRef);
       if (v.data.status === "success") {
+        const subject = "Order Confirmation";
+      //  const text = `Hello ${userData.firstname},\n\nYour order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.\n\nThank you for your purchase!`;
+       const html = `<p>Hello ${userData.firstname},</p><p>Your order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
+
+       await this.sendMailService.sendMail({
+          to: userData.email,
+          subject,
+          // text,
+          html,
+        });
         await this.orderRepository.update(id, {
           isPaid: true,
           status: "success",
         });
+         await this.cartRepository.delete(
+              {
+                  userID: plan.user._id
+               
+            });
       } else if (["abandoned", "ongoing"].includes(v.data.status)) {
         plan.isPaid = false;
         plan.status = "abandoned";
@@ -303,6 +312,160 @@ export class OrderSqlService {
       });
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+//   async handleFlutterwaveWebhook(req: any): Promise<any> {
+//     try {
+//       // Validate webhook signature and get payload
+//       // Note: FlutterwaveService.handleWebhook returns req.body if signature is valid
+//       const payload = await this.paystack.handleWebhook(req);
+//       console.log(object)
+//       const { data } = payload;
+      
+//       if (!data || !data.tx_ref) {
+//          console.error("Flutterwave Webhook: Invalid payload or missing tx_ref");
+//          return { status: "failed", message: "Invalid payload" };
+//       }
+
+//       const tx_ref = data.tx_ref;
+
+//       const plan = await this.orderRepository.findOne({
+//         where: { tx_ref },
+//         relations: ["user"],
+//       });
+
+//       if (!plan) {
+//         console.error(`Flutterwave Webhook: Order not found for tx_ref ${tx_ref}`);
+//         // Return success to acknowledge webhook even if order not found (to stop retries)
+//         // or throw error if you want retries. Usually acknowledge.
+//         return { status: "success", message: "Order not found" };
+//       }
+
+//       if (plan.isPaid) {
+//         return { status: "success", message: "Order already paid" };
+//       }
+
+//       // Check transaction status
+//       if (data.status === "successful") {
+//          const subject = "Order Confirmation";
+//          const html = `<p>Hello ${plan.user?.firstname || plan.user?.fullname || "User"},</p><p>Your order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
+         
+//          //clear user cart
+         
+           
+        
+
+//          if (plan.user && plan.user.email) {
+//             await this.sendMailService.sendMail({
+//                 to: plan.user.email,
+//                 subject,
+//                 html,
+//             });
+//          }
+         
+//          await this.orderRepository.update(plan._id, {
+//             isPaid: true,
+//             status: "success",
+//             flutterwaveRef: data.flw_ref || data.id, // Store flutterwave reference if available
+//          });
+//  await this.cartRepository.delete(
+//               {
+//                   userID: plan.user._id
+               
+//             });
+//       } else if (["abandoned", "ongoing"].includes(data.status)) {
+//         await this.orderRepository.update(plan._id, {
+//           isPaid: false,
+//           status: "abandoned",
+//         });
+//         if (plan.user && plan.user.email) {
+//             await this.sendMailService.sendMail({
+//                 to: plan.user.email,
+//                 subject: `Order Payment Abandoned - ${plan.tx_ref}`,
+//                 text: `Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.`,
+//                 html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been marked as abandoned due to incomplete payment.</p>`,
+//             });
+//         }
+//       } else {
+//         // Failed or cancelled
+//         await this.orderRepository.update(plan._id, {
+//           isPaid: false,
+//           status: "cancelled",
+//         });
+//         if (plan.user && plan.user.email) {
+//             await this.sendMailService.sendMail({
+//                 to: plan.user.email,
+//                 subject: `Order Cancelled - ${plan.tx_ref}`,
+//                 text: `Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.`,
+//                 html: `<p>Hello ${plan.user.fullname || "User"},</p><p>Your order with reference ${plan.tx_ref} has been cancelled due to payment failure.</p>`,
+//             });
+//         }
+//       }
+
+//       return { status: "success", message: "Webhook processed" };
+
+//     } catch (error) {
+//       console.error("Flutterwave Webhook Error:", error);
+//       // Return 200 to prevent retries if it's a logic error, or throw if temporary.
+//       // Usually best to catch and log.
+//       throw new NotAcceptableException(error.message);
+//     }
+//   }
+
+  async handlePaystackWebhook(req: any): Promise<any> {
+    try {
+      const payload = await this.paystack.handleWebhook(req);
+      const { event, data } = payload;
+
+      if (event !== "charge.success") {
+        return { status: "success", message: "Event ignored" };
+      }
+
+      const reference = data.reference;
+      
+      // Find order by paystackRef (which stores the reference)
+      const plan = await this.orderRepository.findOne({
+        where: { paystackRef: reference },
+        relations: ["user"],
+      });
+
+      if (!plan) {
+         console.error(`Paystack Webhook: Order not found for reference ${reference}`);
+         return { status: "success", message: "Order not found" };
+      }
+
+      if (plan.isPaid) {
+        return { status: "success", message: "Order already paid" };
+      }
+
+      if (data.status === "success") {
+         const subject = "Order Confirmation";
+         const html = `<p>Hello ${plan.user?.firstname || plan.user?.fullname || "User"},</p><p>Your order has been placed successfully. We have received your payment and will process your order shortly. If you have any questions, please contact our customer support.</p><p>Thank you for your purchase!</p>`;
+         
+         if (plan.user && plan.user.email) {
+            await this.sendMailService.sendMail({
+                to: plan.user.email,
+                subject,
+                html,
+            });
+         }
+         
+         await this.orderRepository.update(plan._id, {
+            isPaid: true,
+            status: "success",
+         });
+
+         // Clear cart if needed (optional, assuming cart clearing is desired)
+          await this.cartRepository.delete({
+            userID: plan.user._id
+          });
+      }
+
+      return { status: "success", message: "Webhook processed" };
+    } catch (error) {
+      console.error("Paystack Webhook Error:", error);
+      throw new NotAcceptableException(error.message);
     }
   }
 }

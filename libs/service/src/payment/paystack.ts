@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import axios from "axios";
+import * as crypto from "crypto";
 
 @Injectable()
 export class PaystackService {
@@ -68,6 +69,30 @@ export class PaystackService {
         error?.response?.data || "Failed to verify payment",
         error?.response?.status || HttpStatus.INTERNAL_SERVER_ERROR
       );
+    }
+  }
+
+  /**
+   * Validates and handles Paystack webhook
+   */
+  async handleWebhook(req: any): Promise<any> {
+    try {
+      const hash = crypto
+        .createHmac("sha512", this.secretKey)
+        .update(JSON.stringify(req.body))
+        .digest("hex");
+
+      if (hash !== req.headers["x-paystack-signature"]) {
+        throw new Error("Invalid signature");
+      }
+
+      return req.body;
+    } catch (error) {
+        console.error("Paystack webhook error", error);
+        throw new HttpException(
+            "Invalid webhook signature",
+            HttpStatus.BAD_REQUEST
+        );
     }
   }
 }

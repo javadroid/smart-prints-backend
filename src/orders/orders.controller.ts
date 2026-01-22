@@ -112,13 +112,27 @@ export class OrderController {
     return this.orderService.remove(ids);
   }
 
+  // Flutterwave Webhook
+  // @Post("webhook/flutterwave")
+  // @ApiOperation({ summary: "Flutterwave Webhook" })
+  // async handleFlutterwaveWebhook(@Req() req: any) {
+  //   return this.orderService.handleFlutterwaveWebhook(req);
+  // }
+
+  // Paystack Webhook
+  @Post("webhook/paystack")
+  @ApiOperation({ summary: "Paystack Webhook" })
+  async handlePaystackWebhook(@Req() req: any) {
+    return this.orderService.handlePaystackWebhook(req);
+  }
+
   // Verify order payment
   @Get("verify-payment/:id")
   @ApiOperation({ summary: "Verify order payment by ID" })
   @ApiParam({ name: "id", required: true, type: String })
   @UseGuards(JwtAuthGuard)
-  async verifyOrderPayment(@Param("id") id: string) {
-    return this.orderService.verifyOrderPayment(id);
+  async verifyOrderPayment(@Param("id") id: string, @Req() req: any) {
+    return this.orderService.verifyOrderPayment(id, req.user);
   }
   
 }
