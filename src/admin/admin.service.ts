@@ -101,7 +101,7 @@ async createDeliveryPrice(deliveryPriceDto: DeliveryPriceDTO) {
     });
 
     // Perform the upsert operation. TypeORM handles both insert or update
-    const result = await this.deliveryPriceModel.upsert(deliveryPrice, ["country", "state", "lga"]);
+    const result = await this.deliveryPriceModel.upsert(deliveryPrice, ["country", "state", "lga", "zone"]);
 
     // `upsert` returns an InsertResult; you need to retrieve the inserted or updated entity from it
     const updatedDeliveryPrice = result.generatedMaps[0]; // or result.raw[0] depending on your TypeORM version
