@@ -1,15 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, In } from "typeorm";
 import { ProductSqlModel } from "@app/sql-schema/product.sql-schema";
 import { getSqlMetadata, serviceResponse } from "@app/service";
 import { UserDTO } from "@app/dto";
+import { UserSqlModel } from "@app/sql-schema";
 
 @Injectable()
 export class ProductSqlService {
   constructor(
     @InjectRepository(ProductSqlModel)
-    private readonly productRepository: Repository<ProductSqlModel>
+    private readonly productRepository: Repository<ProductSqlModel>,
+    @InjectRepository(UserSqlModel)
+    private readonly userRepository: Repository<UserSqlModel>,
   ) {}
 
   async create(product: Partial<ProductSqlModel>,userData:UserDTO): Promise<any> {
@@ -38,6 +41,8 @@ async findByAny(param:any,query: any): Promise<any> {
       }),
     });
   }
+
+  
 
   async findByMany(param:any,query: any): Promise<any> {
  
@@ -128,4 +133,116 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
       status: true,
     });
   }
+  
+  async rateProduct(
+    id: string,
+    payload: { rating: number; content?: string; feedback?: string },
+    userData: UserDTO
+  ): Promise<any> {
+    const product = await this.productRepository.findOne({ where: { _id: id } });
+    if (!product) {
+      return serviceResponse({ status: false, message: "Product not found" });
+    }
+    const ratingValue = Number(payload.rating);
+    if (isNaN(ratingValue) || ratingValue < 0 || ratingValue > 5) {
+      return serviceResponse({ status: false, message: "Invalid rating value" });
+    }
+    const feedback = payload.feedback ?? payload.content ?? "";
+    const existing = Array.isArray(product.rating) ? product.rating : [];
+    const idx = existing.findIndex((r: any) => String(r.userID) === String(userData._id));
+    const entry = {
+      rating: ratingValue,
+      feedback,
+      userID: String(userData._id),
+      date: new Date(),
+    };
+    if (idx >= 0) {
+      existing[idx] = entry;
+    } else {
+      existing.push(entry);
+    }
+    const avg =
+      existing.length > 0
+        ? existing.reduce((sum: number, r: any) => sum + Number(r.rating || 0), 0) / existing.length
+        : 0;
+    await this.productRepository.update(id, { rating: existing as any, averageRating: avg });
+    const updated = await this.productRepository.findOne({ where: { _id: id } });
+    return serviceResponse({
+      status: true,
+      message: "Product rated successfully",
+      data: updated,
+    });
+  }
+
+  async findSellers(query: any) {
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+
+    // Find distinct userIDs from products
+    const result = await this.productRepository
+      .createQueryBuilder('product')
+      .select('DISTINCT product.userID', 'userID')
+      .limit(limit)
+      .offset(skip)
+      .getRawMany();
+
+    const userIDs = result.map((r) => r.userID);
+
+    if (userIDs.length === 0) {
+      return serviceResponse({
+        data: [],
+        message: 'Sellers retrieved successfully',
+        status: true,
+        metadata: { total: 0, page, limit },
+      });
+    }
+
+    const [users, total] = await this.userRepository.findAndCount({
+      where: { _id: In(userIDs),isReseller:true },
+         select: ['_id','bio', 'fullname', 'email', 'profileImage','coverImage', 'username'],
+   
+    });
+
+    return serviceResponse({
+      data: users,
+      message: 'Sellers retrieved successfully',
+      status: true,
+      metadata: { total, page, limit },
+    });
+  }
+
+  async findByUsername(username: string, query: any) {
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+
+    const user = await this.userRepository.findOne({ where: { username },   select: ['_id', 'fullname', 'email', 'profileImage','coverImage', 'username','bio'],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with username ${username} not found`);
+    }
+
+    const [products, total] = await this.productRepository.findAndCount({
+      where: { userID: user._id },
+      take: limit,
+      skip: skip,
+      relations: ['user'],
+    });
+
+    return serviceResponse({
+      data: {
+        user,
+        products
+      },
+      message: `Products for user ${username} retrieved successfully`,
+      status: true,
+      metadata: await getSqlMetadata({
+        model: this.productRepository,
+        query,
+        querys: { userID: user._id },
+      }),
+    });
+  }
+
+
+ 
 }

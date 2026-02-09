@@ -41,3 +41,20 @@ export class WalletDTO {
     rideID: string;
  
 }
+
+export class RequestWithdrawalDTO {
+  @ApiProperty({ description: 'Amount to withdraw', example: 5000 })
+  amount: number;
+
+  @ApiProperty({ description: 'Account Number', required: false })
+  accountNumber?: string;
+
+  @ApiProperty({ description: 'Bank Code', required: false })
+  bankCode?: string;
+
+  @ApiProperty({ description: 'Account Name', required: false })
+  accountName?: string;
+  
+  @ApiProperty({ description: 'Password for confirmation', required: false })
+  password?: string;
+}

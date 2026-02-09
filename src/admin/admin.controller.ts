@@ -4,7 +4,7 @@ import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { Roles } from '@app/decorator';
 import { UserType } from '@app/enum';
 import { ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
-import { DeliveryPriceDTO } from '@app/dto';
+import { DeliveryPriceDTO, SiteSettingsDTO } from '@app/dto';
 
 @Controller('admin')
 @ApiBearerAuth('access-token')
@@ -44,5 +44,15 @@ export class AdminController {
   @Delete('delivery-price/:id')
   async deleteDeliveryPrice(@Param('id') id: string) {
     return this.adminService.deleteDeliveryPrice(id);
+  }
+  
+  @Get('site-settings')
+  async getSiteSettings() {
+    return this.adminService.getSiteSettings();
+  }
+  
+  @Patch('site-settings')
+  async updateSiteSettings(@Body() dto: SiteSettingsDTO) {
+    return this.adminService.updateSiteSettings(dto);
   }
 }

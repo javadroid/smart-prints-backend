@@ -89,6 +89,50 @@ export class ProductController {
     return this.productService.toggleActive(productID, isActive);
   }
 
+  @Get("sellers")
+  @ApiOperation({ summary: "Get sellers with at least 1 product" })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    type: Number,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of sellers per page",
+    type: Number,
+  })
+  async findSellers(@Query() query: any) {
+    return this.productService.findSellers(query);
+  }
+
+  @Get("user/:username")
+  @ApiOperation({ summary: "Get a user products by username" })
+  @ApiParam({
+    name: "username",
+    description: "The username of the user",
+    type: String,
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    type: Number,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of products per page",
+    type: Number,
+  })
+  async findByUsername(
+    @Param("username") username: string,
+    @Query() query: any
+  ) {
+    return this.productService.findByUsername(username, query);
+  }
+
 
   @Get("by-any/:key/:value")
   // @UseGuards(JwtAuthGuard)
@@ -156,6 +200,29 @@ export class ProductController {
  
   async delete(@Param("id") ids: string,  @Req() req: any) {
     return this.productService.remove(ids, );
+  }
+  
+  @Post(":productID/rate")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Rate a product" })
+  @ApiParam({ name: "productID", description: "The product _id to rate", type: String })
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        rating: { type: "number", description: "Rating value between 0 and 5" },
+        content: { type: "string", description: "Rating content/feedback" },
+      },
+      required: ["rating"],
+    },
+    description: "Rate a product with a score and optional content",
+  })
+  async rateProduct(
+    @Param("productID") productID: string,
+    @Body() body: { rating: number; content?: string },
+    @Req() req: any
+  ) {
+    return this.productService.rateProduct(productID, body, req.user);
   }
   
 }

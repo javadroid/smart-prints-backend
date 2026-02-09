@@ -10,6 +10,8 @@ export class CategoriesSqlModel {
   name: string;
     @Column({  })
   id: string;
+  @Column({ nullable: true })
+  image: string;
 @Column({
    
     default: 'custom',

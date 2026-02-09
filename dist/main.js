@@ -46,6 +46,57 @@ exports.Roles = Roles;
 
 /***/ }),
 
+/***/ "./libs/dto/src/contact-us.dto.ts":
+/*!****************************************!*\
+  !*** ./libs/dto/src/contact-us.dto.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContactUsDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class ContactUsDTO {
+}
+exports.ContactUsDTO = ContactUsDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'John Doe', description: 'Full Name of the sender' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ContactUsDTO.prototype, "fullName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'pending', description: 'Status of the contact message' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ContactUsDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'john@example.com', description: 'Email Address of the sender' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], ContactUsDTO.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'I have a question about...', description: 'Message content' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ContactUsDTO.prototype, "message", void 0);
+
+
+/***/ }),
+
 /***/ "./libs/dto/src/delivery-price.dto.ts":
 /*!********************************************!*\
   !*** ./libs/dto/src/delivery-price.dto.ts ***!
@@ -141,6 +192,9 @@ __exportStar(__webpack_require__(/*! ./delivery-price.dto */ "./libs/dto/src/del
 __exportStar(__webpack_require__(/*! ./product-color.dto */ "./libs/dto/src/product-color.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./pickup-location.dto */ "./libs/dto/src/pickup-location.dto.ts"), exports);
 __exportStar(__webpack_require__(/*! ./zone.dto */ "./libs/dto/src/zone.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./site-settings.dto */ "./libs/dto/src/site-settings.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./transaction.dto */ "./libs/dto/src/transaction.dto.ts"), exports);
+__exportStar(__webpack_require__(/*! ./contact-us.dto */ "./libs/dto/src/contact-us.dto.ts"), exports);
 
 
 /***/ }),
@@ -343,6 +397,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: ['custom', 'store'], description: 'Category type', example: 'custom' }),
     __metadata("design:type", String)
 ], CategoriesDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Category image URL or path', example: '/uploads/category.png' }),
+    __metadata("design:type", String)
+], CategoriesDto.prototype, "image", void 0);
 
 
 /***/ }),
@@ -730,6 +788,14 @@ __decorate([
     __metadata("design:type", Boolean)
 ], ProductDto.prototype, "isFeatured", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Is a 3D product', example: false, required: false }),
+    __metadata("design:type", Boolean)
+], ProductDto.prototype, "is3d", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Is resold product', example: false, required: false }),
+    __metadata("design:type", Boolean)
+], ProductDto.prototype, "isResell", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Product ID', }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "id", void 0);
@@ -810,6 +876,10 @@ __decorate([
     __metadata("design:type", Array)
 ], ProductDto.prototype, "types", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product features', example: ['cotton', 'washable'], required: false }),
+    __metadata("design:type", Array)
+], ProductDto.prototype, "features", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Name of the product', enum: ['custom', 'store'], example: 'custom' }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "type", void 0);
@@ -817,6 +887,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Image', }),
     __metadata("design:type", String)
 ], ProductDto.prototype, "image", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Average rating for the product', example: 4.5, required: false }),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "averageRating", void 0);
 
 
 /***/ }),
@@ -1177,6 +1251,44 @@ __decorate([
 
 /***/ }),
 
+/***/ "./libs/dto/src/site-settings.dto.ts":
+/*!*******************************************!*\
+  !*** ./libs/dto/src/site-settings.dto.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SiteSettingsDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class SiteSettingsDTO {
+}
+exports.SiteSettingsDTO = SiteSettingsDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: ['image', 'video'], default: 'image', description: 'Hero section type' }),
+    __metadata("design:type", String)
+], SiteSettingsDTO.prototype, "heroType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Hero image URL' }),
+    __metadata("design:type", String)
+], SiteSettingsDTO.prototype, "heroImage", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Hero video URL' }),
+    __metadata("design:type", String)
+], SiteSettingsDTO.prototype, "heroVideo", void 0);
+
+
+/***/ }),
+
 /***/ "./libs/dto/src/support.dto.ts":
 /*!*************************************!*\
   !*** ./libs/dto/src/support.dto.ts ***!
@@ -1261,6 +1373,93 @@ __decorate([
 
 /***/ }),
 
+/***/ "./libs/dto/src/transaction.dto.ts":
+/*!*****************************************!*\
+  !*** ./libs/dto/src/transaction.dto.ts ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d, _e;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionDTO = exports.CreateTransactionDTO = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+class CreateTransactionDTO {
+}
+exports.CreateTransactionDTO = CreateTransactionDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'User ID associated with the transaction' }),
+    __metadata("design:type", String)
+], CreateTransactionDTO.prototype, "userID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Amount of the transaction', example: 1000.00 }),
+    __metadata("design:type", Number)
+], CreateTransactionDTO.prototype, "amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Type of the transaction',
+        enum: enum_1.TransactionType,
+        example: enum_1.TransactionType.PAYMENT,
+    }),
+    __metadata("design:type", typeof (_a = typeof enum_1.TransactionType !== "undefined" && enum_1.TransactionType) === "function" ? _a : Object)
+], CreateTransactionDTO.prototype, "transactionType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Status of the transaction',
+        enum: enum_1.TransactionStatus,
+        example: enum_1.TransactionStatus.PENDING,
+    }),
+    __metadata("design:type", typeof (_b = typeof enum_1.TransactionStatus !== "undefined" && enum_1.TransactionStatus) === "function" ? _b : Object)
+], CreateTransactionDTO.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Transaction reference', required: false }),
+    __metadata("design:type", String)
+], CreateTransactionDTO.prototype, "reference", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Description of the transaction', required: false }),
+    __metadata("design:type", String)
+], CreateTransactionDTO.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Related Order ID', required: false }),
+    __metadata("design:type", String)
+], CreateTransactionDTO.prototype, "orderID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Related product ID', required: false }),
+    __metadata("design:type", String)
+], CreateTransactionDTO.prototype, "productID", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Additional metadata', required: false }),
+    __metadata("design:type", typeof (_c = typeof Record !== "undefined" && Record) === "function" ? _c : Object)
+], CreateTransactionDTO.prototype, "metadata", void 0);
+class TransactionDTO extends CreateTransactionDTO {
+}
+exports.TransactionDTO = TransactionDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Transaction ID' }),
+    __metadata("design:type", String)
+], TransactionDTO.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Creation date' }),
+    __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
+], TransactionDTO.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Last update date' }),
+    __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
+], TransactionDTO.prototype, "updatedAt", void 0);
+
+
+/***/ }),
+
 /***/ "./libs/dto/src/user.dto.ts":
 /*!**********************************!*\
   !*** ./libs/dto/src/user.dto.ts ***!
@@ -1277,7 +1476,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserDTO = exports.Refferal = exports.RefreshTokenDTO = exports.VerifyAuthenticationDto = exports.SetAuthenticatorDto = exports.ForgotPasswordDTO = exports.LoginDTO = exports.DeleteAccountDTO = exports.ChangePasswordDTO = exports.BankAccountDTO = exports.UserIDDTO = void 0;
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
@@ -1529,6 +1728,14 @@ __decorate([
 ], UserDTO.prototype, "profileImage", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
+        description: 'Cover image URL',
+        example: 'http://example.com/cover.jpg',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "coverImage", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         description: 'Indicates if the user is an admin',
         example: false,
     }),
@@ -1541,6 +1748,41 @@ __decorate([
     }),
     __metadata("design:type", Boolean)
 ], UserDTO.prototype, "isSuperAdmin", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Indicates if the user is a reseller',
+        example: false,
+    }),
+    __metadata("design:type", Boolean)
+], UserDTO.prototype, "isReseller", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Bio of the user', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "bio", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Date of birth', required: false }),
+    __metadata("design:type", typeof (_g = typeof Date !== "undefined" && Date) === "function" ? _g : Object)
+], UserDTO.prototype, "dob", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'State', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "state", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Country', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "country", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Local Government Area', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "localGovernmentArea", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Social Media Profile', required: false }),
+    __metadata("design:type", typeof (_h = typeof Record !== "undefined" && Record) === "function" ? _h : Object)
+], UserDTO.prototype, "socialMediaProfile", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Residential Address', required: false }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "residentialAddress", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'referral details' }),
     __metadata("design:type", Refferal)
@@ -1570,7 +1812,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WalletDTO = void 0;
+exports.RequestWithdrawalDTO = exports.WalletDTO = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 class WalletDTO {
 }
@@ -1623,6 +1865,29 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'rideID' }),
     __metadata("design:type", String)
 ], WalletDTO.prototype, "rideID", void 0);
+class RequestWithdrawalDTO {
+}
+exports.RequestWithdrawalDTO = RequestWithdrawalDTO;
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Amount to withdraw', example: 5000 }),
+    __metadata("design:type", Number)
+], RequestWithdrawalDTO.prototype, "amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account Number', required: false }),
+    __metadata("design:type", String)
+], RequestWithdrawalDTO.prototype, "accountNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Bank Code', required: false }),
+    __metadata("design:type", String)
+], RequestWithdrawalDTO.prototype, "bankCode", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Account Name', required: false }),
+    __metadata("design:type", String)
+], RequestWithdrawalDTO.prototype, "accountName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Password for confirmation', required: false }),
+    __metadata("design:type", String)
+], RequestWithdrawalDTO.prototype, "password", void 0);
 
 
 /***/ }),
@@ -1740,6 +2005,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__webpack_require__(/*! ./user.enum */ "./libs/enum/src/user.enum.ts"), exports);
 __exportStar(__webpack_require__(/*! ./action.enum */ "./libs/enum/src/action.enum.ts"), exports);
 __exportStar(__webpack_require__(/*! ./role.enum */ "./libs/enum/src/role.enum.ts"), exports);
+__exportStar(__webpack_require__(/*! ./transaction.enum */ "./libs/enum/src/transaction.enum.ts"), exports);
 
 
 /***/ }),
@@ -1759,6 +2025,33 @@ var Role;
     Role["Admin"] = "admin";
     Role["SuperAdmin"] = "super-admin";
 })(Role || (exports.Role = Role = {}));
+
+
+/***/ }),
+
+/***/ "./libs/enum/src/transaction.enum.ts":
+/*!*******************************************!*\
+  !*** ./libs/enum/src/transaction.enum.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionType = exports.TransactionStatus = void 0;
+var TransactionStatus;
+(function (TransactionStatus) {
+    TransactionStatus["PENDING"] = "pending";
+    TransactionStatus["ACTIVE"] = "active";
+    TransactionStatus["SUCCESS"] = "success";
+})(TransactionStatus || (exports.TransactionStatus = TransactionStatus = {}));
+var TransactionType;
+(function (TransactionType) {
+    TransactionType["DEPOSIT"] = "deposit";
+    TransactionType["WITHDRAWAL"] = "withdrawal";
+    TransactionType["PAYMENT"] = "payment";
+    TransactionType["REFUND"] = "refund";
+    TransactionType["TRANSFER"] = "transfer";
+})(TransactionType || (exports.TransactionType = TransactionType = {}));
 
 
 /***/ }),
@@ -2749,6 +3042,14 @@ __decorate([
     __metadata("design:type", Boolean)
 ], ProductModel.prototype, "isFeatured", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductModel.prototype, "is3d", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductModel.prototype, "isResell", void 0);
+__decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
 ], ProductModel.prototype, "name", void 0);
@@ -2764,6 +3065,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [String] }),
     __metadata("design:type", Array)
 ], ProductModel.prototype, "types", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], required: false }),
+    __metadata("design:type", Array)
+], ProductModel.prototype, "features", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
@@ -2836,6 +3141,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [Rating] }),
     __metadata("design:type", Array)
 ], ProductModel.prototype, "rating", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], ProductModel.prototype, "averageRating", void 0);
 __decorate([
     (0, mongoose_1.Prop)({}),
     __metadata("design:type", String)
@@ -3176,6 +3485,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], UserModel.prototype, "profileImage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], UserModel.prototype, "coverImage", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
@@ -4146,8 +4459,8 @@ let WebSocketGatewayService = class WebSocketGatewayService {
             address: client.handshake.query.address || '',
             ip: client.handshake.query.ip,
         };
-        let ip = client.handshake.headers['x-forwarded-for'] || client.handshake.address;
-        let ip2 = userData.ip ? userData.ip : Array.isArray(ip) ? ip[0] : ip;
+        const ip = client.handshake.headers['x-forwarded-for'] || client.handshake.address;
+        const ip2 = userData.ip ? userData.ip : Array.isArray(ip) ? ip[0] : ip;
         const location = await this.getLocationFromIP(ip2);
         if (userId) {
             this.usersData.set(userId, userData);
@@ -4359,6 +4672,10 @@ __decorate([
     __metadata("design:type", String)
 ], CategoriesSqlModel.prototype, "id", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], CategoriesSqlModel.prototype, "image", void 0);
+__decorate([
     (0, typeorm_1.Column)({
         default: 'custom',
     }),
@@ -4375,6 +4692,64 @@ __decorate([
 exports.CategoriesSqlModel = CategoriesSqlModel = __decorate([
     (0, typeorm_1.Entity)()
 ], CategoriesSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/contact-us.sql-schema.ts":
+/*!******************************************************!*\
+  !*** ./libs/sql-schema/src/contact-us.sql-schema.ts ***!
+  \******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContactUsSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+let ContactUsSqlModel = class ContactUsSqlModel {
+};
+exports.ContactUsSqlModel = ContactUsSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], ContactUsSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ContactUsSqlModel.prototype, "fullName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ContactUsSqlModel.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text' }),
+    __metadata("design:type", String)
+], ContactUsSqlModel.prototype, "message", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'pending' }),
+    __metadata("design:type", String)
+], ContactUsSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], ContactUsSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], ContactUsSqlModel.prototype, "updatedAt", void 0);
+exports.ContactUsSqlModel = ContactUsSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'contact_us' })
+], ContactUsSqlModel);
 
 
 /***/ }),
@@ -4407,17 +4782,21 @@ __decorate([
     __metadata("design:type", String)
 ], DeliveryPriceSqlModel.prototype, "_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ length: 100 }),
     __metadata("design:type", String)
 ], DeliveryPriceSqlModel.prototype, "country", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ length: 100 }),
     __metadata("design:type", String)
 ], DeliveryPriceSqlModel.prototype, "state", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ length: 100 }),
     __metadata("design:type", String)
 ], DeliveryPriceSqlModel.prototype, "lga", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ length: 100 }),
+    __metadata("design:type", String)
+], DeliveryPriceSqlModel.prototype, "zone", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, default: 3000.00 }),
     __metadata("design:type", Number)
@@ -4431,16 +4810,12 @@ __decorate([
     __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], DeliveryPriceSqlModel.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], DeliveryPriceSqlModel.prototype, "zone", void 0);
-__decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
 ], DeliveryPriceSqlModel.prototype, "updatedAt", void 0);
 exports.DeliveryPriceSqlModel = DeliveryPriceSqlModel = __decorate([
     (0, typeorm_1.Entity)({ name: 'delivery_prices' }),
-    (0, typeorm_1.Unique)(["country", "state", "lga"])
+    (0, typeorm_1.Unique)(["country", "state", "lga", "zone"])
 ], DeliveryPriceSqlModel);
 
 
@@ -4552,6 +4927,9 @@ __exportStar(__webpack_require__(/*! ./delivery-price.sql-schema */ "./libs/sql-
 __exportStar(__webpack_require__(/*! ./product-color.sql-schema */ "./libs/sql-schema/src/product-color.sql-schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./pickup-location.sql-schema */ "./libs/sql-schema/src/pickup-location.sql-schema.ts"), exports);
 __exportStar(__webpack_require__(/*! ./zone.sql-schema */ "./libs/sql-schema/src/zone.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./site-settings.sql-schema */ "./libs/sql-schema/src/site-settings.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./transaction.sql-schema */ "./libs/sql-schema/src/transaction.sql-schema.ts"), exports);
+__exportStar(__webpack_require__(/*! ./contact-us.sql-schema */ "./libs/sql-schema/src/contact-us.sql-schema.ts"), exports);
 
 
 /***/ }),
@@ -4882,6 +5260,8 @@ class DesignRect {
 }
 class DesignArea {
 }
+class Rating {
+}
 let ProductSqlModel = class ProductSqlModel {
     generateId() {
         this.id = "PDT" + (0, crypto_1.randomInt)(100, 999) + (0, crypto_1.randomUUID)().replace(/\D/g, '').substring(0, 3);
@@ -4900,6 +5280,18 @@ __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], ProductSqlModel.prototype, "isFeatured", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "is3d", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "isResell", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductSqlModel.prototype, "isApproved", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)
@@ -4994,6 +5386,10 @@ __decorate([
     __metadata("design:type", Array)
 ], ProductSqlModel.prototype, "types", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true, type: 'simple-array' }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "features", void 0);
+__decorate([
     (0, typeorm_1.Column)({ nullable: true, type: 'simple-array', }),
     __metadata("design:type", Array)
 ], ProductSqlModel.prototype, "imageUrls", void 0);
@@ -5014,6 +5410,14 @@ __decorate([
     __metadata("design:type", Array)
 ], ProductSqlModel.prototype, "availableSizes", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Array)
+], ProductSqlModel.prototype, "rating", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'float', default: 0, nullable: true }),
+    __metadata("design:type", Number)
+], ProductSqlModel.prototype, "averageRating", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
 ], ProductSqlModel.prototype, "createdAt", void 0);
@@ -5030,6 +5434,176 @@ __decorate([
 exports.ProductSqlModel = ProductSqlModel = __decorate([
     (0, typeorm_1.Entity)({ name: 'products' })
 ], ProductSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/site-settings.sql-schema.ts":
+/*!*********************************************************!*\
+  !*** ./libs/sql-schema/src/site-settings.sql-schema.ts ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SiteSettingsSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+let SiteSettingsSqlModel = class SiteSettingsSqlModel {
+};
+exports.SiteSettingsSqlModel = SiteSettingsSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], SiteSettingsSqlModel.prototype, "_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'default' }),
+    __metadata("design:type", String)
+], SiteSettingsSqlModel.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ['image', 'video'],
+        default: 'image',
+    }),
+    __metadata("design:type", String)
+], SiteSettingsSqlModel.prototype, "heroType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SiteSettingsSqlModel.prototype, "heroImage", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SiteSettingsSqlModel.prototype, "heroVideo", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], SiteSettingsSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], SiteSettingsSqlModel.prototype, "updatedAt", void 0);
+exports.SiteSettingsSqlModel = SiteSettingsSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'site_settings' }),
+    (0, typeorm_1.Unique)(['name'])
+], SiteSettingsSqlModel);
+
+
+/***/ }),
+
+/***/ "./libs/sql-schema/src/transaction.sql-schema.ts":
+/*!*******************************************************!*\
+  !*** ./libs/sql-schema/src/transaction.sql-schema.ts ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c, _d, _e, _f;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionSqlModel = void 0;
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_sql_schema_1 = __webpack_require__(/*! ./user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const order_sql_schema_1 = __webpack_require__(/*! ./order.sql-schema */ "./libs/sql-schema/src/order.sql-schema.ts");
+const product_sql_schema_1 = __webpack_require__(/*! ./product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
+let TransactionSqlModel = class TransactionSqlModel {
+};
+exports.TransactionSqlModel = TransactionSqlModel;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "userID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_sql_schema_1.UserSqlModel),
+    (0, typeorm_1.JoinColumn)({ name: 'userID' }),
+    __metadata("design:type", typeof (_a = typeof user_sql_schema_1.UserSqlModel !== "undefined" && user_sql_schema_1.UserSqlModel) === "function" ? _a : Object)
+], TransactionSqlModel.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], TransactionSqlModel.prototype, "amount", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: enum_1.TransactionType,
+    }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "transactionType", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: enum_1.TransactionStatus,
+        default: enum_1.TransactionStatus.PENDING,
+    }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "reference", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "orderID", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], TransactionSqlModel.prototype, "productID", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => order_sql_schema_1.OrderSqlModel),
+    (0, typeorm_1.JoinColumn)({ name: 'orderID' }),
+    __metadata("design:type", typeof (_b = typeof order_sql_schema_1.OrderSqlModel !== "undefined" && order_sql_schema_1.OrderSqlModel) === "function" ? _b : Object)
+], TransactionSqlModel.prototype, "order", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => product_sql_schema_1.ProductSqlModel),
+    (0, typeorm_1.JoinColumn)({ name: 'productID' }),
+    __metadata("design:type", typeof (_c = typeof product_sql_schema_1.ProductSqlModel !== "undefined" && product_sql_schema_1.ProductSqlModel) === "function" ? _c : Object)
+], TransactionSqlModel.prototype, "product", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'simple-json',
+        nullable: true,
+    }),
+    __metadata("design:type", typeof (_d = typeof Record !== "undefined" && Record) === "function" ? _d : Object)
+], TransactionSqlModel.prototype, "metadata", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
+], TransactionSqlModel.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", typeof (_f = typeof Date !== "undefined" && Date) === "function" ? _f : Object)
+], TransactionSqlModel.prototype, "updatedAt", void 0);
+exports.TransactionSqlModel = TransactionSqlModel = __decorate([
+    (0, typeorm_1.Entity)({ name: 'transactions' })
+], TransactionSqlModel);
 
 
 /***/ }),
@@ -5140,6 +5714,10 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
+], UserSqlModel.prototype, "bio", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
 ], UserSqlModel.prototype, "firstname", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
@@ -5158,9 +5736,17 @@ __decorate([
     __metadata("design:type", String)
 ], UserSqlModel.prototype, "profileImage", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserSqlModel.prototype, "coverImage", void 0);
+__decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], UserSqlModel.prototype, "isAdmin", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserSqlModel.prototype, "isReseller", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
@@ -5646,7 +6232,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -5671,6 +6257,12 @@ let AdminController = class AdminController {
     }
     async deleteDeliveryPrice(id) {
         return this.adminService.deleteDeliveryPrice(id);
+    }
+    async getSiteSettings() {
+        return this.adminService.getSiteSettings();
+    }
+    async updateSiteSettings(dto) {
+        return this.adminService.updateSiteSettings(dto);
     }
 };
 exports.AdminController = AdminController;
@@ -5711,6 +6303,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "deleteDeliveryPrice", null);
+__decorate([
+    (0, common_1.Get)('site-settings'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getSiteSettings", null);
+__decorate([
+    (0, common_1.Patch)('site-settings'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_c = typeof dto_1.SiteSettingsDTO !== "undefined" && dto_1.SiteSettingsDTO) === "function" ? _c : Object]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "updateSiteSettings", null);
 exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
@@ -5748,7 +6353,7 @@ let AdminModule = class AdminModule {
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.UserSqlModel, sql_schema_1.ProductSqlModel, sql_schema_1.OrderSqlModel, sql_schema_1.CategoriesSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DesignSqlModel, sql_schema_1.OtpSqlModel, sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.UserSqlModel, sql_schema_1.ProductSqlModel, sql_schema_1.OrderSqlModel, sql_schema_1.CategoriesSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DesignSqlModel, sql_schema_1.OtpSqlModel, sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.SiteSettingsSqlModel])],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService, service_1.NotificationService, service_1.NotificationGateway, service_1.SendMailService,],
     })
@@ -5776,7 +6381,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminService = void 0;
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
@@ -5784,8 +6389,9 @@ const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-sche
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const sql_schema_2 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let AdminService = class AdminService {
-    constructor(cartModel, categoriesModel, userModel, productModel, orderModel, designModel, deliveryPriceModel) {
+    constructor(cartModel, categoriesModel, userModel, productModel, orderModel, designModel, deliveryPriceModel, siteSettingsModel) {
         this.cartModel = cartModel;
         this.categoriesModel = categoriesModel;
         this.userModel = userModel;
@@ -5793,6 +6399,7 @@ let AdminService = class AdminService {
         this.orderModel = orderModel;
         this.designModel = designModel;
         this.deliveryPriceModel = deliveryPriceModel;
+        this.siteSettingsModel = siteSettingsModel;
     }
     async getDashboardStats() {
         const totalUsers = await this.userModel.count();
@@ -5888,6 +6495,29 @@ let AdminService = class AdminService {
             status: true,
         });
     }
+    async getSiteSettings() {
+        const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
+        return (0, service_1.serviceResponse)({
+            message: "Site settings retrieved",
+            status: true,
+            data: settings || {},
+        });
+    }
+    async updateSiteSettings(dto) {
+        const payload = this.siteSettingsModel.create({
+            name: 'default',
+            heroType: dto.heroType,
+            heroImage: dto.heroImage,
+            heroVideo: dto.heroVideo,
+        });
+        await this.siteSettingsModel.upsert(payload, ['name']);
+        const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
+        return (0, service_1.serviceResponse)({
+            message: "Site settings updated successfully",
+            status: true,
+            data: settings,
+        });
+    }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = __decorate([
@@ -5899,7 +6529,8 @@ exports.AdminService = AdminService = __decorate([
     __param(4, (0, typeorm_1.InjectRepository)(sql_schema_1.OrderSqlModel)),
     __param(5, (0, typeorm_1.InjectRepository)(sql_schema_1.DesignSqlModel)),
     __param(6, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _e : Object, typeof (_f = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object])
+    __param(7, (0, typeorm_1.InjectRepository)(sql_schema_2.SiteSettingsSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _e : Object, typeof (_f = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object, typeof (_h = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _h : Object])
 ], AdminService);
 
 
@@ -6014,6 +6645,8 @@ const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-sche
 const product_colors_module_1 = __webpack_require__(/*! ./product-colors/product-colors.module */ "./src/product-colors/product-colors.module.ts");
 const pickup_locations_module_1 = __webpack_require__(/*! ./pickup-locations/pickup-locations.module */ "./src/pickup-locations/pickup-locations.module.ts");
 const zones_module_1 = __webpack_require__(/*! ./zones/zones.module */ "./src/zones/zones.module.ts");
+const transactions_module_1 = __webpack_require__(/*! ./transactions/transactions.module */ "./src/transactions/transactions.module.ts");
+const contact_module_1 = __webpack_require__(/*! ./contact/contact.module */ "./src/contact/contact.module.ts");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -6069,8 +6702,8 @@ exports.AppModule = AppModule = __decorate([
                 useFactory: async (configService) => ({
                     type: 'mysql',
                     url: configService.get('SQL_URI'),
-                    entities: [user_sql_schema_1.UserSqlModel, sql_schema_1.ZoneSqlModel, product_sql_schema_1.ProductSqlModel, order_sql_schema_1.OrderSqlModel, categories_sql_schema_1.CategoriesSqlModel, cart_sql_schema_1.CartSqlModel, design_sql_schema_1.DesignSqlModel, otp_sql_schema_1.OtpSqlModel, wallet_sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.ZoneSqlModel],
-                    synchronize: false,
+                    entities: [user_sql_schema_1.UserSqlModel, sql_schema_1.ZoneSqlModel, product_sql_schema_1.ProductSqlModel, order_sql_schema_1.OrderSqlModel, categories_sql_schema_1.CategoriesSqlModel, cart_sql_schema_1.CartSqlModel, design_sql_schema_1.DesignSqlModel, otp_sql_schema_1.OtpSqlModel, wallet_sql_schema_1.WalletSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.SiteSettingsSqlModel, sql_schema_1.ZoneSqlModel, sql_schema_1.TransactionSqlModel, sql_schema_1.ContactUsSqlModel],
+                    synchronize: true,
                     autoLoadEntities: true,
                     logging: ['query', 'error'],
                 }),
@@ -6080,7 +6713,7 @@ exports.AppModule = AppModule = __decorate([
             admin_module_1.AdminModule,
             uploads_module_1.UploadsModule,
             zones_module_1.ZonesModule,
-            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, otp_module_1.OtpModule, wallet_module_1.WalletModule, product_colors_module_1.ProductColorsModule, pickup_locations_module_1.PickupLocationsModule, zones_module_1.ZonesModule
+            users_module_1.UsersModule, products_module_1.ProductsModule, cart_module_1.CartModule, orders_module_1.OrdersModule, categories_module_1.CategoriesModule, designs_module_1.DesignsModule, otp_module_1.OtpModule, wallet_module_1.WalletModule, product_colors_module_1.ProductColorsModule, pickup_locations_module_1.PickupLocationsModule, zones_module_1.ZonesModule, transactions_module_1.TransactionsModule, contact_module_1.ContactModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -7309,6 +7942,198 @@ exports["default"] = (0, config_1.registerAs)('database', () => {
 
 /***/ }),
 
+/***/ "./src/contact/contact.controller.ts":
+/*!*******************************************!*\
+  !*** ./src/contact/contact.controller.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContactController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const contact_service_1 = __webpack_require__(/*! ./contact.service */ "./src/contact/contact.service.ts");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+let ContactController = class ContactController {
+    constructor(contactService) {
+        this.contactService = contactService;
+    }
+    contactUs(contactUsDto) {
+        return this.contactService.contactUs(contactUsDto);
+    }
+    findAll() {
+        return this.contactService.findAll();
+    }
+};
+exports.ContactController = ContactController;
+__decorate([
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Send a contact us message' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.ContactUsDTO }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof dto_1.ContactUsDTO !== "undefined" && dto_1.ContactUsDTO) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], ContactController.prototype, "contactUs", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all contact messages (Admin only)' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ContactController.prototype, "findAll", null);
+exports.ContactController = ContactController = __decorate([
+    (0, swagger_1.ApiTags)('Contact'),
+    (0, common_1.Controller)('contact'),
+    __metadata("design:paramtypes", [typeof (_a = typeof contact_service_1.ContactService !== "undefined" && contact_service_1.ContactService) === "function" ? _a : Object])
+], ContactController);
+
+
+/***/ }),
+
+/***/ "./src/contact/contact.module.ts":
+/*!***************************************!*\
+  !*** ./src/contact/contact.module.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContactModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const contact_controller_1 = __webpack_require__(/*! ./contact.controller */ "./src/contact/contact.controller.ts");
+const contact_service_1 = __webpack_require__(/*! ./contact.service */ "./src/contact/contact.service.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+let ContactModule = class ContactModule {
+};
+exports.ContactModule = ContactModule;
+exports.ContactModule = ContactModule = __decorate([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.ContactUsSqlModel])],
+        controllers: [contact_controller_1.ContactController],
+        providers: [contact_service_1.ContactService],
+    })
+], ContactModule);
+
+
+/***/ }),
+
+/***/ "./src/contact/contact.service.ts":
+/*!****************************************!*\
+  !*** ./src/contact/contact.service.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ContactService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const mailer_1 = __webpack_require__(/*! @nestjs-modules/mailer */ "@nestjs-modules/mailer");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+let ContactService = class ContactService {
+    constructor(mailerService, contactRepository) {
+        this.mailerService = mailerService;
+        this.contactRepository = contactRepository;
+    }
+    async contactUs(contactUsDto) {
+        const { fullName, email, message } = contactUsDto;
+        const contactMessage = this.contactRepository.create(contactUsDto);
+        await this.contactRepository.save(contactMessage);
+        try {
+            await this.mailerService.sendMail({
+                to: process.env.ADMIN_EMAIL || 'admin@smartprints.com',
+                subject: `New Contact Us Message from ${fullName}`,
+                html: `
+          <h3>New Contact Us Message</h3>
+          <p><strong>Name:</strong> ${fullName}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        `,
+            });
+            await this.mailerService.sendMail({
+                to: email,
+                subject: `We received your message`,
+                html: `
+          <h3>Hello ${fullName},</h3>
+          <p>We have received your message and will get back to you shortly.</p>
+          <p>Best regards,<br/>Smart Prints Team</p>
+        `,
+            });
+        }
+        catch (error) {
+            console.error('Error sending email:', error);
+        }
+        return (0, service_1.serviceResponse)({
+            message: 'Message sent successfully',
+            status: true,
+            data: contactMessage,
+        });
+    }
+    async findAll() {
+        const messages = await this.contactRepository.find({
+            order: { createdAt: 'DESC' },
+        });
+        return (0, service_1.serviceResponse)({
+            message: 'Contact messages retrieved successfully',
+            status: true,
+            data: messages,
+        });
+    }
+};
+exports.ContactService = ContactService;
+exports.ContactService = ContactService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.ContactUsSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof mailer_1.MailerService !== "undefined" && mailer_1.MailerService) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object])
+], ContactService);
+
+
+/***/ }),
+
 /***/ "./src/designs/design-sql.service.ts":
 /*!*******************************************!*\
   !*** ./src/designs/design-sql.service.ts ***!
@@ -7791,7 +8616,7 @@ let OrderSqlService = class OrderSqlService {
                 where: {
                     state: order.orderDetails?.state,
                     lga: order.orderDetails?.lga,
-                    zone: order.orderDetails?.zone,
+                    zone: order.orderDetails?.wards,
                 },
             });
             let deliveryFee = 0;
@@ -8990,7 +9815,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -8998,9 +9823,11 @@ const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
 const product_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
 const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let ProductSqlService = class ProductSqlService {
-    constructor(productRepository) {
+    constructor(productRepository, userRepository) {
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
     async create(product, userData) {
         const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString() });
@@ -9097,12 +9924,105 @@ let ProductSqlService = class ProductSqlService {
             status: true,
         });
     }
+    async rateProduct(id, payload, userData) {
+        const product = await this.productRepository.findOne({ where: { _id: id } });
+        if (!product) {
+            return (0, service_1.serviceResponse)({ status: false, message: "Product not found" });
+        }
+        const ratingValue = Number(payload.rating);
+        if (isNaN(ratingValue) || ratingValue < 0 || ratingValue > 5) {
+            return (0, service_1.serviceResponse)({ status: false, message: "Invalid rating value" });
+        }
+        const feedback = payload.feedback ?? payload.content ?? "";
+        const existing = Array.isArray(product.rating) ? product.rating : [];
+        const idx = existing.findIndex((r) => String(r.userID) === String(userData._id));
+        const entry = {
+            rating: ratingValue,
+            feedback,
+            userID: String(userData._id),
+            date: new Date(),
+        };
+        if (idx >= 0) {
+            existing[idx] = entry;
+        }
+        else {
+            existing.push(entry);
+        }
+        const avg = existing.length > 0
+            ? existing.reduce((sum, r) => sum + Number(r.rating || 0), 0) / existing.length
+            : 0;
+        await this.productRepository.update(id, { rating: existing, averageRating: avg });
+        const updated = await this.productRepository.findOne({ where: { _id: id } });
+        return (0, service_1.serviceResponse)({
+            status: true,
+            message: "Product rated successfully",
+            data: updated,
+        });
+    }
+    async findSellers(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const result = await this.productRepository
+            .createQueryBuilder('product')
+            .select('DISTINCT product.userID', 'userID')
+            .limit(limit)
+            .offset(skip)
+            .getRawMany();
+        const userIDs = result.map((r) => r.userID);
+        if (userIDs.length === 0) {
+            return (0, service_1.serviceResponse)({
+                data: [],
+                message: 'Sellers retrieved successfully',
+                status: true,
+                metadata: { total: 0, page, limit },
+            });
+        }
+        const [users, total] = await this.userRepository.findAndCount({
+            where: { _id: (0, typeorm_2.In)(userIDs), isReseller: true },
+            select: ['_id', 'bio', 'fullname', 'email', 'profileImage', 'coverImage', 'username'],
+        });
+        return (0, service_1.serviceResponse)({
+            data: users,
+            message: 'Sellers retrieved successfully',
+            status: true,
+            metadata: { total, page, limit },
+        });
+    }
+    async findByUsername(username, query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const user = await this.userRepository.findOne({ where: { username }, select: ['_id', 'fullname', 'email', 'profileImage', 'coverImage', 'username', 'bio'],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with username ${username} not found`);
+        }
+        const [products, total] = await this.productRepository.findAndCount({
+            where: { userID: user._id },
+            take: limit,
+            skip: skip,
+            relations: ['user'],
+        });
+        return (0, service_1.serviceResponse)({
+            data: {
+                user,
+                products
+            },
+            message: `Products for user ${username} retrieved successfully`,
+            status: true,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.productRepository,
+                query,
+                querys: { userID: user._id },
+            }),
+        });
+    }
 };
 exports.ProductSqlService = ProductSqlService;
 exports.ProductSqlService = ProductSqlService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(product_sql_schema_1.ProductSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+    __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.UserSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object])
 ], ProductSqlService);
 
 
@@ -9150,6 +10070,12 @@ let ProductController = class ProductController {
     async toggleActive(productID, isActive, req) {
         return this.productService.toggleActive(productID, isActive);
     }
+    async findSellers(query) {
+        return this.productService.findSellers(query);
+    }
+    async findByUsername(username, query) {
+        return this.productService.findByUsername(username, query);
+    }
     async findbyId(params, query) {
         return this.productService.findByAny(params, query);
     }
@@ -9161,6 +10087,9 @@ let ProductController = class ProductController {
     }
     async delete(ids, req) {
         return this.productService.remove(ids);
+    }
+    async rateProduct(productID, body, req) {
+        return this.productService.rateProduct(productID, body, req.user);
     }
 };
 exports.ProductController = ProductController;
@@ -9226,6 +10155,52 @@ __decorate([
     __metadata("design:paramtypes", [String, Boolean, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "toggleActive", null);
+__decorate([
+    (0, common_1.Get)("sellers"),
+    (0, swagger_1.ApiOperation)({ summary: "Get sellers with at least 1 product" }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of sellers per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findSellers", null);
+__decorate([
+    (0, common_1.Get)("user/:username"),
+    (0, swagger_1.ApiOperation)({ summary: "Get a user products by username" }),
+    (0, swagger_1.ApiParam)({
+        name: "username",
+        description: "The username of the user",
+        type: String,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of products per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Param)("username")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findByUsername", null);
 __decorate([
     (0, common_1.Get)("by-any/:key/:value"),
     (0, swagger_1.ApiOperation)({ summary: "Find a product by any key-value pair" }),
@@ -9296,6 +10271,29 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Post)(":productID/rate"),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: "Rate a product" }),
+    (0, swagger_1.ApiParam)({ name: "productID", description: "The product _id to rate", type: String }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: "object",
+            properties: {
+                rating: { type: "number", description: "Rating value between 0 and 5" },
+                content: { type: "string", description: "Rating content/feedback" },
+            },
+            required: ["rating"],
+        },
+        description: "Rate a product with a score and optional content",
+    }),
+    __param(0, (0, common_1.Param)("productID")),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "rateProduct", null);
 exports.ProductController = ProductController = __decorate([
     (0, swagger_1.ApiTags)("product"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
@@ -9325,18 +10323,345 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const products_controller_1 = __webpack_require__(/*! ./products.controller */ "./src/products/products.controller.ts");
 const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const product_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/product.sql-schema */ "./libs/sql-schema/src/product.sql-schema.ts");
+const user_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/user.sql-schema */ "./libs/sql-schema/src/user.sql-schema.ts");
 const product_sql_service_1 = __webpack_require__(/*! ./product-sql.service */ "./src/products/product-sql.service.ts");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([product_sql_schema_1.ProductSqlModel])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([product_sql_schema_1.ProductSqlModel, user_sql_schema_1.UserSqlModel])],
         controllers: [products_controller_1.ProductController],
         providers: [product_sql_service_1.ProductSqlService],
         exports: [product_sql_service_1.ProductSqlService]
     })
 ], ProductsModule);
+
+
+/***/ }),
+
+/***/ "./src/transactions/transactions.controller.ts":
+/*!*****************************************************!*\
+  !*** ./src/transactions/transactions.controller.ts ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionsController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const transactions_service_1 = __webpack_require__(/*! ./transactions.service */ "./src/transactions/transactions.service.ts");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
+const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+let TransactionsController = class TransactionsController {
+    constructor(transactionsService) {
+        this.transactionsService = transactionsService;
+    }
+    findAll(query) {
+        return this.transactionsService.findAll(query);
+    }
+    getTopUsers(limit) {
+        return this.transactionsService.getTopUsers(limit);
+    }
+    findOne(id) {
+        return this.transactionsService.findOne(id);
+    }
+    update(id, updateTransactionDto) {
+        return this.transactionsService.update(id, updateTransactionDto);
+    }
+    remove(id) {
+        return this.transactionsService.remove(id);
+    }
+    findStats(req) {
+        return this.transactionsService.stats(req.user._id.toString());
+    }
+};
+exports.TransactionsController = TransactionsController;
+__decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all transactions' }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'userID', required: false, type: String }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('top-users'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get top N users based on transactions' }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
+    __param(0, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "getTopUsers", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get a transaction by ID' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update a transaction' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.CreateTransactionDTO }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, typeof (_b = typeof Partial !== "undefined" && Partial) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.RolesGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete a transaction' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Get)('stats'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Get transactions stats' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TransactionsController.prototype, "findStats", null);
+exports.TransactionsController = TransactionsController = __decorate([
+    (0, swagger_1.ApiTags)('Transactions'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.Controller)('transactions'),
+    __metadata("design:paramtypes", [typeof (_a = typeof transactions_service_1.TransactionsService !== "undefined" && transactions_service_1.TransactionsService) === "function" ? _a : Object])
+], TransactionsController);
+
+
+/***/ }),
+
+/***/ "./src/transactions/transactions.module.ts":
+/*!*************************************************!*\
+  !*** ./src/transactions/transactions.module.ts ***!
+  \*************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionsModule = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const transactions_service_1 = __webpack_require__(/*! ./transactions.service */ "./src/transactions/transactions.service.ts");
+const transactions_controller_1 = __webpack_require__(/*! ./transactions.controller */ "./src/transactions/transactions.controller.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+let TransactionsModule = class TransactionsModule {
+};
+exports.TransactionsModule = TransactionsModule;
+exports.TransactionsModule = TransactionsModule = __decorate([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([sql_schema_1.TransactionSqlModel, sql_schema_1.ProductSqlModel, sql_schema_1.UserSqlModel])],
+        controllers: [transactions_controller_1.TransactionsController],
+        providers: [transactions_service_1.TransactionsService],
+        exports: [transactions_service_1.TransactionsService],
+    })
+], TransactionsModule);
+
+
+/***/ }),
+
+/***/ "./src/transactions/transactions.service.ts":
+/*!**************************************************!*\
+  !*** ./src/transactions/transactions.service.ts ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TransactionsService = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+let TransactionsService = class TransactionsService {
+    constructor(transactionRepository, productRepository, userRepository) {
+        this.transactionRepository = transactionRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
+    async create(createTransactionDto) {
+        const transaction = this.transactionRepository.create(createTransactionDto);
+        const savedTransaction = await this.transactionRepository.save(transaction);
+        return (0, service_1.serviceResponse)({
+            message: 'Transaction created successfully',
+            data: savedTransaction,
+            status: true,
+        });
+    }
+    async findAll(query) {
+        const { page = 1, limit = 10, userID } = query;
+        const skip = (page - 1) * limit;
+        const where = {};
+        if (userID) {
+            where.userID = userID;
+        }
+        const [transactions, total] = await this.transactionRepository.findAndCount({
+            where,
+            skip,
+            take: limit,
+            relations: ['user', 'order', 'product'],
+            order: { createdAt: 'DESC' },
+        });
+        return (0, service_1.serviceResponse)({
+            message: 'Transactions retrieved successfully',
+            data: transactions,
+            status: true,
+            metadata: { total, page, limit },
+        });
+    }
+    async findOne(id) {
+        const transaction = await this.transactionRepository.findOne({ where: { id } });
+        if (!transaction) {
+            throw new common_1.NotFoundException(`Transaction with ID ${id} not found`);
+        }
+        return (0, service_1.serviceResponse)({
+            message: 'Transaction retrieved successfully',
+            data: transaction,
+            status: true,
+        });
+    }
+    async update(id, updateTransactionDto) {
+        const transaction = await this.transactionRepository.preload({
+            id,
+            ...updateTransactionDto,
+        });
+        if (!transaction) {
+            throw new common_1.NotFoundException(`Transaction with ID ${id} not found`);
+        }
+        const updatedTransaction = await this.transactionRepository.save(transaction);
+        return (0, service_1.serviceResponse)({
+            message: 'Transaction updated successfully',
+            data: updatedTransaction,
+            status: true,
+        });
+    }
+    async remove(id) {
+        const transaction = await this.transactionRepository.findOne({ where: { id } });
+        if (!transaction) {
+            throw new common_1.NotFoundException(`Transaction with ID ${id} not found`);
+        }
+        await this.transactionRepository.remove(transaction);
+        return (0, service_1.serviceResponse)({
+            message: 'Transaction deleted successfully',
+            status: true,
+        });
+    }
+    async getTopUsers(limit) {
+        const take = limit ? Number(limit) : 10;
+        const topTransactions = await this.transactionRepository
+            .createQueryBuilder('transaction')
+            .select('transaction.userID', 'userID')
+            .addSelect('SUM(transaction.amount)', 'totalAmount')
+            .addSelect('COUNT(transaction.id)', 'transactionCount')
+            .where('transaction.status = :status', { status: enum_1.TransactionStatus.SUCCESS })
+            .groupBy('transaction.userID')
+            .orderBy('totalAmount', 'DESC')
+            .limit(take)
+            .getRawMany();
+        if (!topTransactions.length) {
+            return (0, service_1.serviceResponse)({
+                message: 'No active transactions found',
+                data: [],
+                status: true,
+            });
+        }
+        const userIDs = topTransactions.map((t) => t.userID);
+        const users = await this.userRepository.find({
+            where: { _id: (0, typeorm_2.In)(userIDs) },
+            select: ['_id', 'fullname', 'email', 'profileImage', 'coverImage', 'username'],
+        });
+        const result = topTransactions.map((t) => {
+            const user = users.find((u) => u._id === t.userID);
+            return {
+                user,
+                totalAmount: t.totalAmount,
+                transactionCount: t.transactionCount,
+            };
+        });
+        return (0, service_1.serviceResponse)({
+            message: 'Top users retrieved successfully',
+            data: result,
+            status: true,
+        });
+    }
+    async stats(userID) {
+        const pendingTransactions = await this.transactionRepository.count({ where: { userID, status: enum_1.TransactionStatus.PENDING } });
+        const activeTransactions = await this.transactionRepository.count({ where: { userID, status: enum_1.TransactionStatus.ACTIVE } });
+        const successTransactions = await this.transactionRepository.count({ where: { userID, status: enum_1.TransactionStatus.SUCCESS } });
+        const productApproved = await this.productRepository.count({ where: { userID, isApproved: true } });
+        const productPendingApproval = await this.productRepository.count({ where: { userID, isApproved: false } });
+        return (0, service_1.serviceResponse)({
+            message: 'Transactions stats retrieved successfully',
+            data: {
+                pendingTransactions,
+                activeTransactions,
+                successTransactions,
+                productApproved,
+                totalTransactions: pendingTransactions + activeTransactions + successTransactions,
+                productPendingApproval,
+            },
+            status: true,
+        });
+    }
+};
+exports.TransactionsService = TransactionsService;
+exports.TransactionsService = TransactionsService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(sql_schema_1.TransactionSqlModel)),
+    __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.ProductSqlModel)),
+    __param(2, (0, typeorm_1.InjectRepository)(sql_schema_1.UserSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object])
+], TransactionsService);
 
 
 /***/ }),
@@ -9377,6 +10702,9 @@ let UploadsController = class UploadsController {
     }
     uploadFile(req, files) {
         const host = req.protocol + '://' + req.get('host');
+        const hostCheck = host.startsWith('http://')
+            ? host.replace('http://', 'https://')
+            : host;
         const fileUrls = files?.map((file) => ({
             originalname: file.originalname,
             url: `${host}/v1/upload/file/${file.filename}`,
@@ -9564,7 +10892,9 @@ let UploadsService = class UploadsService {
                 const result = await this.uploadToCloudinary(file.buffer, folder);
                 uploadResults.push({
                     originalname: result.public_id,
-                    url: result.secure_url,
+                    url: result.secure_url.startsWith('http://')
+                        ? result.secure_url.replace('http://', 'https://')
+                        : result.secure_url,
                 });
             }
             catch (error) {
@@ -9800,14 +11130,56 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WalletController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const wallet_service_1 = __webpack_require__(/*! ./wallet.service */ "./src/wallet/wallet.service.ts");
+const dto_1 = __webpack_require__(/*! @app/dto */ "./libs/dto/src/index.ts");
+const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts");
 let WalletController = class WalletController {
+    constructor(walletService) {
+        this.walletService = walletService;
+    }
+    requestWithdrawal(req, requestWithdrawalDto) {
+        return this.walletService.requestWithdrawal(req.user._id, requestWithdrawalDto);
+    }
+    getMyWallet(req) {
+        return this.walletService.getWallet(req.user._id);
+    }
 };
 exports.WalletController = WalletController;
+__decorate([
+    (0, common_1.Post)('withdraw'),
+    (0, swagger_1.ApiOperation)({ summary: 'Request a withdrawal' }),
+    (0, swagger_1.ApiBody)({ type: dto_1.RequestWithdrawalDTO }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, typeof (_b = typeof dto_1.RequestWithdrawalDTO !== "undefined" && dto_1.RequestWithdrawalDTO) === "function" ? _b : Object]),
+    __metadata("design:returntype", void 0)
+], WalletController.prototype, "requestWithdrawal", null);
+__decorate([
+    (0, common_1.Get)('my-wallet'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get my wallet details' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], WalletController.prototype, "getMyWallet", null);
 exports.WalletController = WalletController = __decorate([
-    (0, common_1.Controller)('wallet')
+    (0, swagger_1.ApiTags)('Wallet'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.Controller)('wallet'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
+    __metadata("design:paramtypes", [typeof (_a = typeof wallet_service_1.WalletService !== "undefined" && wallet_service_1.WalletService) === "function" ? _a : Object])
 ], WalletController);
 
 
@@ -9834,15 +11206,16 @@ const wallet_controller_1 = __webpack_require__(/*! ./wallet.controller */ "./sr
 const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
 const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
 const wallet_sql_service_1 = __webpack_require__(/*! ./wallet-sql.service */ "./src/wallet/wallet-sql.service.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let WalletModule = class WalletModule {
 };
 exports.WalletModule = WalletModule;
 exports.WalletModule = WalletModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([wallet_sql_schema_1.WalletSqlModel])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([wallet_sql_schema_1.WalletSqlModel, sql_schema_1.TransactionSqlModel])],
         providers: [wallet_service_1.WalletService, wallet_sql_service_1.WalletSqlService],
         controllers: [wallet_controller_1.WalletController],
-        exports: [wallet_sql_service_1.WalletSqlService]
+        exports: [wallet_sql_service_1.WalletSqlService, wallet_service_1.WalletService]
     })
 ], WalletModule);
 
@@ -9862,14 +11235,99 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WalletService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
+const wallet_sql_schema_1 = __webpack_require__(/*! @app/sql-schema/wallet.sql-schema */ "./libs/sql-schema/src/wallet.sql-schema.ts");
+const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
+const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 let WalletService = class WalletService {
+    constructor(walletRepository, transactionRepository, dataSource) {
+        this.walletRepository = walletRepository;
+        this.transactionRepository = transactionRepository;
+        this.dataSource = dataSource;
+    }
+    async requestWithdrawal(userID, requestWithdrawalDto) {
+        const { amount, accountNumber, bankCode, accountName } = requestWithdrawalDto;
+        if (amount <= 0) {
+            throw new common_1.BadRequestException('Amount must be greater than 0');
+        }
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const wallet = await queryRunner.manager.findOne(wallet_sql_schema_1.WalletSqlModel, {
+                where: { userID },
+                lock: { mode: 'pessimistic_write' },
+            });
+            if (!wallet) {
+                throw new common_1.NotFoundException('Wallet not found for this user');
+            }
+            if (Number(wallet.balance) < Number(amount)) {
+                throw new common_1.BadRequestException('Insufficient wallet balance');
+            }
+            const transaction = queryRunner.manager.create(sql_schema_1.TransactionSqlModel, {
+                userID,
+                amount,
+                transactionType: enum_1.TransactionType.WITHDRAWAL,
+                status: enum_1.TransactionStatus.PENDING,
+                description: 'Withdrawal Request',
+                metadata: {
+                    accountNumber: accountNumber || wallet.accountNumber,
+                    bankCode: bankCode || wallet.bankCode,
+                    accountName: accountName || wallet.accountName,
+                },
+            });
+            const savedTransaction = await queryRunner.manager.save(transaction);
+            wallet.balance = Number(wallet.balance) - Number(amount);
+            await queryRunner.manager.save(wallet);
+            await queryRunner.commitTransaction();
+            return (0, service_1.serviceResponse)({
+                message: 'Withdrawal request submitted successfully',
+                data: savedTransaction,
+                status: true,
+            });
+        }
+        catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }
+        finally {
+            await queryRunner.release();
+        }
+    }
+    async getWallet(userID) {
+        const wallet = await this.walletRepository.findOne({ where: { userID } });
+        if (!wallet) {
+            return (0, service_1.serviceResponse)({
+                status: false,
+                message: "Wallet not found",
+                data: null
+            });
+        }
+        return (0, service_1.serviceResponse)({
+            status: true,
+            message: "Wallet retrieved",
+            data: wallet
+        });
+    }
 };
 exports.WalletService = WalletService;
 exports.WalletService = WalletService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(wallet_sql_schema_1.WalletSqlModel)),
+    __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.TransactionSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.DataSource !== "undefined" && typeorm_2.DataSource) === "function" ? _c : Object])
 ], WalletService);
 
 
@@ -10302,6 +11760,16 @@ module.exports = require("axios");
 /***/ ((module) => {
 
 module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "class-validator":
+/*!**********************************!*\
+  !*** external "class-validator" ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = require("class-validator");
 
 /***/ }),
 

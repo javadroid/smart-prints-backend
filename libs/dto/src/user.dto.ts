@@ -180,6 +180,13 @@ gender: string;
     example: 'http://example.com/image.jpg',
   })
   profileImage?: string;
+  
+  @ApiProperty({
+    description: 'Cover image URL',
+    example: 'http://example.com/cover.jpg',
+    required: false,
+  })
+  coverImage?: string;
 
   @ApiProperty({
     description: 'Indicates if the user is an admin',
@@ -192,6 +199,33 @@ gender: string;
     example: false,
   })
   isSuperAdmin?: boolean;
+
+  @ApiProperty({
+    description: 'Indicates if the user is a reseller',
+    example: false,
+  })
+  isReseller?: boolean;
+
+  @ApiProperty({ description: 'Bio of the user', required: false })
+  bio?: string;
+
+  @ApiProperty({ description: 'Date of birth', required: false })
+  dob?: Date;
+
+  @ApiProperty({ description: 'State', required: false })
+  state?: string;
+
+  @ApiProperty({ description: 'Country', required: false })
+  country?: string;
+
+  @ApiProperty({ description: 'Local Government Area', required: false })
+  localGovernmentArea?: string;
+
+  @ApiProperty({ description: 'Social Media Profile', required: false })
+  socialMediaProfile?: Record<string, string>;
+
+  @ApiProperty({ description: 'Residential Address', required: false })
+  residentialAddress?: string;
 
 
   @ApiProperty({ description: 'referral details' })

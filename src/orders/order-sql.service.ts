@@ -60,7 +60,7 @@ export class OrderSqlService {
         where: {
           state: order.orderDetails?.state,
           lga: order.orderDetails?.lga,
-          zone: order.orderDetails?.zone,
+          zone: order.orderDetails?.wards,
         },
       });
       let deliveryFee = 0;

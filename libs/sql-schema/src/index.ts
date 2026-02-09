@@ -11,4 +11,6 @@ export * from './delivery-price.sql-schema';
 export * from './product-color.sql-schema';
 export * from './pickup-location.sql-schema';
 export * from './zone.sql-schema';
-
+export * from './site-settings.sql-schema';
+export * from './transaction.sql-schema';
+export * from './contact-us.sql-schema';

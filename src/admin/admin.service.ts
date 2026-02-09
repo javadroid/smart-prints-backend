@@ -27,7 +27,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Model } from "mongoose";
 import { Repository } from "typeorm";
-import { DeliveryPriceDTO } from "@app/dto";
+import { DeliveryPriceDTO, SiteSettingsDTO } from "@app/dto";
+import { SiteSettingsSqlModel } from "@app/sql-schema";
 
 @Injectable()
 export class AdminService {
@@ -46,7 +47,9 @@ export class AdminService {
     @InjectRepository(DesignSqlModel)
     private designModel: Repository<DesignSqlModel>,
     @InjectRepository(DeliveryPriceSqlModel)
-    private deliveryPriceModel: Repository<DeliveryPriceSqlModel>
+    private deliveryPriceModel: Repository<DeliveryPriceSqlModel>,
+    @InjectRepository(SiteSettingsSqlModel)
+    private siteSettingsModel: Repository<SiteSettingsSqlModel>
   ) {}
 
   // admin dashboard stats, e.g. total users , total users that have succesfully placed an order , total orders by diffent status,  products, designs.
@@ -150,6 +153,31 @@ async createDeliveryPrice(deliveryPriceDto: DeliveryPriceDTO) {
     return serviceResponse({
       message: "Delivery price deleted successfully",
       status: true,
+    });
+  }
+  
+  async getSiteSettings() {
+    const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
+    return serviceResponse({
+      message: "Site settings retrieved",
+      status: true,
+      data: settings || {},
+    });
+  }
+  
+  async updateSiteSettings(dto: SiteSettingsDTO) {
+    const payload = this.siteSettingsModel.create({
+      name: 'default',
+      heroType: dto.heroType,
+      heroImage: dto.heroImage,
+      heroVideo: dto.heroVideo,
+    });
+    await this.siteSettingsModel.upsert(payload, ['name']);
+    const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
+    return serviceResponse({
+      message: "Site settings updated successfully",
+      status: true,
+      data: settings,
     });
   }
 }

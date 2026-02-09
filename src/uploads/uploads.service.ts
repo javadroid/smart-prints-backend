@@ -39,7 +39,9 @@ export class UploadsService {
         const result = await this.uploadToCloudinary(file.buffer, folder);
         uploadResults.push({
           originalname: result.public_id,
-          url: result.secure_url,
+          url: result.secure_url.startsWith('http://') 
+    ? result.secure_url.replace('http://', 'https://') 
+    : result.secure_url,
         
         });
       } catch (error) {

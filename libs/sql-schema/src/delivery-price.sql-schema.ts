@@ -1,19 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'delivery_prices' })
-@Unique(["country", "state", "lga"])
+@Unique(["country", "state", "lga", "zone"])
 export class DeliveryPriceSqlModel {
   @PrimaryGeneratedColumn('uuid')
   _id: string;
 
-  @Column()
-  country: string;
+  @Column({ length: 100 })  // Adjust length as needed
+country: string;
 
-  @Column()
-  state: string;
+@Column({ length: 100 })  // Adjust length as needed
+state: string;
 
-  @Column()
-  lga: string;
+@Column({ length: 100 })  // Adjust length as needed
+lga: string;
+
+@Column({ length: 100 })  // Adjust length as needed
+zone: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 3000.00 })
   deliveryFee: number;
@@ -24,8 +27,7 @@ export class DeliveryPriceSqlModel {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  zone: string;
+  
 
   @UpdateDateColumn()
   updatedAt: Date;

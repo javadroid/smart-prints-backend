@@ -33,10 +33,12 @@ import { DesignSqlModel } from '@app/sql-schema/design.sql-schema';
 import { OtpSqlModel } from '@app/sql-schema/otp.sql-schema';
 import { WalletSqlModel } from '@app/sql-schema/wallet.sql-schema';
 import { JwtModule } from '@nestjs/jwt';
-import { DeliveryPriceSqlModel, ZoneSqlModel } from '@app/sql-schema';
+import { DeliveryPriceSqlModel, ZoneSqlModel, SiteSettingsSqlModel, TransactionSqlModel, ContactUsSqlModel } from '@app/sql-schema';
 import { ProductColorsModule } from './product-colors/product-colors.module';
 import { PickupLocationsModule } from './pickup-locations/pickup-locations.module';
 import { ZonesModule } from './zones/zones.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { ContactModule } from './contact/contact.module';
 
 
 @Module({
@@ -95,8 +97,8 @@ import { ZonesModule } from './zones/zones.module';
           useFactory: async (configService: ConfigService) => ({
             type: 'mysql', // Assuming PostgreSQL for SQL_URI
             url: configService.get<string>('SQL_URI'),
-            entities: [UserSqlModel, ZoneSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, ZoneSqlModel], // Register your SQL entities here
-            synchronize: false, // Set to false in production
+            entities: [UserSqlModel, ZoneSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
+            synchronize: true, // Set to false in production
             autoLoadEntities: true,
             logging: ['query', 'error'],
           }),
@@ -106,7 +108,7 @@ import { ZonesModule } from './zones/zones.module';
   AdminModule,
   UploadsModule,
   ZonesModule,
-  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule, ProductColorsModule, PickupLocationsModule, ZonesModule ],
+  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule, ProductColorsModule, PickupLocationsModule, ZonesModule, TransactionsModule, ContactModule ],
   controllers: [AppController],
   providers: [AppService],
 })

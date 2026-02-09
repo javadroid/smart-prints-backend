@@ -138,6 +138,9 @@ export class UserModel {
 
   @Prop()
   profileImage?: string;
+  
+  @Prop()
+  coverImage?: string;
 
   @Prop({ default: false })
   isAdmin?: boolean;

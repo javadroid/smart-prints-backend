@@ -85,6 +85,12 @@ export class ProductDto {
 
   @ApiProperty({ description: 'Is the product featured', example: false, required: false })
   isFeatured?: boolean;
+  
+  @ApiProperty({ description: 'Is a 3D product', example: false, required: false })
+  is3d?: boolean;
+  
+  @ApiProperty({ description: 'Is resold product', example: false, required: false })
+  isResell?: boolean;
   @ApiProperty({ description: 'Product ID',  })
   id: string ;
 
@@ -147,9 +153,15 @@ export class ProductDto {
 
   @ApiProperty({ description: 'Product type', example: ['vegetable', 'fruit'], required: false })
   types?: string[];
+  
+  @ApiProperty({ description: 'Product features', example: ['cotton','washable'], required: false })
+  features?: string[] | null;
    @ApiProperty({ description: 'Name of the product', enum:['custom' , 'store'] ,example:'custom'})
   type: string;
 
    @ApiProperty({ description: 'Image', })
   image: string;
+  
+  @ApiProperty({ description: 'Average rating for the product', example: 4.5, required: false })
+  averageRating?: number;
 }

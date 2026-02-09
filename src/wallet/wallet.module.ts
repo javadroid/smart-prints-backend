@@ -4,11 +4,12 @@ import { WalletController } from './wallet.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WalletSqlModel } from '@app/sql-schema/wallet.sql-schema';
 import { WalletSqlService } from './wallet-sql.service';
+import { TransactionSqlModel } from '@app/sql-schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WalletSqlModel])],
+  imports: [TypeOrmModule.forFeature([WalletSqlModel, TransactionSqlModel])],
   providers: [WalletService, WalletSqlService],
   controllers: [WalletController],
-  exports: [WalletSqlService]
+  exports: [WalletSqlService, WalletService]
 })
 export class WalletModule {}

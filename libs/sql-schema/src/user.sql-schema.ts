@@ -67,6 +67,10 @@ export class UserSqlModel {
   @Column({nullable: true})
   fullname: string;
 
+   @Column({nullable: true})
+  bio: string;
+
+
   @Column({nullable: true})
   firstname: string;
 
@@ -81,10 +85,14 @@ export class UserSqlModel {
 
   @Column({ nullable: true })
   profileImage?: string;
+  
+  @Column({ nullable: true })
+  coverImage?: string;
 
   @Column({ default: false })
   isAdmin: boolean;
-
+@Column({ default: false })
+  isReseller: boolean;
   @Column({ default: false })
   isSuperAdmin: boolean;
 

@@ -51,7 +51,9 @@ export class UploadsController {
   ): any {
     // Get the base URL of the current request (protocol + host)
     const host = req.protocol + '://' + req.get('host');
-
+const hostCheck =host.startsWith('http://') 
+    ? host.replace('http://', 'https://') 
+    : host
     // Construct the file URLs
     const fileUrls = files?.map((file) => ({
       originalname: file.originalname,

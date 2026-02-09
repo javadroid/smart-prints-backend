@@ -54,9 +54,9 @@ export class WebSocketGatewayService
       ip: client.handshake.query.ip,
     };
 
-    let ip =
+    const ip =
       client.handshake.headers['x-forwarded-for'] || client.handshake.address;
-    let ip2 = userData.ip ? userData.ip : Array.isArray(ip) ? ip[0] : ip;
+    const ip2 = userData.ip ? userData.ip : Array.isArray(ip) ? ip[0] : ip;
 
     //  console.log(ip2,userData)
     const location = await this.getLocationFromIP(ip2 as string);

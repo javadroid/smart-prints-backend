@@ -21,6 +21,7 @@ class ProductSize { name: string; label: string; inStock: boolean; }
 class Mockups { front?: string; back?: string; left?: string; right?: string; }
 class DesignRect { top: string; left: string; width: string; height:string; }
 class DesignArea { front?: DesignRect; back?: DesignRect; left?: DesignRect; right?: DesignRect; }
+class Rating { rating: number; feedback: string; userID: string; date: Date; }
 
 @Entity({ name: 'products' })
 export class ProductSqlModel {
@@ -32,6 +33,16 @@ export class ProductSqlModel {
 
   @Column({ default: false })
   isFeatured: boolean;
+  
+  @Column({ default: false })
+  is3d: boolean;
+  
+  @Column({ default: false })
+  isResell: boolean;
+
+  @Column({ default: false })
+  isApproved: boolean;
+
 
     @Column({ default: true })
   isActive: boolean;
@@ -103,6 +114,9 @@ export class ProductSqlModel {
   // --- Array & JSON Columns ---
   @Column({ nullable:true, type: 'simple-array' })
   types: string[];
+  
+  @Column({ nullable:true, type: 'simple-array' })
+  features: string[] | null;
 
   @Column({nullable:true, type:'simple-array',  })
   imageUrls: string[];
@@ -118,6 +132,12 @@ export class ProductSqlModel {
 
   @Column({ type: 'json', nullable: true })
   availableSizes: ProductSize[];
+  
+  @Column({ type: 'json', nullable: true })
+  rating?: Rating[];
+  
+  @Column({ type: 'float', default: 0, nullable: true })
+  averageRating?: number;
 
   // --- Timestamps & Hooks ---
   @CreateDateColumn()

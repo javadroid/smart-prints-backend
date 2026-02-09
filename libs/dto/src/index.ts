@@ -27,5 +27,6 @@ export * from './product-color.dto';
 export * from './pickup-location.dto';
 export * from './zone.dto';
 
-
-
+export * from './site-settings.dto';
+export * from './transaction.dto';
+export * from './contact-us.dto';

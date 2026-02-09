@@ -10,5 +10,7 @@ name: string;
 id: string;
     @ApiProperty({enum:['custom' , 'store'] , description: 'Category type', example: 'custom' })
 type: string;
+  @ApiProperty({ required:false, description: 'Category image URL or path', example: '/uploads/category.png' })
+image?: string;
 
 }

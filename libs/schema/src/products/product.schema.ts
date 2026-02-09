@@ -90,6 +90,12 @@ export class ProductModel {
 
   @Prop({ default: false })
   isFeatured?: boolean;
+  
+  @Prop({ default: false })
+  is3d?: boolean;
+  
+  @Prop({ default: false })
+  isResell?: boolean;
 
 
   @Prop({  })
@@ -103,6 +109,9 @@ export class ProductModel {
 
   @Prop({ type: [String] })
   types: string[];
+  
+  @Prop({ type: [String], required: false })
+  features?: string[] | null;
   @Prop({  })
   image: string;
   @Prop({  })
@@ -152,6 +161,9 @@ export class ProductModel {
 
   @Prop({ type: [Rating] })
   rating?: Rating[];
+  
+  @Prop({ default: 0 })
+  averageRating?: number;
 
   @Prop({  })
   measurement?: string;
