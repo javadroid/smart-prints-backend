@@ -180,7 +180,8 @@ if (isWithdrawExist) {
       take: limit,
        order: {
         createdAt: 'DESC',
-      }
+      },
+      relations:["user","wallet"]
     });
     if (!withdraws) {
       throw new NotFoundException('Withdrawals not found');

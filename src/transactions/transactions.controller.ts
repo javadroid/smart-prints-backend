@@ -69,8 +69,9 @@ export class TransactionsController {
 
   @Get('stats')
  @UseGuards(JwtAuthGuard)
+ @ApiQuery({ name: 'userID', required: false })
   @ApiOperation({ summary: 'Get transactions stats' })
-  findStats(@Req() req: any) {
-    return this.transactionsService.stats(req.user._id.toString());
+  findStats(@Req() req: any,@Query('userID') userID: string) {
+    return this.transactionsService.stats(userID??req.user._id.toString());
   }
 }

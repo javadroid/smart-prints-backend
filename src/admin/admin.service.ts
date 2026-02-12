@@ -12,7 +12,7 @@ import {
   UserDoc,
   UserModel,
 } from "@app/schema";
-import { NotificationService, serviceResponse } from "@app/service";
+import { getSqlMetadata, NotificationService, SendMailService, serviceResponse } from "@app/service";
 import {
   CartSqlModel,
   CategoriesSqlModel,
@@ -27,7 +27,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Model } from "mongoose";
 import { Repository } from "typeorm";
-import { DeliveryPriceDTO, SiteSettingsDTO } from "@app/dto";
+import { AdminSendEmailDTO, DeliveryPriceDTO, SiteSettingsDTO, UserDTO } from "@app/dto";
 import { SiteSettingsSqlModel } from "@app/sql-schema";
 
 @Injectable()
@@ -49,7 +49,8 @@ export class AdminService {
     @InjectRepository(DeliveryPriceSqlModel)
     private deliveryPriceModel: Repository<DeliveryPriceSqlModel>,
     @InjectRepository(SiteSettingsSqlModel)
-    private siteSettingsModel: Repository<SiteSettingsSqlModel>
+    private siteSettingsModel: Repository<SiteSettingsSqlModel>,
+    private sendMailService: SendMailService
   ) {}
 
   // admin dashboard stats, e.g. total users , total users that have succesfully placed an order , total orders by diffent status,  products, designs.
@@ -72,6 +73,19 @@ export class AdminService {
     const totalUsersWithOrders = await this.orderModel.countBy({
       status: "completed",
     });
+    const totalResellers = await this.userModel.countBy({
+      isReseller: true,
+    });
+    const productsByReseller = await this.productModel.countBy({
+      isResell:true
+    });
+
+    const productPendingByReseller = await this.productModel.countBy({
+      isResell:true,
+      isApproved:false
+    });
+
+
     return serviceResponse({
       message: "Dashboard stats retrieved",
       status: true,
@@ -86,6 +100,9 @@ export class AdminService {
         totalPendingOrders,
         totalCancelledOrders,
         totalUsersWithOrders: totalUsersWithOrders,
+        totalResellers,
+        productPendingByReseller,
+        productsByReseller,
       },
     });
 
@@ -179,5 +196,76 @@ async createDeliveryPrice(deliveryPriceDto: DeliveryPriceDTO) {
       status: true,
       data: settings,
     });
+  }
+
+  //get users by many 
+  async getUsersByMany(param:any,query: any): Promise<any> {
+ 
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+    
+    
+    const findall = await this.userModel.find({
+      where: param,
+      take: limit,
+
+      skip: skip,
+     
+    });
+    return serviceResponse({
+      data: findall,
+      message: "Users retrieved successfully",
+      status: true,
+      metadata: await getSqlMetadata({
+        model: this.userModel,
+        query,
+        querys: param,
+      }),
+    });
+  }
+
+  // edit user
+  async editUser(id: string, dto: UserSqlModel) {
+    const user = await this.userModel.findOne({ where: { _id:id } });
+    if (!user) {
+      return serviceResponse({
+        message: "User not found",
+        status: false,
+      });
+    }
+    await this.userModel.update(id, dto);
+    return serviceResponse({
+      message: "User updated successfully",
+      status: true,
+    });
+  }
+
+  async sendEmail(dto: AdminSendEmailDTO, attachments: any[]) {
+    try {
+      const formattedAttachments = attachments?.map(file => ({
+        filename: file.originalname,
+        content: file.buffer,
+        contentType: file.mimetype,
+      }));
+
+      await this.sendMailService.sendMail({
+        to: dto.to,
+        subject: dto.subject,
+        text: dto.text,
+        html: dto.html,
+        attachments: formattedAttachments,
+      });
+
+      return serviceResponse({
+        message: "Email sent successfully",
+        status: true,
+      });
+    } catch (error) {
+      console.error("Error sending admin email:", error);
+      return serviceResponse({
+        message: "Failed to send email",
+        status: false,
+      });
+    }
   }
 }

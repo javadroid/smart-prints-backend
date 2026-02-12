@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard, RolesGuard } from '@app/guard';
 import { Roles } from '@app/decorator';
 import { UserType } from '@app/enum';
-import { ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
-import { DeliveryPriceDTO, SiteSettingsDTO } from '@app/dto';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiQuery } from '@nestjs/swagger';
+import { AdminSendEmailDTO, DeliveryPriceDTO, SiteSettingsDTO, UserDTO } from '@app/dto';
+import { UserSqlModel } from '@app/sql-schema';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin')
 @ApiBearerAuth('access-token')
@@ -55,4 +57,31 @@ export class AdminController {
   async updateSiteSettings(@Body() dto: SiteSettingsDTO) {
     return this.adminService.updateSiteSettings(dto);
   }
+
+  // getUsersByMany
+  @Post('users')
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
+@ApiBody({type:UserDTO})
+  async getUsersByMany(@Query() query: any,@Body() userDto: UserDTO) {
+    return this.adminService.getUsersByMany(userDto,query);
+  }
+
+  // edit user
+  @Patch('users/:id')
+  async editUser(@Param('id') id: string, @Body() dto: UserSqlModel) {
+    return this.adminService.editUser(id, dto);
+  }
+
+  @Post('send-email')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: AdminSendEmailDTO })
+  @UseInterceptors(FilesInterceptor('attachments'))
+  async sendEmail(
+    @Body() dto: AdminSendEmailDTO,
+    @UploadedFiles() attachments: any[],
+  ) {
+    return this.adminService.sendEmail(dto, attachments);
+  }
+
 }

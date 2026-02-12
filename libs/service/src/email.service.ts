@@ -13,26 +13,28 @@ interface SendMailInterface {
   subject: string;
   text?: string;
   html?: string;
+  attachments?: any[];
 }
 
 @Injectable()
 export class SendMailService {
   constructor(private mailService: MailerService) {}
 
-  async sendMail({ from, to, subject, html, text }: SendMailInterface) {
-    console.log({from, to, subject, html, text})
+  async sendMail({ from, to, subject, html, text, attachments }: SendMailInterface) {
+    console.log({from, to, subject, html, text, attachments})
     const data = {
       from: from || 'Smart Prints<info@smartprints.ng>',
       to,
       subject,
       text,
       html,
+      attachments,
     };
     try {
       this.mailService.sendMail(data).then(()=>{
         console.log('Email sent');
       }).catch((e) => {
-        console.log('Email failed');
+        console.log('Email failed ', e?.response?.data??e.message);
       });
     } catch (error) {}
   }

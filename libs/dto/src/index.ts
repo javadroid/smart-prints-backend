@@ -30,3 +30,4 @@ export * from './zone.dto';
 export * from './site-settings.dto';
 export * from './transaction.dto';
 export * from './contact-us.dto';
+export * from './admin.dto';
