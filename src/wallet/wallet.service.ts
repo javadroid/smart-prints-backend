@@ -3,9 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { WalletSqlModel } from '@app/sql-schema/wallet.sql-schema';
 import { TransactionSqlModel } from '@app/sql-schema';
-import { RequestWithdrawalDTO } from '@app/dto';
+import { RequestWithdrawalDTO, WalletDTO } from '@app/dto';
 import { TransactionStatus, TransactionType } from '@app/enum';
-import { serviceResponse } from '@app/service';
+import { getSqlMetadata, serviceResponse } from '@app/service';
+import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
+import { PaystackService } from '@app/service/payment/paystack';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class WalletService {
@@ -14,89 +17,204 @@ export class WalletService {
     private readonly walletRepository: Repository<WalletSqlModel>,
     @InjectRepository(TransactionSqlModel)
     private readonly transactionRepository: Repository<TransactionSqlModel>,
-    private readonly dataSource: DataSource,
+     @InjectRepository(WithdrawSqlModel)
+    private readonly withdrawRepository: Repository<WithdrawSqlModel>,
+    private readonly payStackService: PaystackService
+   
   ) {}
 
-  async requestWithdrawal(userID: string, requestWithdrawalDto: RequestWithdrawalDTO) {
-    const { amount, accountNumber, bankCode, accountName } = requestWithdrawalDto;
-
-    if (amount <= 0) {
-      throw new BadRequestException('Amount must be greater than 0');
+@Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async updateTransactionStatus() {
+  // get and update all transaction pending that is more than 2weeks old
+  const transactions = await this.transactionRepository.find({
+    where: {
+      status: TransactionStatus.ACTIVE,
+    },
+  });
+  for (const transaction of transactions) {
+    if (transaction.createdAt < new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)) {
+      transaction.status = TransactionStatus.ACTIVE;
+      await this.transactionRepository.save(transaction);
     }
+  }
+  }
 
-    // Start a database transaction
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+  async requestWithdrawal( requestWithdrawalDto: RequestWithdrawalDTO) {
+    const transaction = await this.transactionRepository.sum('amount', {
+       userID: requestWithdrawalDto.userID,
+        status: TransactionStatus.ACTIVE,
+    });
+    if (!transaction) {
+      throw new BadRequestException('No active transactions found');
+    }
+const isWithdrawExist= await this.withdrawRepository.findOne({
+  where: {
+    userID: requestWithdrawalDto.userID,
+    status: "pending",
+  },
+});
+
+if (isWithdrawExist) {
+  throw new BadRequestException('Withdrawal request already submitted');
+}
+
+    const withdraw =  this.withdrawRepository.create({
+         userID: requestWithdrawalDto.userID,
+        amount: transaction,
+        walletID: requestWithdrawalDto.walletID,
+        status: "pending",
+    });
+  const isSaved=  await this.withdrawRepository.save(withdraw);
+
 
     try {
-      // 1. Find user's wallet (locking it for update)
-      const wallet = await queryRunner.manager.findOne(WalletSqlModel, {
-        where: { userID },
-        lock: { mode: 'pessimistic_write' },
-      });
-
-      if (!wallet) {
-        throw new NotFoundException('Wallet not found for this user');
-      }
-
-      // 2. Check balance
-      if (Number(wallet.balance) < Number(amount)) {
-        throw new BadRequestException('Insufficient wallet balance');
-      }
-
-      // 3. Create Transaction Record
-      const transaction = queryRunner.manager.create(TransactionSqlModel, {
-        userID,
-        amount,
-        transactionType: TransactionType.WITHDRAWAL,
-        status: TransactionStatus.PENDING,
-        description: 'Withdrawal Request',
-        metadata: {
-          accountNumber: accountNumber || wallet.accountNumber,
-          bankCode: bankCode || wallet.bankCode,
-          accountName: accountName || wallet.accountName,
-        },
-      });
-      const savedTransaction = await queryRunner.manager.save(transaction);
-
-      // 4. Deduct balance
-      wallet.balance = Number(wallet.balance) - Number(amount);
-      await queryRunner.manager.save(wallet);
-
-      await queryRunner.commitTransaction();
+     
 
       return serviceResponse({
         message: 'Withdrawal request submitted successfully',
-        data: savedTransaction,
+        data: isSaved,
         status: true,
       });
 
     } catch (err) {
-      await queryRunner.rollbackTransaction();
+     
       throw err;
     } finally {
-      await queryRunner.release();
+     
     }
+  }
+  async approveWithdrawal(withdrawID: string) {
+    const withdraw = await this.withdrawRepository.findOne({ where: { id: withdrawID } });
+    if (!withdraw) {
+        throw new NotFoundException('Withdrawal request not found');
+    }
+    withdraw.status = 'approved';
+    await this.withdrawRepository.save(withdraw);
+    await this.transactionRepository.update({
+      userID: withdraw.userID,
+      status: TransactionStatus.ACTIVE,
+    }, {
+      status: TransactionStatus.SUCCESS,
+    });
+    return serviceResponse({
+        message: 'Withdrawal request approved',
+        data: withdraw,
+        status: true,
+    });
   }
 
   // Helper to get wallet
   async getWallet(userID: string) {
     const wallet = await this.walletRepository.findOne({ where: { userID } });
     if (!wallet) {
-        // Create a wallet if not exists? Or throw? 
-        // For now return null or empty object if that's the pattern, but usually we create one.
-        // Assuming wallet is created on user registration.
-        return serviceResponse({
-            status: false,
-            message: "Wallet not found",
-            data: null
-        })
+      throw new NotFoundException('Wallet not found');
     }
     return serviceResponse({
         status: true,
         message: "Wallet retrieved",
         data: wallet
     })
+  }
+
+  async createWallet(data: WalletDTO,userID: string) {
+    const alreadyExist= await this.walletRepository.findOne({
+      where: {
+        userID: userID,
+      },
+    });
+    let wallet;
+    if (alreadyExist) {
+      await this.walletRepository.update({
+        userID,
+      }, {
+        ...data,
+      });
+      wallet = await this.walletRepository.findOne({ where: { userID } });
+    }else{
+      wallet = this.walletRepository.create({
+        ...data,
+        userID,
+      });
+    }
+    return this.walletRepository.save(wallet);
+  }
+
+  // getWithdrawals
+  async getWithdrawals(userID: string, query: any) {
+    const { page = 1, limit = 10,  } = query;
+    const skip = (page - 1) * limit;
+    const withdraws = await this.withdrawRepository.find({
+      where: {
+        userID,
+      },
+      skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      }
+    });
+    if (!withdraws) {
+      throw new NotFoundException('Withdrawals not found');
+    }
+    return serviceResponse({
+        status: true,
+        message: "Withdrawals retrieved",
+        data: withdraws,
+        metadata: await getSqlMetadata({
+          model: this.withdrawRepository,
+          query,
+          querys:{
+            userID,
+          }
+        })
+    })
+  }
+
+  // get all withdrawals
+  async getAllWithdrawals(query: any) {
+       const { page = 1, limit = 10,  } = query;
+    const skip = (page - 1) * limit;
+    
+    const withdraws = await this.withdrawRepository.find({
+      skip,
+      take: limit,
+       order: {
+        createdAt: 'DESC',
+      }
+    });
+    if (!withdraws) {
+      throw new NotFoundException('Withdrawals not found');
+    }
+    return serviceResponse({
+        status: true,
+        message: "Withdrawals retrieved",
+        data: withdraws,
+        metadata: await getSqlMetadata({
+          model: this.withdrawRepository,
+          query,
+          querys:{}
+        }
+
+        )
+    })
+  }
+
+  // paystack get all banks
+  async getPaystackBanks() {
+    const pay= await this.payStackService.getPaystackBanks();
+    return serviceResponse({
+      status: true,
+      message: "Paystack banks retrieved",
+      data: pay,
+    });
+  }
+  // paystack verify account number
+  async verifyPaystackAccountNumber(accountNumber: string, bankCode: string) {
+    const pay= await this.payStackService.verifyPaystackAccountNumber(accountNumber, bankCode);
+    return serviceResponse({
+      status: true,
+      message: "Paystack account number verified",
+      data: pay,
+    });
   }
 }

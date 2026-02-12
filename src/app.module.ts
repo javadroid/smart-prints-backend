@@ -39,6 +39,7 @@ import { PickupLocationsModule } from './pickup-locations/pickup-locations.modul
 import { ZonesModule } from './zones/zones.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { ContactModule } from './contact/contact.module';
+import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
 
 
 @Module({
@@ -81,9 +82,6 @@ import { ContactModule } from './contact/contact.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}`,
-        },
       }),
     }),
         ThrottlerModule.forRoot([{
@@ -97,13 +95,13 @@ import { ContactModule } from './contact/contact.module';
           useFactory: async (configService: ConfigService) => ({
             type: 'mysql', // Assuming PostgreSQL for SQL_URI
             url: configService.get<string>('SQL_URI'),
-            entities: [UserSqlModel, ZoneSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
+            entities: [UserSqlModel, ZoneSqlModel, WithdrawSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
             synchronize: true, // Set to false in production
             autoLoadEntities: true,
             logging: ['query', 'error'],
           }),
         }),
-         TypeOrmModule.forFeature([ProductSqlModel,CategoriesSqlModel  ]),
+         TypeOrmModule.forFeature([SiteSettingsSqlModel,ProductSqlModel,CategoriesSqlModel  ]),
   AuthModule,
   AdminModule,
   UploadsModule,

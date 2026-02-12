@@ -86,6 +86,12 @@ export class ProductDto {
   @ApiProperty({ description: 'Is the product featured', example: false, required: false })
   isFeatured?: boolean;
   
+  @ApiProperty({ description: 'Display name of the product', example: 'Sample Product', required: false })  
+  displayName?: string;
+
+  @ApiProperty({ description: 'Discount price of the product', example: 20.0, required: false })
+  discountPrice?: number;
+
   @ApiProperty({ description: 'Is a 3D product', example: false, required: false })
   is3d?: boolean;
   
@@ -93,6 +99,12 @@ export class ProductDto {
   isResell?: boolean;
   @ApiProperty({ description: 'Product ID',  })
   id: string ;
+
+  @ApiProperty({ description: 'Product metadata',  })
+  metadata: Record<string, any>;
+
+  @ApiProperty({ description: 'Product ID',  })
+  productID: string ;
 
   @ApiProperty({ description: 'Product name', example: 'Sample Product' })
   name: string;

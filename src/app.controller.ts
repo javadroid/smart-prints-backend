@@ -45,4 +45,9 @@ const state = await this.appService.getStates(query);
       });
  
   }
+
+   @Get('site-settings')
+  async getSiteSettings() {
+    return this.appService.getSiteSettings();
+  }
 }

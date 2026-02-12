@@ -31,6 +31,9 @@ export class ProductSqlModel {
   @Column() // Use PrimaryColumn because we are generating the ID ourselves
   id: string;
 
+  @Column({ nullable:true })
+  displayName: string;
+
   @Column({ default: false })
   isFeatured: boolean;
   
@@ -53,6 +56,12 @@ export class ProductSqlModel {
   // --- Relationships ---
   @Column()
   userID: string;
+
+  @Column({nullable:true})
+  productID: string;
+@ManyToOne(() => ProductSqlModel, product => product._id)
+  @JoinColumn({ name: 'productID' })
+  product: ProductSqlModel;
 
   @ManyToOne(() => UserSqlModel, user => user._id)
   @JoinColumn({ name: 'userID' })
@@ -135,6 +144,14 @@ export class ProductSqlModel {
   
   @Column({ type: 'json', nullable: true })
   rating?: Rating[];
+
+
+  
+  @Column({ type: 'json', nullable: true })
+  metadata:  Record<string, any>;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  discountPrice?: number;
   
   @Column({ type: 'float', default: 0, nullable: true })
   averageRating?: number;

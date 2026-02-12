@@ -224,5 +224,22 @@ export class ProductController {
   ) {
     return this.productService.rateProduct(productID, body, req.user);
   }
-  
+  // getAllCustomProducts
+  @Get("custom")
+  @ApiOperation({ summary: "Get all custom products" })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    type: Number,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of products per page",
+    type: Number,
+  })
+  async getAllCustomProducts(@Query() query: any) {
+    return this.productService.getAllCustomProducts(query);
+  }
 }

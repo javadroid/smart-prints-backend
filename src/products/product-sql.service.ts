@@ -29,7 +29,7 @@ async findByAny(param:any,query: any): Promise<any> {
   const {key, value }=param
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
-    const findall = await this.productRepository.find({where:{[key]:value,}, take: limit, skip: skip,relations: ['user'], });
+    const findall = await this.productRepository.find({where:{[key]:value,}, take: limit, skip: skip,relations: ['user','product'], });
     return serviceResponse({
       data: findall,
       message: "Product plans retrieved successfully",
@@ -56,7 +56,7 @@ async findByAny(param:any,query: any): Promise<any> {
       take: limit,
 
       skip: skip,
-      relations: ['user'],
+      relations: ['user','product'],
     });
     return serviceResponse({
       data: findall,
@@ -222,7 +222,7 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
     }
 
     const [products, total] = await this.productRepository.findAndCount({
-      where: { userID: user._id },
+      where: { userID: user._id,isApproved:true, isResell:true },
       take: limit,
       skip: skip,
       relations: ['user'],
@@ -238,11 +238,32 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
       metadata: await getSqlMetadata({
         model: this.productRepository,
         query,
-        querys: { userID: user._id },
+        querys: { userID: user._id,isApproved:true, isResell:true },
       }),
     });
   }
 
+  
+  async getAllCustomProducts(query: any) {
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+    const findall = await this.productRepository.find({
+      where: { type: "custom" },
+      take: limit,
+      skip: skip,
+      relations: ['user','product'],
+    });
+    return serviceResponse({
+      data: findall,
+      message: "Product plans retrieved successfully",
+      status: true,
+      metadata: await getSqlMetadata({
+        model: this.productRepository,
+        query,
+        querys: { type: "custom" },
+      }),
+    });
+  }
 
  
 }

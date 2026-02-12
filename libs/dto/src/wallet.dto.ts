@@ -24,12 +24,12 @@ export class WalletDTO {
   @ApiProperty({ description: 'Status of the wallet', required: false })
     status?: string;
 
-  @ApiProperty({ description: 'type of tranfer', enum: ['nuban', 'mobile_money'], default: 'nuban', required: false })
-    type?: string;
+  @ApiProperty({ description: 'Name of the bank', default:"GTBank" })
+    bankName: string;
 
  @ApiProperty({ description: 'Bank code of the wallet', default:"058" })
 
-    bank_code: string;
+    bankCode: string;
 
   @ApiProperty({ description: 'amount' })
     amount: number;
@@ -37,24 +37,15 @@ export class WalletDTO {
   @ApiProperty({ description: 'reason' })
     reason: string;
 
-    @ApiProperty({ description: 'rideID' })
-    rideID: string;
+   
  
 }
 
 export class RequestWithdrawalDTO {
+  @ApiProperty({ description: 'User ID associated with the wallet'  })
+  userID: string;
   @ApiProperty({ description: 'Amount to withdraw', example: 5000 })
   amount: number;
-
-  @ApiProperty({ description: 'Account Number', required: false })
-  accountNumber?: string;
-
-  @ApiProperty({ description: 'Bank Code', required: false })
-  bankCode?: string;
-
-  @ApiProperty({ description: 'Account Name', required: false })
-  accountName?: string;
-  
-  @ApiProperty({ description: 'Password for confirmation', required: false })
-  password?: string;
+  @ApiProperty({ description: 'Wallet ID associated with the withdrawal request'  })
+  walletID: string;
 }

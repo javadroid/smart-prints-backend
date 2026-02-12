@@ -95,4 +95,26 @@ export class PaystackService {
         );
     }
   }
+
+  // paystack get all banks
+  async getPaystackBanks() {
+    const response = await axios.get('https://api.paystack.co/bank', {
+      headers: {
+        'Authorization': `Bearer ${this.secretKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  }
+
+  // paystack verify account number
+  async verifyPaystackAccountNumber(accountNumber: string, bankCode: string) {
+    const response = await axios.get(`https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`, {
+      headers: {
+        'Authorization': `Bearer ${this.secretKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  }
 }

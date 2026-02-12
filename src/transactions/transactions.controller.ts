@@ -26,13 +26,14 @@ export class TransactionsController {
 
  
 
-  @Get()
+  @Post("by-many")
   @ApiOperation({ summary: 'Get all transactions' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiQuery({ name: 'userID', required: false, type: String })
-  findAll(@Query() query: any) {
-    return this.transactionsService.findAll(query);
+  
+  @ApiBody({ type: CreateTransactionDTO })
+  findAll(@Query() query: any,@Body() params:CreateTransactionDTO) {
+    return this.transactionsService.findAll(params,query);
   }
 
   @Get('top-users')
@@ -42,11 +43,11 @@ export class TransactionsController {
     return this.transactionsService.getTopUsers(limit);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a transaction by ID' })
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(id);
-  }
+  // @Get(':id')
+  // @ApiOperation({ summary: 'Get a transaction by ID' })
+  // findOne(@Param('id') id: string) {
+  //   return this.transactionsService.findOne(id);
+  // }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a transaction' })

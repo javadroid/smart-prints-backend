@@ -104,6 +104,9 @@ export class ProductModel {
   @Prop({ ref:"UserModel" })
   userID: string;
 
+  @Prop({  })
+  productID: string;
+
   @Prop({ ref:"FarmModel" })
   farmID: string;
 

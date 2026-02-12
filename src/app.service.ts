@@ -1,8 +1,18 @@
+import { serviceResponse } from '@app/service';
+import { SiteSettingsSqlModel } from '@app/sql-schema';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from "fs";
 import * as path from "path";
+import { Repository } from 'typeorm';
 @Injectable()
 export class AppService {
+
+  constructor( @InjectRepository(SiteSettingsSqlModel)
+      private siteSettingsModel: Repository<SiteSettingsSqlModel>
+    ){
+    
+  }
   getHello(): string {
     return 'Hello World!';
   }
@@ -49,5 +59,14 @@ export class AppService {
       found = data.map((s) => s.state).sort();
     }
     return found;
+  }
+
+  async getSiteSettings() {
+    const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
+    return serviceResponse({
+      message: "Site settings retrieved",
+      status: true,
+      data: settings || {},
+    });
   }
 }

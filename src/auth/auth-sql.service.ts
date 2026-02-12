@@ -116,7 +116,6 @@ export class AuthSqlService {
       // expiresIn: "1y",
     });
     const refresh_token = this.jwtService.sign(payload, {
-      expiresIn: "30d",
       secret: this.config.get("JWT_SECRET2"),
     });
     return {
@@ -169,7 +168,7 @@ export class AuthSqlService {
     delete body.status;
     delete body.password;
     await this.userRepository.update(userID, body);
-    const user = await this.userRepository.findOne({ where: { id: userID } });
+    const user = await this.userRepository.findOne({ where: { _id: userID } });
     return {
       message: "User profile updated",
       data: user,

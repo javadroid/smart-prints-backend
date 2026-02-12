@@ -3,13 +3,12 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class WalletSqlModel {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  _id: string;
 
   @Column()
   userID: string;
 
-  @Column({ nullable: true })
-  barter_id?: string;
+
 
   @Column({ nullable: true })
   email?: string;
@@ -26,7 +25,7 @@ export class WalletSqlModel {
   @Column()
   bankCode: string;
 
-  @Column()
+  @Column({ default: "" })
   customerCode: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })

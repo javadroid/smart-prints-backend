@@ -9,19 +9,20 @@ import { CategoriesSqlService } from './categories-sql.service';
 
 @ApiTags("categories")
 @ApiBearerAuth("access-token")
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesSqlService) {}
 
    @Post()
+   @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new categories" })
   @ApiBody({
     type: CategoriesDto,
     description: "Creating a new categories Details",
   })
-  @UseGuards(JwtAuthGuard)
+
   async create(@Body() categories: CategoriesDto, @Req() req: any) {
     // await this.organizationAbilityFactory.checkAbility(
     //   categories.organizationID,
@@ -43,7 +44,8 @@ export class CategoriesController {
     type: CategoriesDto,
     description: "Updating existing categoriess",
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async update(@Body() categories: CategoriesDto, @Param("categoriesID") categoriesID: string, @Req() req: any) {
     // await this.organizationAbilityFactory.checkAbility(
     //   categories.organizationID,
@@ -85,7 +87,7 @@ export class CategoriesController {
   @Get("")
   // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Get all categoriess" })
-  @UseGuards(JwtAuthGuard)
+ 
   @ApiQuery({
     name: "page",
     required: false,
@@ -103,8 +105,8 @@ export class CategoriesController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
-  
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Delete categoriess by their IDs" })
 
   async delete(@Param("id") ids: string,  @Req() req: any) {
