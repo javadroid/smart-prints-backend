@@ -113,9 +113,10 @@ export class AuthSqlService {
       email: user.email,
     };
     const access_token = this.jwtService.sign(payload, {
-      // expiresIn: "1y",
+      expiresIn: "30d",
     });
     const refresh_token = this.jwtService.sign(payload, {
+      expiresIn: "30d",
       secret: this.config.get("JWT_SECRET2"),
     });
     return {

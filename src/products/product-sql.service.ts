@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotAcceptableException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, In } from "typeorm";
+import { Repository, In, Brackets } from "typeorm";
 import { ProductSqlModel } from "@app/sql-schema/product.sql-schema";
 import { getSqlMetadata, serviceResponse } from "@app/service";
 import { UserDTO } from "@app/dto";
@@ -16,6 +16,10 @@ export class ProductSqlService {
   ) {}
 
   async create(product: Partial<ProductSqlModel>,userData:UserDTO): Promise<any> {
+     if(product.type=="custom"&&!userData.isAdmin){
+      throw new NotAcceptableException("You are not authorized to create custom products");
+    }
+    
     const newProduct = this.productRepository.create({...product,userID:userData._id.toString()});
     const data = await this.productRepository.save(newProduct);
     return serviceResponse({
@@ -112,6 +116,9 @@ async findByAny(param:any,query: any): Promise<any> {
   ): Promise<any> {
     // console.log(object)
    delete product._id
+   if(product.type=="custom"&&!userData.isAdmin){
+      throw new NotAcceptableException("You are not authorized to create custom products");
+    }
     await this.productRepository.update(id, {...product,userID:userData._id.toString()});
 const products=await this.productRepository.findOne({ where: { _id:id } });
     return serviceResponse({
@@ -247,12 +254,22 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
   async getAllCustomProducts(query: any) {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
-    const findall = await this.productRepository.find({
-      where: { type: "custom" },
-      take: limit,
-      skip: skip,
-      relations: ['user','product'],
-    });
+    const findall = await this.productRepository.createQueryBuilder('product')
+  .leftJoinAndSelect('product.user', 'user')  // Include relations if necessary
+  .leftJoinAndSelect('product.product', 'productRelation')
+  .where('product.type = :type', { type: 'custom' })
+  .andWhere('product.status = :status', { status: 'active' })
+  .andWhere('product.isApproved = :isApproved', { isApproved: true })
+  .andWhere(
+    new Brackets(qb => {
+      qb.where('product.isResell = :isResell', { isResell: true })
+        .andWhere('product.isApproved = :isApproved', { isApproved: true })
+        .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
+    })
+  )
+  .take(limit)
+  .skip(skip)
+  .getMany();
     return serviceResponse({
       data: findall,
       message: "Product plans retrieved successfully",

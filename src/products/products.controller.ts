@@ -16,9 +16,9 @@ export class ProductController {
 
    @Post()
    @UseGuards(JwtAuthGuard, 
-    RolesGuard
+    // RolesGuard
 )
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new product" })
   @ApiBody({
     type: ProductDto,
@@ -36,8 +36,10 @@ export class ProductController {
   }
 
   @Patch(":productID")
-  @UseGuards(JwtAuthGuard,RolesGuard )
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard,
+    // RolesGuard
+   )
+// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing products" })
   @ApiParam({
     name: "productID",

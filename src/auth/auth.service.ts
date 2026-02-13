@@ -291,7 +291,7 @@
 //       username: user.username,
 //       email: user.email,
 //     };
-//     const newAccessToken = this.jwtService.sign(payload1, { expiresIn: "1d" });
+//     const newAccessToken = this.jwtService.sign(payload1, { expiresIn: "30d" });
 //     const refresh_token = this.jwtService.sign(payload1, {
 //       expiresIn: "30d",
 //     });

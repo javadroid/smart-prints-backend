@@ -7215,8 +7215,11 @@ let AuthSqlService = class AuthSqlService {
             username: user.username,
             email: user.email,
         };
-        const access_token = this.jwtService.sign(payload, {});
+        const access_token = this.jwtService.sign(payload, {
+            expiresIn: "30d",
+        });
         const refresh_token = this.jwtService.sign(payload, {
+            expiresIn: "30d",
             secret: this.config.get("JWT_SECRET2"),
         });
         return {
@@ -10141,6 +10144,9 @@ let ProductSqlService = class ProductSqlService {
         this.userRepository = userRepository;
     }
     async create(product, userData) {
+        if (product.type == "custom" && !userData.isAdmin) {
+            throw new common_1.NotAcceptableException("You are not authorized to create custom products");
+        }
         const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString() });
         const data = await this.productRepository.save(newProduct);
         return (0, service_1.serviceResponse)({
@@ -10220,6 +10226,9 @@ let ProductSqlService = class ProductSqlService {
     }
     async update(id, product, userData) {
         delete product._id;
+        if (product.type == "custom" && !userData.isAdmin) {
+            throw new common_1.NotAcceptableException("You are not authorized to create custom products");
+        }
         await this.productRepository.update(id, { ...product, userID: userData._id.toString() });
         const products = await this.productRepository.findOne({ where: { _id: id } });
         return (0, service_1.serviceResponse)({
@@ -10330,12 +10339,20 @@ let ProductSqlService = class ProductSqlService {
     async getAllCustomProducts(query) {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const findall = await this.productRepository.find({
-            where: { type: "custom" },
-            take: limit,
-            skip: skip,
-            relations: ['user', 'product'],
-        });
+        const findall = await this.productRepository.createQueryBuilder('product')
+            .leftJoinAndSelect('product.user', 'user')
+            .leftJoinAndSelect('product.product', 'productRelation')
+            .where('product.type = :type', { type: 'custom' })
+            .andWhere('product.status = :status', { status: 'active' })
+            .andWhere('product.isApproved = :isApproved', { isApproved: true })
+            .andWhere(new typeorm_2.Brackets(qb => {
+            qb.where('product.isResell = :isResell', { isResell: true })
+                .andWhere('product.isApproved = :isApproved', { isApproved: true })
+                .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
+        }))
+            .take(limit)
+            .skip(skip)
+            .getMany();
         return (0, service_1.serviceResponse)({
             data: findall,
             message: "Product plans retrieved successfully",
@@ -10429,8 +10446,7 @@ let ProductController = class ProductController {
 exports.ProductController = ProductController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Create a new product" }),
     (0, swagger_1.ApiBody)({
         type: dto_1.ProductDto,
@@ -10444,8 +10460,7 @@ __decorate([
 ], ProductController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(":productID"),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Update existing products" }),
     (0, swagger_1.ApiParam)({
         name: "productID",
