@@ -20,11 +20,11 @@ export class TransactionsService {
   ) {}
 
   async create(createTransactionDto: CreateTransactionDTO) {
-    const transaction = this.transactionRepository.create(createTransactionDto);
-    const savedTransaction = await this.transactionRepository.save(transaction);
+    // const transaction = this.transactionRepository.create(createTransactionDto);
+    // const savedTransaction = await this.transactionRepository.save(transaction);
     return serviceResponse({
       message: 'Transaction created successfully',
-      data: savedTransaction,
+      data: {savedTransaction:""},
       status: true,
     });
   }
@@ -65,19 +65,19 @@ export class TransactionsService {
   }
 
   async update(id: string, updateTransactionDto: Partial<CreateTransactionDTO>) {
-    const transaction = await this.transactionRepository.preload({
-      id,
-      ...updateTransactionDto,
-    });
+    // const transaction = await this.transactionRepository.preload({
+    //   id,
+    //   ...updateTransactionDto,
+    // });
 
-    if (!transaction) {
-      throw new NotFoundException(`Transaction with ID ${id} not found`);
-    }
+    // if (!transaction) {
+    //   throw new NotFoundException(`Transaction with ID ${id} not found`);
+    // }
 
-    const updatedTransaction = await this.transactionRepository.save(transaction);
+    // const updatedTransaction = await this.transactionRepository.save(transaction);
     return serviceResponse({
       message: 'Transaction updated successfully',
-      data: updatedTransaction,
+      data: {},
       status: true,
     });
   }

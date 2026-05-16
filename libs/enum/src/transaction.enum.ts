@@ -1,6 +1,6 @@
 export enum TransactionStatus {
   PENDING = 'pending',
-  ACTIVE='active',
+  ACTIVE = 'active',
   SUCCESS = 'success',
 }
 
@@ -10,4 +10,5 @@ export enum TransactionType {
   PAYMENT = 'payment',
   REFUND = 'refund',
   TRANSFER = 'transfer',
+  ORDER = 'order',
 }

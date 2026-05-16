@@ -29,7 +29,7 @@ export class OrderSqlModel {
   // An order has many products (order items)
   // @OneToMany(() => CartSqlModel, (cart) => cart, { cascade: true })
   // products: CartSqlModel[];
-    @Column({ type: "json", nullable: true })
+  @Column({ type: "json", nullable: true })
   products: Record<string, any>;
 
   @Column({ nullable: true })
@@ -56,7 +56,7 @@ export class OrderSqlModel {
     scale: 2,
   })
   totalPrice: number;
-@Column({
+  @Column({
     type: "decimal",
     precision: 10,
     scale: 2,

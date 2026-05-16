@@ -44,9 +44,9 @@ import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
 
 @Module({
   imports: [
-     CaslModule,
-        ScheduleModule.forRoot(),
-        MailerModule.forRootAsync({
+    CaslModule,
+    ScheduleModule.forRoot(),
+    MailerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -59,24 +59,24 @@ import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
               "emmanuel@jamfortetech.com",
             pass: configService.get<string>("EMAIL_PASSWORD") || "Simple@1010*",
           },
-           connectionTimeout: 5000,
+          connectionTimeout: 5000,
           port: 465, // SSL
           secure: true,
         },
       }),
     }),
-        MulterModule.registerAsync({
-          useFactory: () => ({
-            dest: './uploads',
-          }),
-        }),
-        // GlobalMongooseModule,
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [databaseConfig],
-          // validationSchema,
-        }),
-        JwtModule.registerAsync({
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        dest: './uploads',
+      }),
+    }),
+    // GlobalMongooseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [databaseConfig],
+      // validationSchema,
+    }),
+    JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -84,30 +84,30 @@ import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
         secret: configService.get('JWT_SECRET'),
       }),
     }),
-        ThrottlerModule.forRoot([{
-          ttl: 60000,
-          limit: 10,
-        }]),
-        TypeOrmModule.forRootAsync({
-          imports: [ConfigModule],
-          inject: [ConfigService],
-         
-          useFactory: async (configService: ConfigService) => ({
-            type: 'mysql', // Assuming PostgreSQL for SQL_URI
-            url: configService.get<string>('SQL_URI'),
-            entities: [UserSqlModel, ZoneSqlModel, WithdrawSqlModel, ProductSqlModel,  OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
-            synchronize: true, // Set to false in production
-            autoLoadEntities: true,
-            logging: ['query', 'error'],
-          }),
-        }),
-         TypeOrmModule.forFeature([SiteSettingsSqlModel,ProductSqlModel,CategoriesSqlModel  ]),
-  AuthModule,
-  AdminModule,
-  UploadsModule,
-  ZonesModule,
-  UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule, ProductColorsModule, PickupLocationsModule, ZonesModule, TransactionsModule, ContactModule ],
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mysql', // Assuming PostgreSQL for SQL_URI
+        url: configService.get<string>('SQL_URI'),
+        entities: [UserSqlModel, ZoneSqlModel, WithdrawSqlModel, ProductSqlModel, OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
+        synchronize: true, // Set to false in production
+        autoLoadEntities: true,
+        logging: ['query', 'error'],
+      }),
+    }),
+    TypeOrmModule.forFeature([SiteSettingsSqlModel, ProductSqlModel, CategoriesSqlModel]),
+    AuthModule,
+    AdminModule,
+    UploadsModule,
+    ZonesModule,
+    UsersModule, ProductsModule, CartModule, OrdersModule, CategoriesModule, DesignsModule, OtpModule, WalletModule, ProductColorsModule, PickupLocationsModule, ZonesModule, TransactionsModule, ContactModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

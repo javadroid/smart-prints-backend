@@ -19,27 +19,27 @@ import { ProductStatusEnum } from '@app/enum';
 class ProductColor { name: string; hex: string; className: string; }
 class ProductSize { name: string; label: string; inStock: boolean; }
 class Mockups { front?: string; back?: string; left?: string; right?: string; }
-class DesignRect { top: string; left: string; width: string; height:string; }
+class DesignRect { top: string; left: string; width: string; height: string; }
 class DesignArea { front?: DesignRect; back?: DesignRect; left?: DesignRect; right?: DesignRect; }
 class Rating { rating: number; feedback: string; userID: string; date: Date; }
 
 @Entity({ name: 'products' })
 export class ProductSqlModel {
-@PrimaryGeneratedColumn('uuid') // Using UUID to match Mongoose's default ID type
+  @PrimaryGeneratedColumn('uuid') // Using UUID to match Mongoose's default ID type
   _id: string;
 
   @Column() // Use PrimaryColumn because we are generating the ID ourselves
   id: string;
 
-  @Column({ nullable:true })
+  @Column({ nullable: true })
   displayName: string;
 
   @Column({ default: false })
   isFeatured: boolean;
-  
+
   @Column({ default: false })
   is3d: boolean;
-  
+
   @Column({ default: false })
   isResell: boolean;
 
@@ -47,7 +47,7 @@ export class ProductSqlModel {
   isApproved: boolean;
 
 
-    @Column({ default: true })
+  @Column({ default: true })
   isActive: boolean;
 
   @Column()
@@ -57,9 +57,9 @@ export class ProductSqlModel {
   @Column()
   userID: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   productID: string;
-@ManyToOne(() => ProductSqlModel, product => product._id)
+  @ManyToOne(() => ProductSqlModel, product => product._id)
   @JoinColumn({ name: 'productID' })
   product: ProductSqlModel;
 
@@ -67,20 +67,20 @@ export class ProductSqlModel {
   @JoinColumn({ name: 'userID' })
   user: UserSqlModel;
   // --- Simple Columns ---
-  @Column({ nullable:true, type: 'text' })
+  @Column({ nullable: true, type: 'text' })
   description: string;
-  
-  @Column({nullable:true,})
+
+  @Column({ nullable: true, })
   image: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, comment: 'legacy' })
   price?: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
   standardPrice: number;
-    @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
   largePrice: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2,nullable:true, })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
   basePrice: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
@@ -89,7 +89,7 @@ export class ProductSqlModel {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   additionalPrice?: number;
 
-  @Column({ default: true ,})
+  @Column({ default: true, })
   backgroundIn: boolean;
 
   @Column({ nullable: true, comment: 'legacy' })
@@ -98,10 +98,10 @@ export class ProductSqlModel {
   @Column({ nullable: true })
   category: string;
 
-  @Column({ type: 'int', default:0, nullable: true })
+  @Column({ type: 'int', default: 0, nullable: true })
   quantity?: number;
 
-@Column({
+  @Column({
     type: 'enum',
     enum: ['custom', 'store'],
     default: 'custom',
@@ -116,18 +116,18 @@ export class ProductSqlModel {
 
   @Column({ type: 'float', nullable: true })
   distance?: number;
-  
-  @Column({ type:"enum", enum: ProductStatusEnum, default: ProductStatusEnum.ACTIVE })
+
+  @Column({ type: "enum", enum: ProductStatusEnum, default: ProductStatusEnum.ACTIVE })
   status: string;
 
   // --- Array & JSON Columns ---
-  @Column({ nullable:true, type: 'simple-array' })
+  @Column({ nullable: true, type: 'simple-array' })
   types: string[];
-  
-  @Column({ nullable:true, type: 'simple-array' })
+
+  @Column({ nullable: true, type: 'simple-array' })
   features: string[] | null;
 
-  @Column({nullable:true, type:'simple-array',  })
+  @Column({ nullable: true, type: 'simple-array', })
   imageUrls: string[];
 
   @Column({ type: 'json', nullable: true })
@@ -135,24 +135,24 @@ export class ProductSqlModel {
 
   @Column({ type: 'json', nullable: true })
   designArea?: DesignArea;
-  
+
   @Column({ type: 'json', nullable: true })
   availableColors: ProductColor[];
 
   @Column({ type: 'json', nullable: true })
   availableSizes: ProductSize[];
-  
+
   @Column({ type: 'json', nullable: true })
   rating?: Rating[];
 
 
-  
+
   @Column({ type: 'json', nullable: true })
-  metadata:  Record<string, any>;
+  metadata: Record<string, any>;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   discountPrice?: number;
-  
+
   @Column({ type: 'float', default: 0, nullable: true })
   averageRating?: number;
 
@@ -165,8 +165,8 @@ export class ProductSqlModel {
 
   @BeforeInsert()
   generateId() {
-    
-      this.id = "PDT" + randomInt(100, 999) + randomUUID().replace(/\D/g, '').substring(0, 3);
-    
+
+    this.id = "PDT" + randomInt(100, 999) + randomUUID().replace(/\D/g, '').substring(0, 3);
+
   }
 }

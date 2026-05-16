@@ -1,6 +1,6 @@
 import { Injectable, NotAcceptableException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, In, Brackets } from "typeorm";
+import { Repository, In, Brackets, Not } from "typeorm";
 import { ProductSqlModel } from "@app/sql-schema/product.sql-schema";
 import { getSqlMetadata, serviceResponse } from "@app/service";
 import { UserDTO } from "@app/dto";
@@ -13,14 +13,14 @@ export class ProductSqlService {
     private readonly productRepository: Repository<ProductSqlModel>,
     @InjectRepository(UserSqlModel)
     private readonly userRepository: Repository<UserSqlModel>,
-  ) {}
+  ) { }
 
-  async create(product: Partial<ProductSqlModel>,userData:UserDTO): Promise<any> {
-     if(product.type=="custom"&&!userData.isAdmin){
+  async create(product: Partial<ProductSqlModel>, userData: UserDTO): Promise<any> {
+    if (product.type == "custom" && !userData.isAdmin) {
       throw new NotAcceptableException("You are not authorized to create custom products");
     }
-    
-    const newProduct = this.productRepository.create({...product,userID:userData._id.toString()});
+
+    const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString(), status: "active" });
     const data = await this.productRepository.save(newProduct);
     return serviceResponse({
       data,
@@ -29,11 +29,11 @@ export class ProductSqlService {
       status: true,
     });
   }
-async findByAny(param:any,query: any): Promise<any> {
-  const {key, value }=param
+  async findByAny(param: any, query: any): Promise<any> {
+    const { key, value } = param
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
-    const findall = await this.productRepository.find({where:{[key]:value,}, take: limit, skip: skip,relations: ['user','product'], });
+    const findall = await this.productRepository.find({ where: { [key]: value, }, take: limit, skip: skip, relations: ['user', 'product'], });
     return serviceResponse({
       data: findall,
       message: "Product plans retrieved successfully",
@@ -41,26 +41,26 @@ async findByAny(param:any,query: any): Promise<any> {
       metadata: await getSqlMetadata({
         model: this.productRepository,
         query,
-        querys: {[key]:value},
+        querys: { [key]: value },
       }),
     });
   }
 
-  
 
-  async findByMany(param:any,query: any): Promise<any> {
- 
+
+  async findByMany(param: any, query: any): Promise<any> {
+
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
     console.log(param)
-    param.isActive=true
-    
+    param.isActive = true
+
     const findall = await this.productRepository.find({
       where: param,
       take: limit,
 
       skip: skip,
-      relations: ['user','product'],
+      relations: ['user', 'product'],
     });
     return serviceResponse({
       data: findall,
@@ -73,11 +73,47 @@ async findByAny(param:any,query: any): Promise<any> {
       }),
     });
   }
+  async findByManyAll(param: any, query: any): Promise<any> {
 
-//toggle isActive field
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+    console.log(param)
+    param.isActive = true
+
+    const findall = await this.productRepository.find({
+      where: [
+        {
+          status: "active",
+          type: "store",
+          isApproved: true,
+          ...param,
+        },
+        {
+          status: "active",
+          type: Not("store"),
+          ...param,
+        },
+      ],
+      take: limit,
+
+      skip: skip,
+      relations: ['user', 'product'],
+    });
+    return serviceResponse({
+      data: findall,
+      message: "Product plans retrieved successfully",
+      status: true,
+      metadata: await getSqlMetadata({
+        model: this.productRepository,
+        query,
+        querys: param,
+      }),
+    });
+  }
+  //toggle isActive field
   async toggleActive(id: string, isActive: boolean): Promise<any> {
     await this.productRepository.update(id, { isActive });
-    const product = await this.productRepository.findOne({ where: { _id:id } });
+    const product = await this.productRepository.findOne({ where: { _id: id } });
     return serviceResponse({
       data: product,
       message: `Product plan ${isActive ? "activated" : "deactivated"} successfully`,
@@ -106,41 +142,41 @@ async findByAny(param:any,query: any): Promise<any> {
   }
 
   async findOne(id: string): Promise<ProductSqlModel> {
-    return this.productRepository.findOne({ where: { id },relations: ['user'] });
+    return this.productRepository.findOne({ where: { id }, relations: ['user'] });
   }
 
   async update(
     id: string,
     product: Partial<ProductSqlModel>,
-    userData:UserDTO
+    userData: UserDTO
   ): Promise<any> {
     // console.log(object)
-   delete product._id
-   if(product.type=="custom"&&!userData.isAdmin){
+    delete product._id
+    if (product.type == "custom" && !userData.isAdmin) {
       throw new NotAcceptableException("You are not authorized to create custom products");
     }
-    await this.productRepository.update(id, {...product,userID:userData._id.toString()});
-const products=await this.productRepository.findOne({ where: { _id:id } });
+    await this.productRepository.update(id, { ...product, });
+    const products = await this.productRepository.findOne({ where: { _id: id } });
     return serviceResponse({
-      data:products,
+      data: products,
       message: "Product updated successfully",
 
       status: true,
     });
-     
+
   }
 
   async remove(id: string): Promise<any> {
-    
+
 
     return serviceResponse({
-      data:await this.productRepository.delete({_id:id}),
+      data: await this.productRepository.delete({ _id: id }),
       message: "Product plan deleted successfully",
 
       status: true,
     });
   }
-  
+
   async rateProduct(
     id: string,
     payload: { rating: number; content?: string; feedback?: string },
@@ -205,9 +241,9 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
     }
 
     const [users, total] = await this.userRepository.findAndCount({
-      where: { _id: In(userIDs),isReseller:true },
-         select: ['_id','bio', 'fullname', 'email', 'profileImage','coverImage', 'username'],
-   
+      where: { _id: In(userIDs), isReseller: true },
+      select: ['_id', 'bio', 'fullname', 'email', 'profileImage', 'coverImage', 'username'],
+
     });
 
     return serviceResponse({
@@ -222,14 +258,15 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
 
-    const user = await this.userRepository.findOne({ where: { username },   select: ['_id', 'fullname', 'email', 'profileImage','coverImage', 'username','bio'],
+    const user = await this.userRepository.findOne({
+      where: { username }, select: ['_id', 'fullname', 'email', 'profileImage', 'coverImage', 'username', 'bio'],
     });
     if (!user) {
       throw new NotFoundException(`User with username ${username} not found`);
     }
 
     const [products, total] = await this.productRepository.findAndCount({
-      where: { userID: user._id,isApproved:true, isResell:true },
+      where: { userID: user._id, isApproved: true, isResell: true },
       take: limit,
       skip: skip,
       relations: ['user'],
@@ -245,31 +282,21 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
       metadata: await getSqlMetadata({
         model: this.productRepository,
         query,
-        querys: { userID: user._id,isApproved:true, isResell:true },
+        querys: { userID: user._id, isApproved: true, isResell: true },
       }),
     });
   }
 
-  
+
   async getAllCustomProducts(query: any) {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
-    const findall = await this.productRepository.createQueryBuilder('product')
-  .leftJoinAndSelect('product.user', 'user')  // Include relations if necessary
-  .leftJoinAndSelect('product.product', 'productRelation')
-  .where('product.type = :type', { type: 'custom' })
-  .andWhere('product.status = :status', { status: 'active' })
-  .andWhere('product.isApproved = :isApproved', { isApproved: true })
-  .andWhere(
-    new Brackets(qb => {
-      qb.where('product.isResell = :isResell', { isResell: true })
-        .andWhere('product.isApproved = :isApproved', { isApproved: true })
-        .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
-    })
-  )
-  .take(limit)
-  .skip(skip)
-  .getMany();
+    const findall = await this.productRepository.find({
+      where: { type: "custom", status: "active", },
+      take: limit,
+      skip: skip,
+      relations: ['user', 'product'],
+    });
     return serviceResponse({
       data: findall,
       message: "Product plans retrieved successfully",
@@ -282,5 +309,33 @@ const products=await this.productRepository.findOne({ where: { _id:id } });
     });
   }
 
- 
+  async getAllShopifyProducts(query: any) {
+    const { limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
+    const findall = await this.productRepository.createQueryBuilder('product')
+      .leftJoinAndSelect('product.user', 'user')  // Include relations if necessary
+      .leftJoinAndSelect('product.product', 'productRelation')
+      .where('product.type = :type', { type: 'store' })
+      .andWhere('product.status = :status', { status: 'active' })
+      .andWhere('product.isApproved = :isApproved', { isApproved: true })
+      .andWhere(
+        new Brackets(qb => {
+          qb.where('product.isResell = :isResell', { isResell: true })
+            .andWhere('product.isApproved = :isApproved', { isApproved: true })
+            .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
+        })
+      )
+    return serviceResponse({
+      data: findall,
+      message: "Product plans retrieved successfully",
+      status: true,
+      // metadata: await getSqlMetadata({
+      //   model: this.productRepository,
+      //   query,
+      //   querys: { type: "shopify" },
+      // }),
+    });
+  }
+
+
 }

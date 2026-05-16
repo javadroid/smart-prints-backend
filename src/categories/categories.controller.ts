@@ -12,11 +12,11 @@ import { CategoriesSqlService } from './categories-sql.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesSqlService) {}
+  constructor(private readonly categoriesService: CategoriesSqlService) { }
 
-   @Post()
-   @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new categories" })
   @ApiBody({
     type: CategoriesDto,
@@ -30,7 +30,7 @@ export class CategoriesController {
     //   Action.Create,
     //   CategoriesModel,
     // );
-    return this.categoriesService.create(categories, );
+    return this.categoriesService.create(categories as any,);
   }
 
   @Patch(":categoriesID")
@@ -45,7 +45,7 @@ export class CategoriesController {
     description: "Updating existing categoriess",
   })
   @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async update(@Body() categories: CategoriesDto, @Param("categoriesID") categoriesID: string, @Req() req: any) {
     // await this.organizationAbilityFactory.checkAbility(
     //   categories.organizationID,
@@ -53,7 +53,7 @@ export class CategoriesController {
     //   Action.Update,
     //   CategoriesModel,
     // );
-    return this.categoriesService.update( categoriesID, categories, );
+    return this.categoriesService.update(categoriesID, categories as any,);
   }
 
   // @Get("by-any/:key/:value")
@@ -87,7 +87,7 @@ export class CategoriesController {
   @Get("")
   // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Get all categoriess" })
- 
+
   @ApiQuery({
     name: "page",
     required: false,
@@ -105,12 +105,12 @@ export class CategoriesController {
   }
 
   @Delete(":id")
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Delete categoriess by their IDs" })
 
-  async delete(@Param("id") ids: string,  @Req() req: any) {
-    return this.categoriesService.remove(ids, );
+  async delete(@Param("id") ids: string, @Req() req: any) {
+    return this.categoriesService.remove(ids,);
   }
-  
+
 }

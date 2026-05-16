@@ -12,19 +12,19 @@ import { ProductSqlService } from './product-sql.service';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductSqlService) {}
+  constructor(private readonly productService: ProductSqlService) { }
 
-   @Post()
-   @UseGuards(JwtAuthGuard, 
+  @Post()
+  @UseGuards(JwtAuthGuard,
     // RolesGuard
-)
-// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  )
+  // @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Create a new product" })
   @ApiBody({
     type: ProductDto,
     description: "Creating a new product Details",
   })
- 
+
   async create(@Body() product: ProductDto, @Req() req: any) {
     // await this.organizationAbilityFactory.checkAbility(
     //   product.organizationID,
@@ -38,8 +38,8 @@ export class ProductController {
   @Patch(":productID")
   @UseGuards(JwtAuthGuard,
     // RolesGuard
-   )
-// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  )
+  // @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Update existing products" })
   @ApiParam({
     name: "productID",
@@ -58,18 +58,18 @@ export class ProductController {
     //   Action.Update,
     //   ProductModel,
     // );
-    return this.productService.update( productID, product, req.user);
+    return this.productService.update(productID, product, req.user);
   }
-//toggle isActive field
+  //toggle isActive field
   @Patch("toggle-active/:productID")
   @UseGuards(JwtAuthGuard,
     // RolesGuard 
   )
-// @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  // @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiOperation({ summary: "Toggle product active status" })
-  @ApiParam({ 
-    name: "productID", 
-    description: "The ID of the product to toggle", 
+  @ApiParam({
+    name: "productID",
+    description: "The ID of the product to toggle",
     type: String
   })
   @ApiBody({
@@ -163,7 +163,7 @@ export class ProductController {
   ) {
     return this.productService.findByAny(params, query);
   }
-@Post("by-many")
+  @Post("by-many")
   @ApiBody({
     required: false,
     type: ProductDto,
@@ -173,6 +173,18 @@ export class ProductController {
     @Query() query: any
   ) {
     return this.productService.findByMany(params, query);
+  }
+
+  @Post("by-many-all")
+  @ApiBody({
+    required: false,
+    type: ProductDto,
+  })
+  async findbyManyAll(
+    @Body() params: ProductDto,
+    @Query() query: any
+  ) {
+    return this.productService.findByManyAll(params, query);
   }
   @Get("")
   // @UseGuards(JwtAuthGuard)
@@ -195,15 +207,15 @@ export class ProductController {
   }
 
   @Delete(":id")
- @UseGuards(JwtAuthGuard,RolesGuard )
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
-  
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+
   @ApiOperation({ summary: "Delete products by their IDs" })
- 
-  async delete(@Param("id") ids: string,  @Req() req: any) {
-    return this.productService.remove(ids, );
+
+  async delete(@Param("id") ids: string, @Req() req: any) {
+    return this.productService.remove(ids,);
   }
-  
+
   @Post(":productID/rate")
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Rate a product" })
@@ -243,5 +255,24 @@ export class ProductController {
   })
   async getAllCustomProducts(@Query() query: any) {
     return this.productService.getAllCustomProducts(query);
+  }
+
+
+  @Get("shopify")
+  @ApiOperation({ summary: "Get all shopify products" })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    description: "Page number for pagination",
+    type: Number,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    description: "Number of products per page",
+    type: Number,
+  })
+  async getAllShopifyProducts(@Query() query: any) {
+    return this.productService.getAllShopifyProducts(query);
   }
 }

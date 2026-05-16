@@ -436,6 +436,60 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesDto = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class MockupsDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "front", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "back", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", String)
+], MockupsDto.prototype, "right", void 0);
+class DesignRectDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '27%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "top", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '33%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '37%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "width", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '50%' }),
+    __metadata("design:type", String)
+], DesignRectDto.prototype, "height", void 0);
+class DesignAreaDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "front", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "back", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "left", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, type: DesignRectDto }),
+    __metadata("design:type", DesignRectDto)
+], DesignAreaDto.prototype, "right", void 0);
 class CategoriesDto {
 }
 exports.CategoriesDto = CategoriesDto;
@@ -455,6 +509,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ required: false, description: 'Category image URL or path', example: '/uploads/category.png' }),
     __metadata("design:type", String)
 ], CategoriesDto.prototype, "image", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [MockupsDto] }),
+    __metadata("design:type", Array)
+], CategoriesDto.prototype, "mockups", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [DesignAreaDto] }),
+    __metadata("design:type", Array)
+], CategoriesDto.prototype, "designAreas", void 0);
 
 
 /***/ }),
@@ -2109,6 +2171,7 @@ var TransactionType;
     TransactionType["PAYMENT"] = "payment";
     TransactionType["REFUND"] = "refund";
     TransactionType["TRANSFER"] = "transfer";
+    TransactionType["ORDER"] = "order";
 })(TransactionType || (exports.TransactionType = TransactionType = {}));
 
 
@@ -3314,6 +3377,60 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesSchema = exports.CategoriesModel = void 0;
 const mongoose_1 = __webpack_require__(/*! @nestjs/mongoose */ "@nestjs/mongoose");
+class Mockups {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "front", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "back", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Mockups.prototype, "right", void 0);
+class DesignRect {
+}
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "top", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "width", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], DesignRect.prototype, "height", void 0);
+class DesignArea {
+}
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "front", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "back", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "left", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: DesignRect }),
+    __metadata("design:type", DesignRect)
+], DesignArea.prototype, "right", void 0);
 let CategoriesModel = class CategoriesModel {
 };
 exports.CategoriesModel = CategoriesModel;
@@ -3321,6 +3438,22 @@ __decorate([
     (0, mongoose_1.Prop)({ required: true, }),
     __metadata("design:type", String)
 ], CategoriesModel.prototype, "name", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], CategoriesModel.prototype, "type", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], CategoriesModel.prototype, "image", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [Mockups] }),
+    __metadata("design:type", Array)
+], CategoriesModel.prototype, "mockups", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [DesignArea] }),
+    __metadata("design:type", Array)
+], CategoriesModel.prototype, "designAreas", void 0);
 exports.CategoriesModel = CategoriesModel = __decorate([
     (0, mongoose_1.Schema)()
 ], CategoriesModel);
@@ -4733,10 +4866,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CategoriesSqlModel = void 0;
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+class Mockups {
+}
+class DesignRect {
+}
+class DesignArea {
+}
 let CategoriesSqlModel = class CategoriesSqlModel {
 };
 exports.CategoriesSqlModel = CategoriesSqlModel;
@@ -4770,6 +4909,18 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
 ], CategoriesSqlModel.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Mockups)
+], CategoriesSqlModel.prototype, "mockups", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", DesignArea)
+], CategoriesSqlModel.prototype, "designArea", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", typeof (_c = typeof Record !== "undefined" && Record) === "function" ? _c : Object)
+], CategoriesSqlModel.prototype, "metadata", void 0);
 exports.CategoriesSqlModel = CategoriesSqlModel = __decorate([
     (0, typeorm_1.Entity)()
 ], CategoriesSqlModel);
@@ -8897,7 +9048,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -8909,13 +9060,14 @@ const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/in
 const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
 const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let OrderSqlService = class OrderSqlService {
-    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService) {
+    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService, transactionRepository) {
         this.orderRepository = orderRepository;
         this.pickupLocationRepository = pickupLocationRepository;
         this.cartRepository = cartRepository;
         this.deliveryPriceSqlModelRepository = deliveryPriceSqlModelRepository;
         this.paystack = paystack;
         this.sendMailService = sendMailService;
+        this.transactionRepository = transactionRepository;
     }
     async create(order, userData) {
         try {
@@ -9113,6 +9265,20 @@ let OrderSqlService = class OrderSqlService {
                 await this.cartRepository.delete({
                     userID: plan.user._id
                 });
+                for (let i = 0; i < plan.products.length; i++) {
+                    const element = plan?.products[i];
+                    const transaction = await this.transactionRepository.create({
+                        amount: element?.price,
+                        reference: v?.data?.reference,
+                        status: "active",
+                        productID: element?._id,
+                        userID: plan?.userID,
+                        metadata: element?.metadata,
+                        transactionType: "order",
+                        orderID: plan._id,
+                    });
+                    await this.transactionRepository.save(transaction);
+                }
             }
             else if (["abandoned", "ongoing"].includes(v.data.status)) {
                 plan.isPaid = false;
@@ -9191,6 +9357,20 @@ let OrderSqlService = class OrderSqlService {
                 await this.cartRepository.delete({
                     userID: plan.user._id
                 });
+                for (let i = 0; i < plan.products.length; i++) {
+                    const element = plan?.products[i];
+                    const transaction = await this.transactionRepository.create({
+                        amount: element?.price,
+                        reference: data?.reference,
+                        status: "active",
+                        productID: element?._id,
+                        userID: plan?.userID,
+                        metadata: element?.metadata,
+                        transactionType: "order",
+                        orderID: plan._id,
+                    });
+                    await this.transactionRepository.save(transaction);
+                }
             }
             return { status: "success", message: "Webhook processed" };
         }
@@ -9207,7 +9387,8 @@ exports.OrderSqlService = OrderSqlService = __decorate([
     __param(1, (0, typeorm_1.InjectRepository)(sql_schema_1.PickupLocationSqlModel)),
     __param(2, (0, typeorm_1.InjectRepository)(sql_schema_1.CartSqlModel)),
     __param(3, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object])
+    __param(6, (0, typeorm_1.InjectRepository)(sql_schema_1.TransactionSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object])
 ], OrderSqlService);
 
 
@@ -9419,7 +9600,7 @@ let OrdersModule = class OrdersModule {
 exports.OrdersModule = OrdersModule;
 exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.PickupLocationSqlModel]),],
+        imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel, sql_schema_1.TransactionSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.PickupLocationSqlModel]),],
         controllers: [orders_controller_1.OrderController],
         providers: [service_1.FlutterwaveService, paystack_1.PaystackService, order_sql_service_1.OrderSqlService, service_1.SendMailService],
         exports: [order_sql_service_1.OrderSqlService]
@@ -10147,7 +10328,7 @@ let ProductSqlService = class ProductSqlService {
         if (product.type == "custom" && !userData.isAdmin) {
             throw new common_1.NotAcceptableException("You are not authorized to create custom products");
         }
-        const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString() });
+        const newProduct = this.productRepository.create({ ...product, userID: userData._id.toString(), status: "active" });
         const data = await this.productRepository.save(newProduct);
         return (0, service_1.serviceResponse)({
             data,
@@ -10178,6 +10359,40 @@ let ProductSqlService = class ProductSqlService {
         param.isActive = true;
         const findall = await this.productRepository.find({
             where: param,
+            take: limit,
+            skip: skip,
+            relations: ['user', 'product'],
+        });
+        return (0, service_1.serviceResponse)({
+            data: findall,
+            message: "Product plans retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.productRepository,
+                query,
+                querys: param,
+            }),
+        });
+    }
+    async findByManyAll(param, query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        console.log(param);
+        param.isActive = true;
+        const findall = await this.productRepository.find({
+            where: [
+                {
+                    status: "active",
+                    type: "store",
+                    isApproved: true,
+                    ...param,
+                },
+                {
+                    status: "active",
+                    type: (0, typeorm_2.Not)("store"),
+                    ...param,
+                },
+            ],
             take: limit,
             skip: skip,
             relations: ['user', 'product'],
@@ -10229,7 +10444,7 @@ let ProductSqlService = class ProductSqlService {
         if (product.type == "custom" && !userData.isAdmin) {
             throw new common_1.NotAcceptableException("You are not authorized to create custom products");
         }
-        await this.productRepository.update(id, { ...product, userID: userData._id.toString() });
+        await this.productRepository.update(id, { ...product, });
         const products = await this.productRepository.findOne({ where: { _id: id } });
         return (0, service_1.serviceResponse)({
             data: products,
@@ -10311,7 +10526,8 @@ let ProductSqlService = class ProductSqlService {
     async findByUsername(username, query) {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const user = await this.userRepository.findOne({ where: { username }, select: ['_id', 'fullname', 'email', 'profileImage', 'coverImage', 'username', 'bio'],
+        const user = await this.userRepository.findOne({
+            where: { username }, select: ['_id', 'fullname', 'email', 'profileImage', 'coverImage', 'username', 'bio'],
         });
         if (!user) {
             throw new common_1.NotFoundException(`User with username ${username} not found`);
@@ -10339,20 +10555,12 @@ let ProductSqlService = class ProductSqlService {
     async getAllCustomProducts(query) {
         const { limit = 10, page = 1 } = query;
         const skip = (page - 1) * limit;
-        const findall = await this.productRepository.createQueryBuilder('product')
-            .leftJoinAndSelect('product.user', 'user')
-            .leftJoinAndSelect('product.product', 'productRelation')
-            .where('product.type = :type', { type: 'custom' })
-            .andWhere('product.status = :status', { status: 'active' })
-            .andWhere('product.isApproved = :isApproved', { isApproved: true })
-            .andWhere(new typeorm_2.Brackets(qb => {
-            qb.where('product.isResell = :isResell', { isResell: true })
-                .andWhere('product.isApproved = :isApproved', { isApproved: true })
-                .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
-        }))
-            .take(limit)
-            .skip(skip)
-            .getMany();
+        const findall = await this.productRepository.find({
+            where: { type: "custom", status: "active", },
+            take: limit,
+            skip: skip,
+            relations: ['user', 'product'],
+        });
         return (0, service_1.serviceResponse)({
             data: findall,
             message: "Product plans retrieved successfully",
@@ -10362,6 +10570,26 @@ let ProductSqlService = class ProductSqlService {
                 query,
                 querys: { type: "custom" },
             }),
+        });
+    }
+    async getAllShopifyProducts(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const findall = await this.productRepository.createQueryBuilder('product')
+            .leftJoinAndSelect('product.user', 'user')
+            .leftJoinAndSelect('product.product', 'productRelation')
+            .where('product.type = :type', { type: 'store' })
+            .andWhere('product.status = :status', { status: 'active' })
+            .andWhere('product.isApproved = :isApproved', { isApproved: true })
+            .andWhere(new typeorm_2.Brackets(qb => {
+            qb.where('product.isResell = :isResell', { isResell: true })
+                .andWhere('product.isApproved = :isApproved', { isApproved: true })
+                .orWhere('product.isResell = :isResellFalse', { isResellFalse: false });
+        }));
+        return (0, service_1.serviceResponse)({
+            data: findall,
+            message: "Product plans retrieved successfully",
+            status: true,
         });
     }
 };
@@ -10395,7 +10623,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -10430,6 +10658,9 @@ let ProductController = class ProductController {
     async findbyMany(params, query) {
         return this.productService.findByMany(params, query);
     }
+    async findbyManyAll(params, query) {
+        return this.productService.findByManyAll(params, query);
+    }
     async findAll(query) {
         return this.productService.findAll(query);
     }
@@ -10441,6 +10672,9 @@ let ProductController = class ProductController {
     }
     async getAllCustomProducts(query) {
         return this.productService.getAllCustomProducts(query);
+    }
+    async getAllShopifyProducts(query) {
+        return this.productService.getAllShopifyProducts(query);
     }
 };
 exports.ProductController = ProductController;
@@ -10590,6 +10824,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "findbyMany", null);
 __decorate([
+    (0, common_1.Post)("by-many-all"),
+    (0, swagger_1.ApiBody)({
+        required: false,
+        type: dto_1.ProductDto,
+    }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_e = typeof dto_1.ProductDto !== "undefined" && dto_1.ProductDto) === "function" ? _e : Object, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findbyManyAll", null);
+__decorate([
     (0, common_1.Get)(""),
     (0, swagger_1.ApiOperation)({ summary: "Get all products" }),
     (0, swagger_1.ApiQuery)({
@@ -10663,6 +10909,26 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "getAllCustomProducts", null);
+__decorate([
+    (0, common_1.Get)("shopify"),
+    (0, swagger_1.ApiOperation)({ summary: "Get all shopify products" }),
+    (0, swagger_1.ApiQuery)({
+        name: "page",
+        required: false,
+        description: "Page number for pagination",
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: "limit",
+        required: false,
+        description: "Number of products per page",
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "getAllShopifyProducts", null);
 exports.ProductController = ProductController = __decorate([
     (0, swagger_1.ApiTags)("product"),
     (0, swagger_1.ApiBearerAuth)("access-token"),
@@ -10891,11 +11157,9 @@ let TransactionsService = class TransactionsService {
         this.userRepository = userRepository;
     }
     async create(createTransactionDto) {
-        const transaction = this.transactionRepository.create(createTransactionDto);
-        const savedTransaction = await this.transactionRepository.save(transaction);
         return (0, service_1.serviceResponse)({
             message: 'Transaction created successfully',
-            data: savedTransaction,
+            data: { savedTransaction: "" },
             status: true,
         });
     }
@@ -10928,17 +11192,9 @@ let TransactionsService = class TransactionsService {
         });
     }
     async update(id, updateTransactionDto) {
-        const transaction = await this.transactionRepository.preload({
-            id,
-            ...updateTransactionDto,
-        });
-        if (!transaction) {
-            throw new common_1.NotFoundException(`Transaction with ID ${id} not found`);
-        }
-        const updatedTransaction = await this.transactionRepository.save(transaction);
         return (0, service_1.serviceResponse)({
             message: 'Transaction updated successfully',
-            data: updatedTransaction,
+            data: {},
             status: true,
         });
     }
