@@ -96,7 +96,7 @@ import { WithdrawSqlModel } from '@app/sql-schema/withdraw.sql-schema ';
         type: 'mysql', // Assuming PostgreSQL for SQL_URI
         url: configService.get<string>('SQL_URI'),
         entities: [UserSqlModel, ZoneSqlModel, WithdrawSqlModel, ProductSqlModel, OrderSqlModel, CategoriesSqlModel, CartSqlModel, DesignSqlModel, OtpSqlModel, WalletSqlModel, DeliveryPriceSqlModel, SiteSettingsSqlModel, ZoneSqlModel, TransactionSqlModel, ContactUsSqlModel], // Register your SQL entities here
-        synchronize: true, // Set to false in production
+        synchronize: false, // Set to false in production
         autoLoadEntities: true,
         logging: ['query', 'error'],
       }),

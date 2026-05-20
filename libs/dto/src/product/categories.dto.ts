@@ -55,10 +55,10 @@ export class CategoriesDto {
   @ApiProperty({ required: false, description: 'Category image URL or path', example: '/uploads/category.png' })
   image?: string;
 
-  @ApiProperty({ type: [MockupsDto] })
-  mockups?: MockupsDto[];
+  @ApiProperty({ type: MockupsDto, required: false })
+  mockups?: MockupsDto;
 
-  @ApiProperty({ type: [DesignAreaDto] })
-  designAreas?: DesignAreaDto[];
+  @ApiProperty({ type: DesignAreaDto, required: false })
+  designArea?: DesignAreaDto;
 
 }
