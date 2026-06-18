@@ -23,7 +23,7 @@ export class CartSqlService {
     const isFront=(cart.metadata?.front?.elements??[]).length>0
     const isBack=(cart.metadata?.back?.elements??[]).length>0
 
-     let price = product?.salePrice || product?.basePrice || 0
+     let price =product?.discountPrice|| product?.salePrice || product?.basePrice || 0
 const isMug = product?.category === "mug";
    
     if (isMug) {
@@ -33,7 +33,7 @@ const isMug = product?.category === "mug";
       } else if (sizeName === "Large") {
         price = (product as any)?.largePrice ?? product?.salePrice ?? product?.basePrice ?? 0;
       } else {
-        price = product?.salePrice ?? product?.basePrice ?? 0;
+        price = product?.discountPrice??product?.salePrice ?? product?.basePrice ?? 0;
       }
     }
 

@@ -1,6 +1,7 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { GenderEnum } from '@app/enum';
 
 export type CategoriesDoc = CategoriesModel & Document;
 
@@ -63,6 +64,9 @@ export class CategoriesModel {
 
   @Prop({ type: [DesignArea] })
   designAreas?: DesignArea[];
+
+  @Prop({ enum: GenderEnum, default: GenderEnum.UNISEX })
+  gender?: string;
 
 
 }

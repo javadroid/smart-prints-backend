@@ -166,13 +166,46 @@ export class ProductSqlService {
 
   }
 
-  async remove(id: string): Promise<any> {
+  async remove(id: string, userData: any): Promise<any> {
+    const product = await this.productRepository.findOne({ where: { _id: id } });
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
 
+    // Allow admin/super admin to delete any product, or seller to delete their own product
+    const isAdminOrSuper = userData.role === "admin" || userData.role === "super_admin";
+    const isOwner = String(product.userID) === String(userData._id);
+    if (!isAdminOrSuper && !isOwner) {
+      throw new NotAcceptableException("You are not authorized to delete this product");
+    }
 
+    // Soft delete: mark as inactive
+    await this.productRepository.update(id, { isActive: false, status: "inactive" });
+    const updatedProduct = await this.productRepository.findOne({ where: { _id: id } });
+    return serviceResponse({
+      data: updatedProduct,
+      message: "Product deleted successfully (soft delete)",
+      status: true,
+    });
+  }
+
+  async forceRemove(id: string, userData: any): Promise<any> {
+    const product = await this.productRepository.findOne({ where: { _id: id } });
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+
+    // Allow admin/super admin to force delete any product, or seller to force delete their own product
+    const isAdminOrSuper = userData.role === "admin" || userData.role === "super_admin";
+    const isOwner = String(product.userID) === String(userData._id);
+    if (!isAdminOrSuper && !isOwner) {
+      throw new NotAcceptableException("You are not authorized to force delete this product");
+    }
+
+    // Hard delete: remove from database
     return serviceResponse({
       data: await this.productRepository.delete({ _id: id }),
-      message: "Product plan deleted successfully",
-
+      message: "Product permanently deleted",
       status: true,
     });
   }

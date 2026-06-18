@@ -13,7 +13,7 @@ import {
 import { randomInt, randomUUID } from 'crypto';
 import { UserSqlModel } from './user.sql-schema';
 
-import { ProductStatusEnum } from '@app/enum';
+import { ProductStatusEnum, GenderEnum } from '@app/enum';
 
 // --- Type definitions for JSON columns (no decorators needed) ---
 class ProductColor { name: string; hex: string; className: string; }
@@ -77,14 +77,16 @@ export class ProductSqlModel {
   price?: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
-  standardPrice: number;
+  standardPrice?: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
-  largePrice: number;
+  largePrice?: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, })
   basePrice: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   salePrice?: number;
+
+
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   additionalPrice?: number;
@@ -119,6 +121,13 @@ export class ProductSqlModel {
 
   @Column({ type: "enum", enum: ProductStatusEnum, default: ProductStatusEnum.ACTIVE })
   status: string;
+
+  @Column({
+    type: 'enum',
+    enum: GenderEnum,
+    default: GenderEnum.UNISEX,
+  })
+  gender: string;
 
   // --- Array & JSON Columns ---
   @Column({ nullable: true, type: 'simple-array' })

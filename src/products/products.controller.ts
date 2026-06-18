@@ -207,13 +207,19 @@ export class ProductController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Delete product by ID" })
+  @ApiParam({ name: "id", description: "Product ID", type: String })
+  async delete(@Param("id") id: string, @Req() req: any) {
+    return this.productService.remove(id, req.user);
+  }
 
-  @ApiOperation({ summary: "Delete products by their IDs" })
-
-  async delete(@Param("id") ids: string, @Req() req: any) {
-    return this.productService.remove(ids,);
+  @Delete(":id/force")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Force delete product by ID (irreversible)" })
+  @ApiParam({ name: "id", description: "Product ID", type: String })
+  async forceDelete(@Param("id") id: string, @Req() req: any) {
+    return this.productService.forceRemove(id, req.user);
   }
 
   @Post(":productID/rate")

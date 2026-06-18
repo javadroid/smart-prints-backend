@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { GenderEnum } from '@app/enum';
 
 
 class Mockups { front?: string; back?: string; left?: string; right?: string; }
@@ -22,6 +23,12 @@ export class CategoriesSqlModel {
     default: 'custom',
   })
   type: string;
+  @Column({
+    type: 'enum',
+    enum: GenderEnum,
+    default: GenderEnum.UNISEX,
+  })
+  gender: string;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

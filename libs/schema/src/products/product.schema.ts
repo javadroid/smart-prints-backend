@@ -1,4 +1,4 @@
-import { ProductStatusEnum } from '@app/enum';
+import { ProductStatusEnum, GenderEnum } from '@app/enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { randomInt, randomUUID } from 'crypto';
 import { Document } from 'mongoose';
@@ -127,10 +127,16 @@ export class ProductModel {
   @Prop({  })
   basePrice: number;
   @Prop({ default:true })
-    backgroundIn:boolean;
+  backgroundIn:boolean;
   @Prop({ required: false })
   salePrice?: number;
-@Prop({ required: false })
+  @Prop({ required: false })
+  discountPrice?: number;
+  @Prop({ required: false })
+  standardPrice?: number;
+  @Prop({ required: false })
+  largePrice?: number;
+  @Prop({ required: false })
   additionalPrice?: number;
 
 
@@ -176,6 +182,9 @@ export class ProductModel {
   
   @Prop({ enum: ProductStatusEnum, default: ProductStatusEnum.ACTIVE })
   status?: string;
+
+  @Prop({ enum: GenderEnum, default: GenderEnum.UNISEX })
+  gender?: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(ProductModel);

@@ -14,3 +14,4 @@ export * from './zone.sql-schema';
 export * from './site-settings.sql-schema';
 export * from './transaction.sql-schema';
 export * from './contact-us.sql-schema';
+export * from './gallery.sql-schema';

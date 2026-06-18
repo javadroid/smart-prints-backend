@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { OrderSqlModel } from "@app/sql-schema/order.sql-schema";
 import { PaystackService } from "@app/service/payment/paystack";
 import { OrderDto, UserDTO } from "@app/dto";
@@ -174,7 +174,8 @@ export class OrderSqlService {
     const { limit = 10, page = 1 } = query;
     const skip = (page - 1) * limit;
     const data = await this.orderRepository.find({
-      where: { [key]: value },
+      // where status is not pending
+      where: { [key]: value,  status: Not("pending"),},
       take: limit,
       skip: skip,
       order: {

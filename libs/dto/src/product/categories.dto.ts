@@ -1,5 +1,6 @@
 
 import { ApiProperty } from "@nestjs/swagger";
+import { GenderEnum } from "@app/enum";
 
 
 class MockupsDto {
@@ -60,5 +61,8 @@ export class CategoriesDto {
 
   @ApiProperty({ type: DesignAreaDto, required: false })
   designArea?: DesignAreaDto;
+
+  @ApiProperty({ enum: GenderEnum, description: 'Gender', example: GenderEnum.UNISEX, required: false })
+  gender?: string;
 
 }

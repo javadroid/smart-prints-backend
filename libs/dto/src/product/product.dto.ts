@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CategoriesDto } from "./categories.dto";
-import { ProductStatusEnum } from "@app/enum";
+import { ProductStatusEnum, GenderEnum } from "@app/enum";
 
 export class RatingDto {
   @ApiProperty({ description: 'Rating given by the user for the ride', example: 4.5 })
@@ -119,8 +119,19 @@ export class ProductDto {
   @ApiProperty({ description: 'Product base price', example: 25.0 })
   basePrice: number;
 
-  @ApiProperty({ description: 'Product sale price', example: 20.0, required: false })
+  @ApiProperty({ description: 'Product standard price (for mugs)', example: 18.0, required: false })
+  standardPrice?: number;
+
+  @ApiProperty({ description: 'Product sale price (main price)', example: 20.0, required: false })
   salePrice?: number;
+
+  
+
+  @ApiProperty({ description: 'Large size price (for mugs)', example: 25.0, required: false })
+  largePrice?: number;
+
+  @ApiProperty({ description: 'Additional price', example: 5.0, required: false })
+  additionalPrice?: number;
 
   @ApiProperty({ description: 'Product category ID (legacy)', example: '6568zsdsadD', required: false })
   categoryID?: string;
@@ -176,4 +187,7 @@ export class ProductDto {
   
   @ApiProperty({ description: 'Average rating for the product', example: 4.5, required: false })
   averageRating?: number;
+
+  @ApiProperty({ enum: GenderEnum, description: 'Gender', example: GenderEnum.UNISEX, required: false })
+  gender?: string;
 }

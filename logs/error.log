@@ -922,3 +922,281 @@ Trace: EntityPropertyNotFoundError: Property "$or" was not found in "ProductSqlM
     at C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:38:29
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
     at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+[2026-05-23T20:20:33.422Z] UNHANDLED_REJECTION - {"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":1912}
+[2026-05-23T20:20:33.420Z] ERROR NestApplication - Error: listen EADDRINUSE: address already in use :::1912
+[2026-05-27T13:23:39.663Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-05-27T13:23:39.733Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-05-27T13:24:09.760Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-05-27T13:24:09.804Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'gallery.imageUrls' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:08:30.852Z] ERROR ExceptionsHandler - Property "gender" was not found in "CategoriesSqlModel". Make sure your query is correct.
+Trace: EntityPropertyNotFoundError: Property "gender" was not found in "CategoriesSqlModel". Make sure your query is correct.
+    at <anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\query-builder\src\query-builder\UpdateQueryBuilder.ts:500:31)
+    at Array.forEach (<anonymous>)
+    at UpdateQueryBuilder.createUpdateExpression (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\query-builder\src\query-builder\UpdateQueryBuilder.ts:493:68)
+    at UpdateQueryBuilder.getQuery (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\query-builder\src\query-builder\UpdateQueryBuilder.ts:53:21)
+    at UpdateQueryBuilder.getQueryAndParameters (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\query-builder\src\query-builder\QueryBuilder.ts:495:28)
+    at UpdateQueryBuilder.execute (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\query-builder\src\query-builder\UpdateQueryBuilder.ts:142:50)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async CategoriesSqlService.update (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:8375:9)
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[2026-06-18T19:14:43.465Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:14:43.530Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:14:43.544Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:14:43.576Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:15:36.837Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:15:36.864Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:15:36.871Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:15:36.904Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:17:13.058Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:17:13.077Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:17:13.082Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CategoriesSqlModel.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:17:13.106Z] ERROR ExceptionsHandler - ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+Trace: QueryFailedError: ER_BAD_FIELD_ERROR: Unknown column 'CartSqlModel__CartSqlModel_product.gender' in 'field list'
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\typeorm@0.3.27_mongodb@6.18_3d9a812e28dbd3b158d45fa2cc381fb4\node_modules\typeorm\driver\src\driver\mysql\MysqlQueryRunner.ts:248:33)
+    at Query.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:526:10)
+    at Query._callback (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:488:16)
+    at Sequence.end (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Sequence.js:83:24)
+    at Query.ErrorPacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\sequences\Query.js:92:8)
+    at Protocol._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:291:23)
+    at Parser._parsePacket (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:433:10)
+    at Parser.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Parser.js:43:10)
+    at Protocol.write (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\mysql@2.18.1\node_modules\mysql\lib\Connection.js:88:28)
+[2026-06-18T19:29:04.242Z] ERROR ExceptionsHandler - getaddrinfo ENOTFOUND api.paystack.co
+Trace: Error: getaddrinfo ENOTFOUND api.paystack.co
+    at Function.AxiosError.from (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\AxiosError.js:92:14)
+    at RedirectableRequest.handleRequestError (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\adapters\http.js:620:25)
+    at RedirectableRequest.emit (node:events:518:28)
+    at eventHandlers.<computed> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\follow-redirects@1.15.11\node_modules\follow-redirects\index.js:49:24)
+    at ClientRequest.emit (node:events:518:28)
+    at emitErrorEvent (node:_http_client:104:11)
+    at TLSSocket.socketErrorListener (node:_http_client:518:5)
+    at TLSSocket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at Axios.request (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\Axios.js:45:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async PaystackService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:4564:26)
+    at async WalletService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:12540:21)
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[2026-06-18T19:29:04.276Z] ERROR ExceptionsHandler - getaddrinfo ENOTFOUND api.paystack.co
+Trace: Error: getaddrinfo ENOTFOUND api.paystack.co
+    at Function.AxiosError.from (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\AxiosError.js:92:14)
+    at RedirectableRequest.handleRequestError (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\adapters\http.js:620:25)
+    at RedirectableRequest.emit (node:events:518:28)
+    at eventHandlers.<computed> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\follow-redirects@1.15.11\node_modules\follow-redirects\index.js:49:24)
+    at ClientRequest.emit (node:events:518:28)
+    at emitErrorEvent (node:_http_client:104:11)
+    at TLSSocket.socketErrorListener (node:_http_client:518:5)
+    at TLSSocket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at Axios.request (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\Axios.js:45:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async PaystackService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:4564:26)
+    at async WalletService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:12540:21)
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[2026-06-18T19:30:06.223Z] ERROR ExceptionsHandler - getaddrinfo ENOTFOUND api.paystack.co
+Trace: Error: getaddrinfo ENOTFOUND api.paystack.co
+    at Function.AxiosError.from (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\AxiosError.js:92:14)
+    at RedirectableRequest.handleRequestError (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\adapters\http.js:620:25)
+    at RedirectableRequest.emit (node:events:518:28)
+    at eventHandlers.<computed> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\follow-redirects@1.15.11\node_modules\follow-redirects\index.js:49:24)
+    at ClientRequest.emit (node:events:518:28)
+    at emitErrorEvent (node:_http_client:104:11)
+    at TLSSocket.socketErrorListener (node:_http_client:518:5)
+    at TLSSocket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at Axios.request (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\Axios.js:45:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async PaystackService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:4564:26)
+    at async WalletService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:12540:21)
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[2026-06-18T19:30:06.293Z] ERROR ExceptionsHandler - getaddrinfo ENOTFOUND api.paystack.co
+Trace: Error: getaddrinfo ENOTFOUND api.paystack.co
+    at Function.AxiosError.from (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\AxiosError.js:92:14)
+    at RedirectableRequest.handleRequestError (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\adapters\http.js:620:25)
+    at RedirectableRequest.emit (node:events:518:28)
+    at eventHandlers.<computed> (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\follow-redirects@1.15.11\node_modules\follow-redirects\index.js:49:24)
+    at ClientRequest.emit (node:events:518:28)
+    at emitErrorEvent (node:_http_client:104:11)
+    at TLSSocket.socketErrorListener (node:_http_client:518:5)
+    at TLSSocket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at Axios.request (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\axios@1.11.0\node_modules\axios\lib\core\Axios.js:45:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async PaystackService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:4564:26)
+    at async WalletService.getPaystackBanks (C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\dist\main.js:12540:21)
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\GEELLLL\OneDrive\Documents\AAAAA\julius\smartprints\smart-prints-backend\node_modules\.pnpm\@nestjs+core@10.4.20_@nestj_352f2983c8f45b29c877fca50752a30f\node_modules\@nestjs\core\router\router-proxy.js:9:17
