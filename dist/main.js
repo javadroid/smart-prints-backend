@@ -1498,6 +1498,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ required: false, description: 'Hero video URL' }),
     __metadata("design:type", String)
 ], SiteSettingsDTO.prototype, "heroVideo", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: 0, description: 'Percentage fee admin charges resellers on profit' }),
+    __metadata("design:type", Number)
+], SiteSettingsDTO.prototype, "resellerFeePercentage", void 0);
 
 
 /***/ }),
@@ -5949,6 +5953,10 @@ __decorate([
     __metadata("design:type", String)
 ], SiteSettingsSqlModel.prototype, "heroVideo", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 5, scale: 2, default: 0 }),
+    __metadata("design:type", Number)
+], SiteSettingsSqlModel.prototype, "resellerFeePercentage", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], SiteSettingsSqlModel.prototype, "createdAt", void 0);
@@ -6056,6 +6064,14 @@ __decorate([
     }),
     __metadata("design:type", typeof (_d = typeof Record !== "undefined" && Record) === "function" ? _d : Object)
 ], TransactionSqlModel.prototype, "metadata", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true }),
+    __metadata("design:type", Number)
+], TransactionSqlModel.prototype, "adminFee", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2, nullable: true }),
+    __metadata("design:type", Number)
+], TransactionSqlModel.prototype, "resellerProfit", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
@@ -7001,6 +7017,9 @@ let AdminService = class AdminService {
             isResell: true,
             isApproved: false
         });
+        const totalRevenue = await this.orderModel.sum("totalPrice", {
+            status: (0, typeorm_2.In)(["completed", "delivered", "paid", "shipped"]),
+        });
         return (0, service_1.serviceResponse)({
             message: "Dashboard stats retrieved",
             status: true,
@@ -7008,6 +7027,7 @@ let AdminService = class AdminService {
                 totalUsers,
                 totalProducts,
                 totalDesigns,
+                totalRevenue,
                 totalOrders,
                 totalCarts,
                 totalCategories,
@@ -7093,6 +7113,7 @@ let AdminService = class AdminService {
             heroType: dto.heroType,
             heroImage: dto.heroImage,
             heroVideo: dto.heroVideo,
+            resellerFeePercentage: dto.resellerFeePercentage,
         });
         await this.siteSettingsModel.upsert(payload, ['name']);
         const settings = await this.siteSettingsModel.findOne({ where: { name: 'default' } });
@@ -9519,7 +9540,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrderSqlService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -9531,7 +9552,7 @@ const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/in
 const crypto_1 = __webpack_require__(/*! crypto */ "crypto");
 const sql_schema_1 = __webpack_require__(/*! @app/sql-schema */ "./libs/sql-schema/src/index.ts");
 let OrderSqlService = class OrderSqlService {
-    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService, transactionRepository) {
+    constructor(orderRepository, pickupLocationRepository, cartRepository, deliveryPriceSqlModelRepository, paystack, sendMailService, transactionRepository, productRepository, siteSettingsRepository) {
         this.orderRepository = orderRepository;
         this.pickupLocationRepository = pickupLocationRepository;
         this.cartRepository = cartRepository;
@@ -9539,6 +9560,8 @@ let OrderSqlService = class OrderSqlService {
         this.paystack = paystack;
         this.sendMailService = sendMailService;
         this.transactionRepository = transactionRepository;
+        this.productRepository = productRepository;
+        this.siteSettingsRepository = siteSettingsRepository;
     }
     async create(order, userData) {
         try {
@@ -9548,7 +9571,7 @@ let OrderSqlService = class OrderSqlService {
             const cartItems = await this.cartRepository.find({
                 where: { userID: userData._id },
             });
-            const totalPrice = cartItems.reduce((sum, item) => sum + (Number(item?.price) || 0), 0);
+            const totalPrice = cartItems.reduce((sum, item) => sum + ((Number(item?.price) || 0) * Number(item?.quantity || 0)), 0);
             const delivery = await this.deliveryPriceSqlModelRepository.findOne({
                 where: {
                     state: order.orderDetails?.state,
@@ -9568,10 +9591,11 @@ let OrderSqlService = class OrderSqlService {
             }
             else {
                 for (let i = 0; i < cartItems.length; i++) {
-                    deliveryFee += delivery?.deliveryFee ?? 3000;
-                    if (cartItems[i].quantity && cartItems[i].quantity > 1) {
+                    deliveryFee += Number(delivery?.deliveryFee);
+                    const quantity = Number(cartItems[i].quantity);
+                    if (quantity && quantity > 1) {
                         deliveryFee +=
-                            (cartItems[i].quantity - 1) * (delivery?.additionalFee ?? 1000);
+                            (quantity - 1) * (Number(delivery?.additionalFee) ?? 1000);
                     }
                 }
             }
@@ -9736,8 +9760,24 @@ let OrderSqlService = class OrderSqlService {
                 await this.cartRepository.delete({
                     userID: plan.user._id
                 });
+                const siteSettings = await this.siteSettingsRepository.findOne({
+                    where: { name: 'default' }
+                });
+                const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
                 for (let i = 0; i < plan.products.length; i++) {
                     const element = plan?.products[i];
+                    const product = await this.productRepository.findOne({
+                        where: { _id: element?._id }
+                    });
+                    let adminFee = 0;
+                    let resellerProfit = 0;
+                    if (product && product.isResell && product.basePrice && element?.price) {
+                        const basePrice = Number(product.basePrice);
+                        const salePrice = Number(element.price);
+                        const grossProfit = salePrice - basePrice;
+                        adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
+                        resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
+                    }
                     const transaction = await this.transactionRepository.create({
                         amount: element?.price,
                         reference: v?.data?.reference,
@@ -9747,6 +9787,8 @@ let OrderSqlService = class OrderSqlService {
                         metadata: element?.metadata,
                         transactionType: "order",
                         orderID: plan._id,
+                        adminFee: adminFee > 0 ? adminFee : undefined,
+                        resellerProfit: resellerProfit > 0 ? resellerProfit : undefined,
                     });
                     await this.transactionRepository.save(transaction);
                 }
@@ -9828,8 +9870,24 @@ let OrderSqlService = class OrderSqlService {
                 await this.cartRepository.delete({
                     userID: plan.user._id
                 });
+                const siteSettings = await this.siteSettingsRepository.findOne({
+                    where: { name: 'default' }
+                });
+                const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
                 for (let i = 0; i < plan.products.length; i++) {
                     const element = plan?.products[i];
+                    const product = await this.productRepository.findOne({
+                        where: { _id: element?._id }
+                    });
+                    let adminFee = 0;
+                    let resellerProfit = 0;
+                    if (product && product.isResell && product.basePrice && element?.price) {
+                        const basePrice = Number(product.basePrice);
+                        const salePrice = Number(element.price);
+                        const grossProfit = salePrice - basePrice;
+                        adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
+                        resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
+                    }
                     const transaction = await this.transactionRepository.create({
                         amount: element?.price,
                         reference: data?.reference,
@@ -9839,6 +9897,8 @@ let OrderSqlService = class OrderSqlService {
                         metadata: element?.metadata,
                         transactionType: "order",
                         orderID: plan._id,
+                        adminFee: adminFee > 0 ? adminFee : undefined,
+                        resellerProfit: resellerProfit > 0 ? resellerProfit : undefined,
                     });
                     await this.transactionRepository.save(transaction);
                 }
@@ -9859,7 +9919,9 @@ exports.OrderSqlService = OrderSqlService = __decorate([
     __param(2, (0, typeorm_1.InjectRepository)(sql_schema_1.CartSqlModel)),
     __param(3, (0, typeorm_1.InjectRepository)(sql_schema_1.DeliveryPriceSqlModel)),
     __param(6, (0, typeorm_1.InjectRepository)(sql_schema_1.TransactionSqlModel)),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object])
+    __param(7, (0, typeorm_1.InjectRepository)(sql_schema_1.ProductSqlModel)),
+    __param(8, (0, typeorm_1.InjectRepository)(sql_schema_1.SiteSettingsSqlModel)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object, typeof (_b = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _b : Object, typeof (_c = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _c : Object, typeof (_d = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _d : Object, typeof (_e = typeof paystack_1.PaystackService !== "undefined" && paystack_1.PaystackService) === "function" ? _e : Object, typeof (_f = typeof service_1.SendMailService !== "undefined" && service_1.SendMailService) === "function" ? _f : Object, typeof (_g = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _g : Object, typeof (_h = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _h : Object, typeof (_j = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _j : Object])
 ], OrderSqlService);
 
 
@@ -10071,7 +10133,7 @@ let OrdersModule = class OrdersModule {
 exports.OrdersModule = OrdersModule;
 exports.OrdersModule = OrdersModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel, sql_schema_1.TransactionSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.PickupLocationSqlModel]),],
+        imports: [typeorm_1.TypeOrmModule.forFeature([order_sql_schema_1.OrderSqlModel, sql_schema_1.TransactionSqlModel, sql_schema_1.CartSqlModel, sql_schema_1.DeliveryPriceSqlModel, sql_schema_1.SiteSettingsSqlModel, sql_schema_1.PickupLocationSqlModel, sql_schema_1.ProductSqlModel]),],
         controllers: [orders_controller_1.OrderController],
         providers: [service_1.FlutterwaveService, paystack_1.PaystackService, order_sql_service_1.OrderSqlService, service_1.SendMailService],
         exports: [order_sql_service_1.OrderSqlService]
@@ -10915,10 +10977,35 @@ let ProductSqlService = class ProductSqlService {
         if (product.type == "custom" && !userData.isAdmin) {
             throw new common_1.NotAcceptableException("You are not authorized to create custom products");
         }
+        const originalProduct = await this.productRepository.findOne({ where: { _id: id } });
         await this.productRepository.update(id, { ...product, });
-        const products = await this.productRepository.findOne({ where: { _id: id } });
+        const updatedProduct = await this.productRepository.findOne({ where: { _id: id } });
+        if (originalProduct && updatedProduct && originalProduct.basePrice !== updatedProduct.basePrice) {
+            const oldBasePrice = Number(originalProduct.basePrice);
+            const newBasePrice = Number(updatedProduct.basePrice);
+            const percentageChange = oldBasePrice !== 0 ? (newBasePrice - oldBasePrice) / oldBasePrice : 0;
+            const resellerProducts = await this.productRepository.find({
+                where: { productID: id, isResell: true }
+            });
+            const roundTo2Decimals = (num) => Math.round(num * 100) / 100;
+            for (const resellerProduct of resellerProducts) {
+                const newResellerBasePrice = Number(resellerProduct.basePrice) * (1 + percentageChange);
+                const newSalePrice = resellerProduct.salePrice ? Number(resellerProduct.salePrice) * (1 + percentageChange) : undefined;
+                const newDiscountPrice = resellerProduct.discountPrice ? Number(resellerProduct.discountPrice) * (1 + percentageChange) : undefined;
+                const newStandardPrice = resellerProduct.standardPrice ? Number(resellerProduct.standardPrice) * (1 + percentageChange) : undefined;
+                const newLargePrice = resellerProduct.largePrice ? Number(resellerProduct.largePrice) * (1 + percentageChange) : undefined;
+                await this.productRepository.update(resellerProduct._id, {
+                    basePrice: roundTo2Decimals(newResellerBasePrice),
+                    salePrice: newSalePrice ? roundTo2Decimals(newSalePrice) : undefined,
+                    discountPrice: newDiscountPrice ? roundTo2Decimals(newDiscountPrice) : undefined,
+                    standardPrice: newStandardPrice ? roundTo2Decimals(newStandardPrice) : undefined,
+                    largePrice: newLargePrice ? roundTo2Decimals(newLargePrice) : undefined,
+                });
+                console.log(`Updated reseller product ${resellerProduct._id} for user ${resellerProduct.userID}`);
+            }
+        }
         return (0, service_1.serviceResponse)({
-            data: products,
+            data: updatedProduct,
             message: "Product updated successfully",
             status: true,
         });
@@ -11763,9 +11850,9 @@ let TransactionsService = class TransactionsService {
         const successTransactions = await this.transactionRepository.count({ where: { userID, status: enum_1.TransactionStatus.SUCCESS } });
         const productApproved = await this.productRepository.count({ where: { userID, isApproved: true } });
         const productPendingApproval = await this.productRepository.count({ where: { userID, isApproved: false } });
-        const totalAmountEarned = await this.transactionRepository.sum('amount', { userID, status: enum_1.TransactionStatus.SUCCESS });
-        const totalWithdrawable = await this.transactionRepository.sum('amount', { userID, status: enum_1.TransactionStatus.ACTIVE });
-        const totalPending = await this.transactionRepository.sum('amount', { userID, status: enum_1.TransactionStatus.PENDING });
+        const totalAmountEarned = await this.transactionRepository.sum('resellerProfit', { userID, status: enum_1.TransactionStatus.SUCCESS });
+        const totalWithdrawable = await this.transactionRepository.sum('resellerProfit', { userID, status: enum_1.TransactionStatus.ACTIVE });
+        const totalPending = await this.transactionRepository.sum('resellerProfit', { userID, status: enum_1.TransactionStatus.PENDING });
         return (0, service_1.serviceResponse)({
             message: 'Transactions stats retrieved successfully',
             data: {
@@ -12131,6 +12218,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -12138,15 +12232,59 @@ const guard_1 = __webpack_require__(/*! @app/guard */ "./libs/guard/src/index.ts
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const enum_1 = __webpack_require__(/*! @app/enum */ "./libs/enum/src/index.ts");
 const decorator_1 = __webpack_require__(/*! @app/decorator */ "./libs/decorator/src/index.ts");
+const user_sql_service_1 = __webpack_require__(/*! ./user-sql.service */ "./src/users/user-sql.service.ts");
+const service_1 = __webpack_require__(/*! @app/service */ "./libs/service/src/index.ts");
 let UsersController = class UsersController {
+    constructor(userSqlService) {
+        this.userSqlService = userSqlService;
+    }
+    async findAll(query) {
+        const { limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const [findall, total] = await this.userSqlService.userRepository.findAndCount({
+            take: limit,
+            skip: skip,
+        });
+        return (0, service_1.serviceResponse)({
+            data: findall,
+            message: "Users retrieved successfully",
+            status: true,
+            metadata: await (0, service_1.getSqlMetadata)({
+                model: this.userSqlService.userRepository,
+                query,
+                querys: {},
+            }),
+        });
+    }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.Get)(''),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all users' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'page',
+        required: false,
+        description: 'Page number for pagination',
+        type: Number,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'limit',
+        required: false,
+        description: 'Number of users per page',
+        type: Number,
+    }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findAll", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)('users'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN)
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
+    __metadata("design:paramtypes", [typeof (_a = typeof user_sql_service_1.UserSqlService !== "undefined" && user_sql_service_1.UserSqlService) === "function" ? _a : Object])
 ], UsersController);
 
 
@@ -12428,7 +12566,7 @@ let WalletService = class WalletService {
         }
     }
     async requestWithdrawal(requestWithdrawalDto) {
-        const transaction = await this.transactionRepository.sum('amount', {
+        const transaction = await this.transactionRepository.sum('resellerProfit', {
             userID: requestWithdrawalDto.userID,
             status: enum_1.TransactionStatus.ACTIVE,
         });

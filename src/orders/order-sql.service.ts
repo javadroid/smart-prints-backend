@@ -22,6 +22,7 @@ import {
   PickupLocationSqlModel,
   ProductSqlModel,
   TransactionSqlModel,
+  SiteSettingsSqlModel,
 } from "@app/sql-schema";
 
 @Injectable()
@@ -43,6 +44,10 @@ export class OrderSqlService {
     private sendMailService: SendMailService,
     @InjectRepository(TransactionSqlModel)
     private readonly transactionRepository: Repository<TransactionSqlModel>,
+    @InjectRepository(ProductSqlModel)
+    private readonly productRepository: Repository<ProductSqlModel>,
+    @InjectRepository(SiteSettingsSqlModel)
+    private readonly siteSettingsRepository: Repository<SiteSettingsSqlModel>,
 
 
   ) { }
@@ -57,7 +62,7 @@ export class OrderSqlService {
         where: { userID: userData._id },
       });
       const totalPrice = cartItems.reduce(
-        (sum, item) => sum + (Number(item?.price) || 0),
+        (sum, item) => sum + ((Number(item?.price) || 0) * Number(item?.quantity || 0)),
         0
       );
       const delivery = await this.deliveryPriceSqlModelRepository.findOne({
@@ -78,10 +83,11 @@ export class OrderSqlService {
         deliveryFee = Number(location?.price);
       } else {
         for (let i = 0; i < cartItems.length; i++) {
-          deliveryFee += delivery?.deliveryFee ?? 3000;
-          if (cartItems[i].quantity && cartItems[i].quantity > 1) {
+          deliveryFee += Number(delivery?.deliveryFee);
+          const quantity = Number(cartItems[i].quantity);
+          if (quantity && quantity > 1) {
             deliveryFee +=
-              (cartItems[i].quantity - 1) * (delivery?.additionalFee ?? 1000);
+              (quantity - 1) * (Number(delivery?.additionalFee) ?? 1000);
           }
         }
       }
@@ -280,10 +286,35 @@ export class OrderSqlService {
             userID: plan.user._id
 
           });
+        // Get site settings for reseller fee
+        const siteSettings = await this.siteSettingsRepository.findOne({ 
+          where: { name: 'default' } 
+        });
+        const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
+        
         for (let i = 0; i < plan.products.length; i++) {
           const element = plan?.products[i];
+          
+          // Fetch product details
+          const product = await this.productRepository.findOne({
+            where: { _id: element?._id }
+          });
+          
+          let adminFee = 0;
+          let resellerProfit = 0;
+          
+          // Check if product is reseller product
+          if (product && product.isResell && product.basePrice && element?.price) {
+            const basePrice = Number(product.basePrice);
+            const salePrice = Number(element.price);
+            const grossProfit = salePrice - basePrice;
+            
+            // Calculate admin fee based on profit percentage
+            adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
+            resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
+          }
+          
           const transaction = await this.transactionRepository.create({
-
             amount: element?.price,
             reference: v?.data?.reference,
             status: "active",
@@ -292,7 +323,8 @@ export class OrderSqlService {
             metadata: element?.metadata,
             transactionType: "order",
             orderID: plan._id,
-
+            adminFee: adminFee > 0 ? adminFee : undefined,
+            resellerProfit: resellerProfit > 0 ? resellerProfit : undefined,
           });
           await this.transactionRepository.save(transaction);
         }
@@ -483,10 +515,35 @@ export class OrderSqlService {
           userID: plan.user._id
         });
 
+        // Get site settings for reseller fee
+        const siteSettings = await this.siteSettingsRepository.findOne({ 
+          where: { name: 'default' } 
+        });
+        const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
+        
         for (let i = 0; i < plan.products.length; i++) {
           const element = plan?.products[i];
+          
+          // Fetch product details
+          const product = await this.productRepository.findOne({
+            where: { _id: element?._id }
+          });
+          
+          let adminFee = 0;
+          let resellerProfit = 0;
+          
+          // Check if product is reseller product
+          if (product && product.isResell && product.basePrice && element?.price) {
+            const basePrice = Number(product.basePrice);
+            const salePrice = Number(element.price);
+            const grossProfit = salePrice - basePrice;
+            
+            // Calculate admin fee based on profit percentage
+            adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
+            resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
+          }
+          
           const transaction = await this.transactionRepository.create({
-
             amount: element?.price,
             reference: data?.reference,
             status: "active",
@@ -495,7 +552,8 @@ export class OrderSqlService {
             metadata: element?.metadata,
             transactionType: "order",
             orderID: plan._id,
-
+            adminFee: adminFee > 0 ? adminFee : undefined,
+            resellerProfit: resellerProfit > 0 ? resellerProfit : undefined,
           });
           await this.transactionRepository.save(transaction);
         }

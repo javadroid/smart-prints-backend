@@ -7,7 +7,7 @@ import { UserSqlModel } from '@app/sql-schema/user.sql-schema';
 export class UserSqlService {
   constructor(
     @InjectRepository(UserSqlModel)
-    private readonly userRepository: Repository<UserSqlModel>,
+    public readonly userRepository: Repository<UserSqlModel>,
   ) {}
 
   async create(user: Partial<UserSqlModel>): Promise<UserSqlModel> {

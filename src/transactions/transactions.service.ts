@@ -147,9 +147,9 @@ export class TransactionsService {
    const successTransactions = await this.transactionRepository.count({ where: { userID, status: TransactionStatus.SUCCESS } });
    const productApproved = await this.productRepository.count({ where: { userID,isApproved:true } });
    const productPendingApproval = await this.productRepository.count({ where: { userID,isApproved:false } });
-   const totalAmountEarned = await this.transactionRepository.sum('amount', { userID, status: TransactionStatus.SUCCESS  });
-   const totalWithdrawable = await this.transactionRepository.sum('amount', { userID, status: TransactionStatus.ACTIVE  });
-   const totalPending = await this.transactionRepository.sum('amount', { userID, status: TransactionStatus.PENDING  });
+   const totalAmountEarned = await this.transactionRepository.sum('resellerProfit', { userID, status: TransactionStatus.SUCCESS  });
+   const totalWithdrawable = await this.transactionRepository.sum('resellerProfit', { userID, status: TransactionStatus.ACTIVE  });
+   const totalPending = await this.transactionRepository.sum('resellerProfit', { userID, status: TransactionStatus.PENDING  });
    return serviceResponse({
       message: 'Transactions stats retrieved successfully',
       data: {

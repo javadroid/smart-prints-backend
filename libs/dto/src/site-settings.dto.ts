@@ -9,4 +9,7 @@ export class SiteSettingsDTO {
 
   @ApiProperty({ required: false, description: 'Hero video URL' })
   heroVideo?: string;
+
+  @ApiProperty({ required: false, default: 0, description: 'Percentage fee admin charges resellers on profit' })
+  resellerFeePercentage?: number;
 }

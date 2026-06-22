@@ -64,6 +64,12 @@ export class TransactionSqlModel {
   })
   metadata?: Record<string, any>;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  adminFee?: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  resellerProfit?: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

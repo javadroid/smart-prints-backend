@@ -155,15 +155,56 @@ export class ProductSqlService {
     if (product.type == "custom" && !userData.isAdmin) {
       throw new NotAcceptableException("You are not authorized to create custom products");
     }
-    await this.productRepository.update(id, { ...product, });
-    const products = await this.productRepository.findOne({ where: { _id: id } });
-    return serviceResponse({
-      data: products,
-      message: "Product updated successfully",
 
+    // Get original product before update
+    const originalProduct = await this.productRepository.findOne({ where: { _id: id } });
+
+    // Update the product
+    await this.productRepository.update(id, { ...product, });
+    const updatedProduct = await this.productRepository.findOne({ where: { _id: id } });
+
+    // If basePrice changed, update all reseller products based on this one
+    if (originalProduct && updatedProduct && originalProduct.basePrice !== updatedProduct.basePrice) {
+      const oldBasePrice = Number(originalProduct.basePrice);
+      const newBasePrice = Number(updatedProduct.basePrice);
+
+      // Calculate percentage change (to apply same % to reseller prices)
+      const percentageChange = oldBasePrice !== 0 ? (newBasePrice - oldBasePrice) / oldBasePrice : 0;
+
+      // Get all reseller products that are based on this product (productID = id)
+      const resellerProducts = await this.productRepository.find({
+        where: { productID: id, isResell: true }
+      });
+
+      // Function to round to 2 decimal places
+      const roundTo2Decimals = (num: number) => Math.round(num * 100) / 100;
+
+      // Update each reseller product
+      for (const resellerProduct of resellerProducts) {
+        const newResellerBasePrice = Number(resellerProduct.basePrice) * (1 + percentageChange);
+        const newSalePrice = resellerProduct.salePrice ? Number(resellerProduct.salePrice) * (1 + percentageChange) : undefined;
+        const newDiscountPrice = resellerProduct.discountPrice ? Number(resellerProduct.discountPrice) * (1 + percentageChange) : undefined;
+        const newStandardPrice = resellerProduct.standardPrice ? Number(resellerProduct.standardPrice) * (1 + percentageChange) : undefined;
+        const newLargePrice = resellerProduct.largePrice ? Number(resellerProduct.largePrice) * (1 + percentageChange) : undefined;
+
+        await this.productRepository.update(resellerProduct._id, {
+          basePrice: roundTo2Decimals(newResellerBasePrice),
+          salePrice: newSalePrice ? roundTo2Decimals(newSalePrice) : undefined,
+          discountPrice: newDiscountPrice ? roundTo2Decimals(newDiscountPrice) : undefined,
+          standardPrice: newStandardPrice ? roundTo2Decimals(newStandardPrice) : undefined,
+          largePrice: newLargePrice ? roundTo2Decimals(newLargePrice) : undefined,
+        });
+
+        // TODO: Send notification/email to reseller (implement notification service later)
+        console.log(`Updated reseller product ${resellerProduct._id} for user ${resellerProduct.userID}`);
+      }
+    }
+
+    return serviceResponse({
+      data: updatedProduct,
+      message: "Product updated successfully",
       status: true,
     });
-
   }
 
   async remove(id: string, userData: any): Promise<any> {

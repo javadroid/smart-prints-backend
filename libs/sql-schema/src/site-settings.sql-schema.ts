@@ -22,6 +22,9 @@ export class SiteSettingsSqlModel {
   @Column({ nullable: true })
   heroVideo?: string;
 
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  resellerFeePercentage: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

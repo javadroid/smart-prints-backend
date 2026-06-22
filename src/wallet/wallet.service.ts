@@ -40,7 +40,7 @@ export class WalletService {
   }
 
   async requestWithdrawal( requestWithdrawalDto: RequestWithdrawalDTO) {
-    const transaction = await this.transactionRepository.sum('amount', {
+    const transaction = await this.transactionRepository.sum('resellerProfit', {
        userID: requestWithdrawalDto.userID,
         status: TransactionStatus.ACTIVE,
     });
