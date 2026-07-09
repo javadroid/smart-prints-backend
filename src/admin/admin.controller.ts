@@ -10,8 +10,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin')
 @ApiBearerAuth('access-token')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
+
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
@@ -25,6 +24,8 @@ export class AdminController {
 
   @Post('delivery-price')
   @ApiBody({type:DeliveryPriceDTO})
+  @UseGuards( RolesGuard)
+  @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async createDeliveryPrice(@Body() deliveryPriceDto: DeliveryPriceDTO) {
     return this.adminService.createDeliveryPrice(deliveryPriceDto);
   }
@@ -44,22 +45,29 @@ export class AdminController {
   }
 
   @Delete('delivery-price/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async deleteDeliveryPrice(@Param('id') id: string) {
     return this.adminService.deleteDeliveryPrice(id);
   }
   
   @Get('site-settings')
+
   async getSiteSettings() {
     return this.adminService.getSiteSettings();
   }
   
   @Patch('site-settings')
+  @UseGuards( RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async updateSiteSettings(@Body() dto: SiteSettingsDTO) {
     return this.adminService.updateSiteSettings(dto);
   }
 
   // getUsersByMany
   @Post('users')
+  @UseGuards( RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'page', required: false })
 @ApiBody({type:UserDTO})
@@ -69,12 +77,16 @@ export class AdminController {
 
   // edit user
   @Patch('users/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async editUser(@Param('id') id: string, @Body() dto: UserSqlModel) {
     return this.adminService.editUser(id, dto);
   }
 
   @Post('send-email')
   @ApiConsumes('multipart/form-data')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiBody({ type: AdminSendEmailDTO })
   @UseInterceptors(FilesInterceptor('attachments'))
   async sendEmail(
