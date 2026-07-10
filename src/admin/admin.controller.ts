@@ -16,7 +16,7 @@ export class AdminController {
 
   
   @Get('dashboard-stats')
-@UseGuards( RolesGuard)
+@UseGuards( JwtAuthGuard, RolesGuard)
 @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async getDashboardStats() {
     return this.adminService.getDashboardStats();
@@ -24,7 +24,7 @@ export class AdminController {
 
   @Post('delivery-price')
   @ApiBody({type:DeliveryPriceDTO})
-  @UseGuards( RolesGuard)
+ @UseGuards( JwtAuthGuard, RolesGuard)
   @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async createDeliveryPrice(@Body() deliveryPriceDto: DeliveryPriceDTO) {
     return this.adminService.createDeliveryPrice(deliveryPriceDto);
@@ -58,7 +58,7 @@ export class AdminController {
   }
   
   @Patch('site-settings')
-  @UseGuards( RolesGuard)
+ @UseGuards( JwtAuthGuard, RolesGuard)
 @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   async updateSiteSettings(@Body() dto: SiteSettingsDTO) {
     return this.adminService.updateSiteSettings(dto);
@@ -66,7 +66,7 @@ export class AdminController {
 
   // getUsersByMany
   @Post('users')
-  @UseGuards( RolesGuard)
+ @UseGuards( JwtAuthGuard, RolesGuard)
 @Roles(UserType.ADMIN, UserType.SUPER_ADMIN)
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'page', required: false })

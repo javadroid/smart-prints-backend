@@ -16,7 +16,7 @@ import { UserSqlModel } from './user.sql-schema';
 import { ProductStatusEnum, GenderEnum } from '@app/enum';
 
 // --- Type definitions for JSON columns (no decorators needed) ---
-class ProductColor { name: string; hex: string; className: string; }
+class ProductColor { name: string; hex: string; className: string; images?: string[]; }
 class ProductSize { name: string; label: string; inStock: boolean; }
 class Mockups { front?: string; back?: string; left?: string; right?: string; }
 class DesignRect { top: string; left: string; width: string; height: string; }

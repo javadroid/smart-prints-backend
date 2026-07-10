@@ -1382,6 +1382,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], ProductColor.prototype, "className", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], default: [] }),
+    __metadata("design:type", Array)
+], ProductColor.prototype, "images", void 0);
 class ProductSize {
 }
 __decorate([
@@ -5517,6 +5521,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: 'bg-white' }),
     __metadata("design:type", String)
 ], ProductColorDto.prototype, "className", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: ['https://cdn.example.com/white-tee.png'], required: false, type: [String] }),
+    __metadata("design:type", Array)
+], ProductColorDto.prototype, "images", void 0);
 class ProductSizeDto {
 }
 exports.ProductSizeDto = ProductSizeDto;
@@ -6290,6 +6298,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'CSS Class Name' }),
     __metadata("design:type", String)
 ], ProductColorDTO.prototype, "className", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Preview image URLs for this color', type: [String], required: false }),
+    __metadata("design:type", Array)
+], ProductColorDTO.prototype, "images", void 0);
 
 
 /***/ }),
@@ -10356,7 +10368,7 @@ let AdminController = class AdminController {
 exports.AdminController = AdminController;
 __decorate([
     (0, common_1.Get)('dashboard-stats'),
-    (0, common_1.UseGuards)(guard_1.RolesGuard),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
     (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -10365,6 +10377,8 @@ __decorate([
 __decorate([
     (0, common_1.Post)('delivery-price'),
     (0, swagger_1.ApiBody)({ type: dto_1.DeliveryPriceDTO }),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_b = typeof dto_1.DeliveryPriceDTO !== "undefined" && dto_1.DeliveryPriceDTO) === "function" ? _b : Object]),
@@ -10386,6 +10400,8 @@ __decorate([
 ], AdminController.prototype, "getDeliveryPrices", null);
 __decorate([
     (0, common_1.Delete)('delivery-price/:id'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -10399,6 +10415,8 @@ __decorate([
 ], AdminController.prototype, "getSiteSettings", null);
 __decorate([
     (0, common_1.Patch)('site-settings'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_c = typeof dto_1.SiteSettingsDTO !== "undefined" && dto_1.SiteSettingsDTO) === "function" ? _c : Object]),
@@ -10406,6 +10424,8 @@ __decorate([
 ], AdminController.prototype, "updateSiteSettings", null);
 __decorate([
     (0, common_1.Post)('users'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
     (0, swagger_1.ApiBody)({ type: dto_1.UserDTO }),
@@ -10417,6 +10437,8 @@ __decorate([
 ], AdminController.prototype, "getUsersByMany", null);
 __decorate([
     (0, common_1.Patch)('users/:id'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -10426,6 +10448,8 @@ __decorate([
 __decorate([
     (0, common_1.Post)('send-email'),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
+    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     (0, swagger_1.ApiBody)({ type: dto_1.AdminSendEmailDTO }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('attachments')),
     __param(0, (0, common_1.Body)()),
@@ -10437,8 +10461,6 @@ __decorate([
 exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
-    (0, common_1.UseGuards)(guard_1.JwtAuthGuard, guard_1.RolesGuard),
-    (0, decorator_1.Roles)(enum_1.UserType.ADMIN, enum_1.UserType.SUPER_ADMIN),
     __metadata("design:paramtypes", [typeof (_a = typeof admin_service_1.AdminService !== "undefined" && admin_service_1.AdminService) === "function" ? _a : Object])
 ], AdminController);
 

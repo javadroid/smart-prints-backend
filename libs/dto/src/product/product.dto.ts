@@ -25,6 +25,9 @@ export class ProductColorDto {
 
   @ApiProperty({ example: 'bg-white' })
   className: string;
+
+  @ApiProperty({ example: ['https://cdn.example.com/white-tee.png'], required: false, type: [String] })
+  images?: string[];
 }
 
 export class ProductSizeDto {

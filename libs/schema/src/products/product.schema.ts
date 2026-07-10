@@ -28,6 +28,9 @@ class ProductColor {
 
   @Prop()
   className: string;
+
+  @Prop({ type: [String], default: [] })
+  images?: string[];
 }
 
 class ProductSize {

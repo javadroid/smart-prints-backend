@@ -9,4 +9,7 @@ export class ProductColorDTO {
 
   @ApiProperty({ description: 'CSS Class Name' })
   className: string;
+
+  @ApiProperty({ description: 'Preview image URLs for this color', type: [String], required: false })
+  images?: string[];
 }
