@@ -7811,7 +7811,7 @@ let ProductController = class ProductController {
         return this.productService.findAll(query);
     }
     async delete(id, req) {
-        return this.productService.remove(id, req.user);
+        return this.productService.forceRemove(id, req.user);
     }
     async forceDelete(id, req) {
         return this.productService.forceRemove(id, req.user);
@@ -9218,7 +9218,7 @@ let OrderSqlService = class OrderSqlService {
                 where: {
                     state: order.orderDetails?.state,
                     lga: order.orderDetails?.lga,
-                    zone: order.orderDetails?.wards,
+                    zone: order.orderDetails?.city,
                 },
             });
             let deliveryFee = 0;

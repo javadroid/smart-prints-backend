@@ -69,7 +69,7 @@ export class OrderSqlService {
         where: {
           state: order.orderDetails?.state,
           lga: order.orderDetails?.lga,
-          zone: order.orderDetails?.wards,
+          zone: order.orderDetails?.city,
         },
       });
       let deliveryFee = 0;
@@ -181,7 +181,7 @@ export class OrderSqlService {
     const skip = (page - 1) * limit;
     const data = await this.orderRepository.find({
       // where status is not pending
-      where: { [key]: value,  status: Not("pending"),},
+      where: { [key]: value, status: Not("pending"), },
       take: limit,
       skip: skip,
       order: {
@@ -287,33 +287,33 @@ export class OrderSqlService {
 
           });
         // Get site settings for reseller fee
-        const siteSettings = await this.siteSettingsRepository.findOne({ 
-          where: { name: 'default' } 
+        const siteSettings = await this.siteSettingsRepository.findOne({
+          where: { name: 'default' }
         });
         const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
-        
+
         for (let i = 0; i < plan.products.length; i++) {
           const element = plan?.products[i];
-          
+
           // Fetch product details
           const product = await this.productRepository.findOne({
             where: { _id: element?._id }
           });
-          
+
           let adminFee = 0;
           let resellerProfit = 0;
-          
+
           // Check if product is reseller product
           if (product && product.isResell && product.basePrice && element?.price) {
             const basePrice = Number(product.basePrice);
             const salePrice = Number(element.price);
             const grossProfit = salePrice - basePrice;
-            
+
             // Calculate admin fee based on profit percentage
             adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
             resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
           }
-          
+
           const transaction = await this.transactionRepository.create({
             amount: element?.price,
             reference: v?.data?.reference,
@@ -516,33 +516,33 @@ export class OrderSqlService {
         });
 
         // Get site settings for reseller fee
-        const siteSettings = await this.siteSettingsRepository.findOne({ 
-          where: { name: 'default' } 
+        const siteSettings = await this.siteSettingsRepository.findOne({
+          where: { name: 'default' }
         });
         const resellerFeePercentage = siteSettings?.resellerFeePercentage || 0;
-        
+
         for (let i = 0; i < plan.products.length; i++) {
           const element = plan?.products[i];
-          
+
           // Fetch product details
           const product = await this.productRepository.findOne({
             where: { _id: element?._id }
           });
-          
+
           let adminFee = 0;
           let resellerProfit = 0;
-          
+
           // Check if product is reseller product
           if (product && product.isResell && product.basePrice && element?.price) {
             const basePrice = Number(product.basePrice);
             const salePrice = Number(element.price);
             const grossProfit = salePrice - basePrice;
-            
+
             // Calculate admin fee based on profit percentage
             adminFee = Math.round((grossProfit * resellerFeePercentage / 100) * 100) / 100;
             resellerProfit = Math.round((grossProfit - adminFee) * 100) / 100;
           }
-          
+
           const transaction = await this.transactionRepository.create({
             amount: element?.price,
             reference: data?.reference,

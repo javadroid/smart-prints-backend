@@ -211,7 +211,7 @@ export class ProductController {
   @ApiOperation({ summary: "Delete product by ID" })
   @ApiParam({ name: "id", description: "Product ID", type: String })
   async delete(@Param("id") id: string, @Req() req: any) {
-    return this.productService.remove(id, req.user);
+    return this.productService.forceRemove(id, req.user);
   }
 
   @Delete(":id/force")
