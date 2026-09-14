@@ -26,7 +26,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Model } from "mongoose";
-import { In, Repository } from "typeorm";
+import { In, Not, Repository } from "typeorm";
 import { AdminSendEmailDTO, DeliveryPriceDTO, SiteSettingsDTO, UserDTO } from "@app/dto";
 import { SiteSettingsSqlModel } from "@app/sql-schema";
 
@@ -84,10 +84,13 @@ export class AdminService {
       isResell:true,
       isApproved:false
     });
-    // total revenue where status is completed or delivered
-  const totalRevenue = await this.orderModel.sum("totalPrice", {
-  status: In(["completed", "delivered","paid","shipped"]),
-});
+    // total revenue where status is not pending
+    const totalRevenue =
+      Number(
+        await this.orderModel.sum("totalPrice", {
+          status: Not("pending"),
+        })
+      ) || 0;
 
 
 

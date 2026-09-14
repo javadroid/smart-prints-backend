@@ -10122,9 +10122,9 @@ let AdminService = class AdminService {
             isResell: true,
             isApproved: false
         });
-        const totalRevenue = await this.orderModel.sum("totalPrice", {
-            status: (0, typeorm_2.In)(["completed", "delivered", "paid", "shipped"]),
-        });
+        const totalRevenue = Number(await this.orderModel.sum("totalPrice", {
+            status: (0, typeorm_2.Not)("pending"),
+        })) || 0;
         return (0, service_1.serviceResponse)({
             message: "Dashboard stats retrieved",
             status: true,
