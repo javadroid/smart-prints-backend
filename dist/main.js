@@ -10123,7 +10123,7 @@ let AdminService = class AdminService {
             isApproved: false
         });
         const totalRevenue = Number(await this.orderModel.sum("totalPrice", {
-            status: (0, typeorm_2.Not)("pending"),
+            status: (0, typeorm_2.In)(["shipped", "completed"]),
         })) || 0;
         return (0, service_1.serviceResponse)({
             message: "Dashboard stats retrieved",
@@ -12706,22 +12706,41 @@ async function bootstrap() {
     app.useLogger(new file_logger_service_1.FileLogger());
     app.use((0, helmet_1.default)({
         contentSecurityPolicy: {
+            useDefaults: false,
             directives: {
                 defaultSrc: ["'self'"],
                 imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
+                styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
+                scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:", "http:"],
+                connectSrc: ["'self'", "https:", "http:", "ws:", "wss:"],
+                fontSrc: ["'self'", "data:", "https:", "http:"],
                 mediaSrc: ["'self'", "data:", "https:", "http:"],
+                frameSrc: ["'self'", "https:", "http:"],
+                workerSrc: ["'self'", "blob:"],
+                manifestSrc: ["'self'"],
+                objectSrc: ["'none'"],
+                baseUri: ["'self'"],
+                formAction: ["'self'"],
             },
         },
+        crossOriginEmbedderPolicy: false,
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+        crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
     }));
     app.enableCors({
         credentials: true,
-        origin: [
-            'http://localhost:5173',
-            'https://www.smartprints.ng',
-            'https://smartprints.ng',
-            'https://api.smartprints.ng'
-        ],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        origin: (origin, callback) => {
+            if (!origin ||
+                origin.startsWith('http://localhost') ||
+                origin.startsWith('http://127.0.0.1') ||
+                origin === 'https://www.smartprints.ng' ||
+                origin === 'https://smartprints.ng' ||
+                origin === 'https://api.smartprints.ng') {
+                return callback(null, true);
+            }
+            return callback(null, true);
+        },
+        methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: [
             'Content-Type',
             'Authorization',
@@ -12736,7 +12755,7 @@ async function bootstrap() {
         ],
         exposedHeaders: ['Content-Disposition', 'Content-Length', 'Content-Range'],
         maxAge: 3600,
-        preflightContinue: true,
+        preflightContinue: false,
         optionsSuccessStatus: 204,
     });
     app.use(express.json({ limit: "50mb" }));

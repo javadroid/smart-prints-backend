@@ -87,9 +87,9 @@ export class AdminService {
     // total revenue where status is not pending
     const totalRevenue =
       Number(
-        await this.orderModel.sum("totalPrice", {
-          status: Not("pending"),
-        })
+      await this.orderModel.sum("totalPrice", {
+  status: In(["shipped", "completed"]),
+})
       ) || 0;
 
 

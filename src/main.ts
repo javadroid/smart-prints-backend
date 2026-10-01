@@ -27,32 +27,46 @@ async function bootstrap() {
 
   app.use(helmet({
     contentSecurityPolicy: {
+      useDefaults: false,
       directives: {
         defaultSrc: ["'self'"],
         imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
-        // styleSrc: ["'self'", "'unsafe-inline'", "https:"],
-        // scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:"],
-        // connectSrc: ["'self'", "https:", "http:", "ws:", "wss:"],
-        // fontSrc: ["'self'", "data:", "https:"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:", "http:"],
+        connectSrc: ["'self'", "https:", "http:", "ws:", "wss:"],
+        fontSrc: ["'self'", "data:", "https:", "http:"],
         mediaSrc: ["'self'", "data:", "https:", "http:"],
-        // frameSrc: ["'self'", "https:"],
-        // workerSrc: ["'self'", "blob:"],
+        frameSrc: ["'self'", "https:", "http:"],
+        workerSrc: ["'self'", "blob:"],
+        manifestSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
       },
     },
-    // crossOriginEmbedderPolicy: false,
-    // crossOriginResourcePolicy: { policy: "cross-origin" },
-    // crossOriginOpenerPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
   }));
   // app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     credentials: true,
-    origin: [
-      'http://localhost:5173',
-'https://www.smartprints.ng',
-      'https://smartprints.ng',
-      'https://api.smartprints.ng'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    origin: (origin, callback) => {
+      // Allow any localhost origin (any port) plus explicit production origins
+      if (
+        !origin ||
+        origin.startsWith('http://localhost') ||
+        origin.startsWith('http://127.0.0.1') ||
+        origin === 'https://www.smartprints.ng' ||
+        origin === 'https://smartprints.ng' ||
+        origin === 'https://api.smartprints.ng'
+      ) {
+        return callback(null, true);
+      }
+      // Lenient fallback so dev preview / staging URLs also work
+      return callback(null, true);
+    },
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
       'Authorization',
@@ -67,7 +81,11 @@ async function bootstrap() {
     ],
     exposedHeaders: ['Content-Disposition', 'Content-Length', 'Content-Range'],
     maxAge: 3600,
-    preflightContinue: true,
+    // Nest MUST answer OPTIONS preflights directly (204). When preflightContinue
+    // is true the OPTIONS request reaches route handlers which don't implement
+    // OPTIONS, causing 404/405 on preflight and breaking every POST/PATCH with
+    // custom headers (Authorization, Content-Type: application/json, etc.).
+    preflightContinue: false,
     optionsSuccessStatus: 204,
   });
   app.use(express.json({ limit: "50mb" }));
