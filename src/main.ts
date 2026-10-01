@@ -25,9 +25,26 @@ async function bootstrap() {
   // app.useGlobalInterceptors(new DecryptInterceptor());
   // app.useGlobalInterceptors(new EncryptionInterceptor());
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
+        // styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        // scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:"],
+        // connectSrc: ["'self'", "https:", "http:", "ws:", "wss:"],
+        // fontSrc: ["'self'", "data:", "https:"],
+        mediaSrc: ["'self'", "data:", "https:", "http:"],
+        // frameSrc: ["'self'", "https:"],
+        // workerSrc: ["'self'", "blob:"],
+      },
+    },
+    // crossOriginEmbedderPolicy: false,
+    // crossOriginResourcePolicy: { policy: "cross-origin" },
+    // crossOriginOpenerPolicy: false,
+  }));
   // app.useGlobalPipes(new ValidationPipe());
-   app.enableCors({
+  app.enableCors({
     credentials: true,
     origin: [
       'http://localhost:5173',
@@ -37,19 +54,40 @@ async function bootstrap() {
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: [
-      'Content-Type', 
+      'Content-Type',
       'Authorization',
       'Origin',
       'Accept',
       'access-control-allow-origin',
       'referrer-policy',
-      'X-Requested-With'
+      'X-Requested-With',
+      'Accept-Language',
+      'Content-Language',
+      'Range',
     ],
-    exposedHeaders: ['Content-Disposition'],
-    maxAge: 3600
+    exposedHeaders: ['Content-Disposition', 'Content-Length', 'Content-Range'],
+    maxAge: 3600,
+    preflightContinue: true,
+    optionsSuccessStatus: 204,
   });
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+  // Explicit CORS for static upload file endpoint (ensures img crossOrigin="anonymous" works)
+  app.use('/v1/upload/file', (req: any, res: any, next: any) => {
+    const reqOrigin = req.headers.origin || '*';
+    res.header('Access-Control-Allow-Origin', reqOrigin);
+    res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Range, Origin, Content-Type, Accept');
+    res.header('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Content-Disposition');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.header('Cross-Origin-Embedder-Policy', 'credentialless');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
 
   const config = app.get(ConfigService);
   // app.useGlobalFilters(new HttpExceptionFilter())

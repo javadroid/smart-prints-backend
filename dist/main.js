@@ -7528,12 +7528,12 @@ let UploadsController = class UploadsController {
     }
     uploadFile(req, files) {
         const host = req.protocol + '://' + req.get('host');
-        const hostCheck = host.startsWith('http://')
+        const hostWithHttps = host.startsWith('http://')
             ? host.replace('http://', 'https://')
             : host;
         const fileUrls = files?.map((file) => ({
             originalname: file.originalname,
-            url: `${host}/v1/upload/file/${file.filename}`,
+            url: `${hostWithHttps}/v1/upload/file/${file.filename}`,
         }));
         return fileUrls;
     }
@@ -12704,7 +12704,15 @@ const file_logger_service_1 = __webpack_require__(179);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useLogger(new file_logger_service_1.FileLogger());
-    app.use((0, helmet_1.default)());
+    app.use((0, helmet_1.default)({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
+                mediaSrc: ["'self'", "data:", "https:", "http:"],
+            },
+        },
+    }));
     app.enableCors({
         credentials: true,
         origin: [
@@ -12721,13 +12729,32 @@ async function bootstrap() {
             'Accept',
             'access-control-allow-origin',
             'referrer-policy',
-            'X-Requested-With'
+            'X-Requested-With',
+            'Accept-Language',
+            'Content-Language',
+            'Range',
         ],
-        exposedHeaders: ['Content-Disposition'],
-        maxAge: 3600
+        exposedHeaders: ['Content-Disposition', 'Content-Length', 'Content-Range'],
+        maxAge: 3600,
+        preflightContinue: true,
+        optionsSuccessStatus: 204,
     });
     app.use(express.json({ limit: "50mb" }));
     app.use(express.urlencoded({ limit: "50mb", extended: true }));
+    app.use('/v1/upload/file', (req, res, next) => {
+        const reqOrigin = req.headers.origin || '*';
+        res.header('Access-Control-Allow-Origin', reqOrigin);
+        res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Range, Origin, Content-Type, Accept');
+        res.header('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Content-Disposition');
+        res.header('Access-Control-Allow-Credentials', 'true');
+        res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+        res.header('Cross-Origin-Embedder-Policy', 'credentialless');
+        if (req.method === 'OPTIONS') {
+            return res.sendStatus(204);
+        }
+        next();
+    });
     const config = app.get(config_1.ConfigService);
     const globalPrefix = "v1";
     app.setGlobalPrefix(globalPrefix);
